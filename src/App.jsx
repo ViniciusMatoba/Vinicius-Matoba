@@ -236,60 +236,76 @@ function LandingPage() {
 }
 
 function BioLink() {
+  const cards = [
+    {
+      title: "Diagnóstico Estratégico",
+      subtitle: "Descubra onde seu perfil perde clientes.",
+      image: "https://images.unsplash.com/photo-1551288049-bbda48658a7d?q=80&w=800",
+      link: "https://wa.me/5519984522494?text=Quero+um+diagnóstico+estratégico"
+    },
+    {
+      title: "Gestão de Tráfego",
+      subtitle: "Alcance o público certo e venda mais.",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800",
+      link: "https://wa.me/5519984522494?text=Quero+saber+mais+sobre+Gestão+de+Tráfego"
+    },
+    {
+      title: "Mentoria Individual",
+      subtitle: "O próximo nível do seu posicionamento.",
+      image: "https://images.unsplash.com/photo-1521791136064-7986c2959210?q=80&w=800",
+      link: "https://wa.me/5519984522494?text=Quero+saber+mais+sobre+a+Mentoria"
+    },
+    {
+      title: "Falar com Vinícius",
+      subtitle: "Inicie sua escala agora.",
+      image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=800",
+      link: "https://wa.me/5519984522494"
+    }
+  ];
+
   return (
-    <div className="container-full">
-      <header className="header-compact">
-        <div className="profile-image-compact">
-          <img src={profileImg} alt="Vinícius Matoba" className="profile-image" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+    <div className="bio-container">
+      {/* 1. TOPO DE AUTORIDADE */}
+      <header className="bio-header">
+        <div className="bio-profile-wrapper">
+          <img src={profileImg} alt="Vinícius Matoba" className="bio-profile-img" />
         </div>
-        <h1 className="profile-name-bio">Vinícius Matoba</h1>
-        <p className="profile-specialty-bio">Estrategista Digital de Alta Performance</p>
+        <h1 className="bio-name">Vinícius Matoba</h1>
+        <p className="bio-description">
+          Estrategista Digital focado em escala e lucro. Transformo redes sociais em canais previsíveis de aquisição de clientes através de dados, tráfego e posicionamento de elite.
+        </p>
       </header>
 
-      <main className="links-compact">
-        <div className="links-box">
-          {/* Site */}
-          <a
-            href="/"
-            className="link-button"
-          >
-            <Briefcase size={18} /> Site
-          </a>
-
-          {/* Instagram Profissional */}
-          <a
-            href="https://www.instagram.com/viniciusmatoba/?igsh=MXgzOGdwcG15bGg2OA=="
-            target="_blank"
-            className="link-button"
-          >
-            <Instagram size={18} /> Instagram Profissional
-          </a>
-
-          {/* Falar com Estrategista */}
-          <a
-            href="https://wa.me/5519984522494"
-            target="_blank"
-            className="link-button"
-          >
-            <MessageCircle size={18} /> Falar com Estrategista
-          </a>
-
-          {/* Agende seu Diagnóstico */}
-          <a
-            href="https://wa.me/5519984522494?text=Quero+um+diagnóstico+estratégico"
-            target="_blank"
-            className="link-button btn-animate link-button-highlight"
-          >
-            <Target size={18} /> AGENDE seu Diagnóstico
-          </a>
+      {/* 2. CARDS VISUAIS "FORMATO 2026" */}
+      <main className="bio-main">
+        <div className="bio-cards-grid">
+          {cards.map((card, idx) => (
+            <a key={idx} href={card.link} target="_blank" rel="noopener noreferrer" className="bio-card">
+              <div className="bio-card-bg" style={{ backgroundImage: `url(${card.image})` }}></div>
+              <div className="bio-card-overlay"></div>
+              <div className="bio-card-content">
+                <h2 className="bio-card-title">{card.title}</h2>
+                <p className="bio-card-subtitle">{card.subtitle}</p>
+              </div>
+            </a>
+          ))}
         </div>
       </main>
 
-      <footer className="footer-triangle-container">
-        <div className="footer-triangle">
-          <img src={logo} alt="Logo" className="logo-white" />
-        </div>
+      <footer className="bio-footer">
+        <img src={logo} alt="Logo" className="bio-footer-logo" />
       </footer>
+
+      {/* Botão Flutuante WhatsApp */}
+      <a
+        href="https://wa.me/5519984522494"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="whatsapp-floating-btn"
+        title="Falar no WhatsApp"
+      >
+        <MessageCircle size={24} />
+      </a>
     </div>
   );
 }
