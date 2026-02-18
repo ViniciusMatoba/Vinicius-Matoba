@@ -22,125 +22,85 @@ import {
 
 const VM_STEPS = [
   {
-    number: '01',
-    title: 'Diagnóstico Estratégico',
-    description: 'Análise de perfil, concorrentes e mapeamento técnico de gargalos.',
-    result: 'Clareza total do plano.',
-    icon: <Search className="mb-1" style={{ color: '#0F2D3A' }} />,
-    cta: 'Iniciar Diagnóstico'
+    title: 'DIAGNOSTICAR',
+    description: 'Análise de Bio, Instagram e Funil. Objetivo: Identificar onde você perde oportunidades.',
+    icon: <Search className="mb-1" style={{ color: '#0F2D3A' }} />
   },
   {
-    number: '02',
-    title: 'Posicionamento & Estratégia',
-    description: 'Definição de persona, proposta de valor e funil de vendas direto.',
-    result: 'Autoridade imediata.',
-    icon: <Target className="mb-1" style={{ color: '#0F2D3A' }} />,
-    cta: 'Definir Estratégia'
+    title: 'POSICIONAR',
+    description: 'Definição de Persona, Autoridade e Oferta Clara. Resultado: Deixar de ser "mais um" para virar referência.',
+    icon: <Target className="mb-1" style={{ color: '#0F2D3A' }} />
   },
   {
-    number: '03',
-    title: 'Planejamento de Conteúdo',
-    description: 'Linha editorial e calendário focado 100% em conversão.',
-    result: 'Conteúdo que gera clientes.',
-    icon: <Briefcase className="mb-1" style={{ color: '#0F2D3A' }} />,
-    cta: 'Planejar Conteúdo'
+    title: 'PLANEJAR',
+    description: 'Linha Editorial e Funil (Atração -> Relacionamento -> Venda).',
+    icon: <Briefcase className="mb-1" style={{ color: '#0F2D3A' }} />
   },
   {
-    number: '04',
-    title: 'Execução & Gestão',
-    description: 'Criação de pautas, legendas e presença consistente de marca.',
-    result: 'Presença profissional.',
-    icon: <Settings className="mb-1" style={{ color: '#0F2D3A' }} />,
-    cta: 'Contratar Gestão'
+    title: 'EXECUTAR',
+    description: 'Operação, Roteiros e Gestão Estratégica.',
+    icon: <Settings className="mb-1" style={{ color: '#0F2D3A' }} />
   },
   {
-    number: '05',
-    title: 'Aquisição (Tráfego Pago)',
-    description: 'Campanhas de Meta Ads focadas em público local e leads qualificados.',
-    result: 'Fluxo de clientes constante.',
-    icon: <TrendingUp className="mb-1" style={{ color: '#0F2D3A' }} />,
-    cta: 'Escalar Tráfego'
+    title: 'ANALISAR',
+    description: 'Acompanhamento de métricas (Alcance, CPL, Conversões).',
+    icon: <LineChart className="mb-1" style={{ color: '#0F2D3A' }} />
   },
   {
-    number: '06',
-    title: 'Análise & Otimização',
-    description: 'Relatórios mensais de performance e ajustes contínuos de rota.',
-    result: 'Crescimento sustentável.',
-    icon: <LineChart className="mb-1" style={{ color: '#0F2D3A' }} />,
-    cta: 'Ver Relatórios'
+    title: 'OTIMIZAR',
+    description: 'Ajustes contínuos e melhoria de performance a cada ciclo.',
+    icon: <TrendingUp className="mb-1" style={{ color: '#0F2D3A' }} />
   }
 ];
 
-function MethodologyModal({ isOpen, onClose }) {
+function VmModal({ isOpen, onClose }) {
   const [current, setCurrent] = useState(0);
-  const [touchStart, setTouchStart] = useState(null);
-  const [touchEnd, setTouchEnd] = useState(null);
 
   if (!isOpen) return null;
-
-  const minSwipeDistance = 50;
-
-  const onTouchStart = (e) => {
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const onTouchMove = (e) => setTouchEnd(e.targetTouches[0].clientX);
-
-  const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > minSwipeDistance;
-    const isRightSwipe = distance < -minSwipeDistance;
-    if (isLeftSwipe) {
-      next();
-    } else if (isRightSwipe) {
-      prev();
-    }
-  };
 
   const next = () => setCurrent((prev) => (prev + 1) % VM_STEPS.length);
   const prev = () => setCurrent((prev) => (prev - 1 + VM_STEPS.length) % VM_STEPS.length);
 
+  const isLast = current === VM_STEPS.length - 1;
+
   return (
-    <div className="method-modal-overlay" onClick={onClose}>
-      <div
-        className="method-modal-content"
-        onClick={(e) => e.stopPropagation()}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
-      >
-        <button className="modal-close-btn" onClick={onClose}><X size={32} /></button>
+    <div className="vm-modal-overlay" onClick={onClose}>
+      <div className="vm-modal-content" onClick={(e) => e.stopPropagation()}>
+        <button className="vm-modal-close" onClick={onClose}><X size={24} /></button>
 
-        <div className="modal-carousel-container">
-          <button className="nav-btn prev" onClick={prev}><ChevronLeft size={36} /></button>
+        <div className="vm-modal-body">
+          <div className="vm-step-counter">Etapa {current + 1} de 6</div>
 
-          <div className="modal-step-card">
-            <span className="modal-step-number">{VM_STEPS[current].number}</span>
-            <div className="modal-icon-wrapper">
-              {VM_STEPS[current].icon}
+          <div className="vm-slide-container">
+            <button className="vm-nav-arrow left" onClick={prev}><ChevronLeft size={32} /></button>
+
+            <div className="vm-slide-content">
+              <div className="vm-icon-box">{VM_STEPS[current].icon}</div>
+              <h2 className="vm-slide-title">{VM_STEPS[current].title}</h2>
+              <p className="vm-slide-text">{VM_STEPS[current].description}</p>
+
+              {isLast && (
+                <div className="vm-last-slide-footer">
+                  <p className="vm-valor-resumo">"Não criamos posts. Aplicamos um processo estruturado de crescimento"</p>
+                  <a
+                    href="https://wa.me/5519984522494?text=Quero+meu+Diagnóstico+Estratégico"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="vm-cta-btn"
+                  >
+                    Quero meu Diagnóstico Estratégico
+                  </a>
+                </div>
+              )}
             </div>
-            <h3 className="modal-step-title">{VM_STEPS[current].title}</h3>
-            <p className="modal-step-description">{VM_STEPS[current].description}</p>
-            <div className="modal-step-result">
-              <strong>Resultado:</strong> {VM_STEPS[current].result}
-            </div>
-            <Link to="/linknabio" onClick={onClose} className="btn-card-elite mt-2">
-              {VM_STEPS[current].cta} <ChevronRight size={14} />
-            </Link>
+
+            <button className="vm-nav-arrow right" onClick={next}><ChevronRight size={32} /></button>
           </div>
-
-          <button className="nav-btn next" onClick={next}><ChevronRight size={36} /></button>
         </div>
 
-        <div className="modal-navigation-dots">
+        <div className="vm-progress-dots">
           {VM_STEPS.map((_, idx) => (
-            <div
-              key={idx}
-              className={`dot ${idx === current ? 'active' : ''}`}
-              onClick={() => setCurrent(idx)}
-            />
+            <div key={idx} className={`vm-dot ${idx === current ? 'active' : ''}`} onClick={() => setCurrent(idx)} />
           ))}
         </div>
       </div>
@@ -225,7 +185,7 @@ function LandingPage() {
         </div>
       </section>
 
-      <MethodologyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <VmModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
       <footer className="section-padding" style={{ backgroundColor: '#0F2D3A', color: 'white', textAlign: 'center' }}>
         <img src={logo} alt="Logo" style={{ width: '200px', marginBottom: '1.5rem', filter: 'brightness(0) invert(1)' }} />
@@ -236,30 +196,36 @@ function LandingPage() {
 }
 
 function BioLink() {
+  const [isVmModalOpen, setIsVmModalOpen] = useState(false);
+
   const cards = [
     {
-      title: "Diagnóstico Estratégico",
-      subtitle: "Descubra onde seu perfil perde clientes.",
+      title: "Solicitar Diagnóstico Estratégico",
+      subtitle: "Descubra os gargalos que impedem seu lucro.",
       image: "https://images.unsplash.com/photo-1551288049-bbda48658a7d?q=80&w=800",
-      link: "https://wa.me/5519984522494?text=Quero+um+diagnóstico+estratégico"
+      link: "https://wa.me/5519984522494?text=Quero+um+diagnóstico+estratégico",
+      isModal: false
     },
     {
-      title: "Gestão de Tráfego",
-      subtitle: "Alcance o público certo e venda mais.",
+      title: "Crescimento Estruturado — Método VM",
+      subtitle: "Posicionamento, conteúdo e tráfego por dados.",
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800",
-      link: "https://wa.me/5519984522494?text=Quero+saber+mais+sobre+Gestão+de+Tráfego"
+      link: "#",
+      isModal: true
     },
     {
-      title: "Mentoria Individual",
-      subtitle: "O próximo nível do seu posicionamento.",
+      title: "Mentoria Estratégica 1:1",
+      subtitle: "O próximo nível do seu posicionamento de elite.",
       image: "https://images.unsplash.com/photo-1521791136064-7986c2959210?q=80&w=800",
-      link: "https://wa.me/5519984522494?text=Quero+saber+mais+sobre+a+Mentoria"
+      link: "https://wa.me/5519984522494?text=Quero+saber+mais+sobre+a+Mentoria",
+      isModal: false
     },
     {
-      title: "Falar com Vinícius",
-      subtitle: "Inicie sua escala agora.",
+      title: "Conversar no WhatsApp",
+      subtitle: "Fale diretamente com Vinícius Matoba.",
       image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=800",
-      link: "https://wa.me/5519984522494"
+      link: "https://wa.me/5519984522494",
+      isModal: false
     }
   ];
 
@@ -267,33 +233,50 @@ function BioLink() {
     <div className="bio-container">
       {/* 1. TOPO DE AUTORIDADE */}
       <header className="bio-header">
-        <div className="bio-profile-wrapper">
-          <img src={profileImg} alt="Vinícius Matoba" className="bio-profile-img" />
+        <div className="bio-profile-card">
+          <div className="bio-profile-wrapper">
+            <img src={profileImg} alt="Vinícius Matoba" className="bio-profile-img" />
+          </div>
+          <div className="bio-profile-text">
+            <h1 className="bio-name">Vinícius Matoba</h1>
+            <p className="bio-description">
+              Estrategista digital para negócios locais. Estruturo crescimento previsível através do Método VM — posicionamento, conteúdo e tráfego orientado por dados.
+            </p>
+          </div>
         </div>
-        <h1 className="bio-name">Vinícius Matoba</h1>
-        <p className="bio-description">
-          Estrategista Digital focado em escala e lucro. Transformo redes sociais em canais previsíveis de aquisição de clientes através de dados, tráfego e posicionamento de elite.
-        </p>
       </header>
 
       {/* 2. CARDS VISUAIS "FORMATO 2026" */}
       <main className="bio-main">
         <div className="bio-cards-grid">
           {cards.map((card, idx) => (
-            <a key={idx} href={card.link} target="_blank" rel="noopener noreferrer" className="bio-card">
-              <div className="bio-card-bg" style={{ backgroundImage: `url(${card.image})` }}></div>
-              <div className="bio-card-overlay"></div>
-              <div className="bio-card-content">
-                <h2 className="bio-card-title">{card.title}</h2>
-                <p className="bio-card-subtitle">{card.subtitle}</p>
+            card.isModal ? (
+              <div key={idx} onClick={() => setIsVmModalOpen(true)} className="bio-card" style={{ cursor: 'pointer' }}>
+                <div className="bio-card-bg" style={{ backgroundImage: `url(${card.image})` }}></div>
+                <div className="bio-card-overlay"></div>
+                <div className="bio-card-content">
+                  <h2 className="bio-card-title">{card.title}</h2>
+                  <p className="bio-card-subtitle">{card.subtitle}</p>
+                </div>
               </div>
-            </a>
+            ) : (
+              <a key={idx} href={card.link} target="_blank" rel="noopener noreferrer" className="bio-card">
+                <div className="bio-card-bg" style={{ backgroundImage: `url(${card.image})` }}></div>
+                <div className="bio-card-overlay"></div>
+                <div className="bio-card-content">
+                  <h2 className="bio-card-title">{card.title}</h2>
+                  <p className="bio-card-subtitle">{card.subtitle}</p>
+                </div>
+              </a>
+            )
           ))}
         </div>
       </main>
 
-      <footer className="bio-footer">
-        <img src={logo} alt="Logo" className="bio-footer-logo" />
+      <footer className="footer-triangle-container">
+        <div className="footer-triangle">
+          <img src={logo} alt="Logo" className="logo-white" />
+        </div>
       </footer>
 
       {/* Botão Flutuante WhatsApp */}
@@ -306,6 +289,8 @@ function BioLink() {
       >
         <MessageCircle size={24} />
       </a>
+
+      <VmModal isOpen={isVmModalOpen} onClose={() => setIsVmModalOpen(false)} />
     </div>
   );
 }
@@ -320,4 +305,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
