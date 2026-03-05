@@ -1,8 +1,32 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { auth } from './firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import logo from './assets/logo.png';
 
 export default function VMLogin() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            navigate('/dashboard');
+        } catch (err) {
+            console.error("Erro ao fazer login:", err);
+            setError('Credenciais inválidas ou erro de conexão.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className="backstage-login-wrapper">
             <div className="login-card">
@@ -15,13 +39,17 @@ export default function VMLogin() {
                     <p className="login-tagline">Estrategista Digital</p>
                 </div>
 
-                <form className="login-form">
+                <form className="login-form" onSubmit={handleLogin}>
+                    {error && <p className="login-error-msg" style={{ color: '#ff4757', fontSize: '0.8rem', textAlign: 'center', marginBottom: '1rem' }}>{error}</p>}
                     <div className="form-group">
                         <label>E-mail de Acesso</label>
                         <input
                             type="email"
                             placeholder="seu@email.com"
                             className="login-input"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
                         />
                     </div>
                     <div className="form-group">
@@ -30,11 +58,14 @@ export default function VMLogin() {
                             type="password"
                             placeholder="••••••••"
                             className="login-input"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
                         />
                     </div>
 
-                    <button type="submit" className="btn-login">
-                        ENTRAR NO DASHBOARD
+                    <button type="submit" className="btn-login" disabled={loading}>
+                        {loading ? 'AUTENTICANDO...' : 'ENTRAR NO DASHBOARD'}
                     </button>
                 </form>
 
