@@ -511,9 +511,6 @@ function BioLink() {
       <div className="bio-overlay-bg"></div>
       {/* 1. TOPO DE AUTORIDADE */}
       <header className="bio-header">
-        <Link to="/" className="bio-back-link">
-          <ChevronRight size={18} style={{ transform: 'rotate(180deg)' }} /> Voltar ao Site Oficial
-        </Link>
         <div className="bio-profile-card">
           <div className="bio-profile-wrapper">
             <img src={profileImg} alt="Vinícius Matoba" className="bio-profile-img" />
