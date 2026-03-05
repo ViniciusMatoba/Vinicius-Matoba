@@ -7,6 +7,8 @@ import heroBg from './assets/metodo-hero-bg.jfif'
 import footerBg from './assets/metodo-footer-bg.png'
 import heroHomeBg from './assets/hero-home-bg.jpeg'
 import bioLinkBg from './assets/bio-link-bg.png'
+import VMLogin from './VMLogin'
+import Dashboard from './Dashboard'
 
 import {
   MessageCircle,
@@ -285,6 +287,12 @@ function FullSitePage() {
         </div>
       </section>
 
+      <div className="vm-footer-access">
+        <Link to="/login" className="btn-access-backstage">
+          <span>Acessar Agência VM</span>
+          <ChevronRight size={16} />
+        </Link>
+      </div>
       <footer className="section-padding" style={{ backgroundColor: '#0F2D3A', color: 'white', textAlign: 'center' }}>
         <img src={logo} alt="Logo" style={{ width: '200px', marginBottom: '1.5rem', filter: 'brightness(0) invert(1)' }} />
         <p style={{ opacity: 0.6 }}>© 2026 VM Estratégia Digital. Todos os direitos reservados.</p>
@@ -647,6 +655,8 @@ function App() {
         <Route path="/reuniao-estrategica" element={<ReuniaoEstrategicaPage />} />
         <Route path="/metodo-vm" element={<MetodoVMPage />} />
         <Route path="/site" element={<FullSitePage />} />
+        <Route path="/login" element={<VMLogin />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="*" element={<LandingPage />} />
       </Routes>
     </>
