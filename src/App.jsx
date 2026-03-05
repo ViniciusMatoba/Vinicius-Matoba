@@ -296,6 +296,12 @@ function FullSitePage() {
 function MetodoVMPage() {
   return (
     <div className="metodo-wrapper" translate="no">
+      <header className="site-mini-header">
+        <Link to="/" className="back-link">
+          <ChevronRight size={20} style={{ transform: 'rotate(180deg)' }} /> Voltar para o Início
+        </Link>
+        <img src={logo} alt="Logo VM" className="mini-logo" />
+      </header>
       <section className="metodo-hero" style={{ backgroundImage: `url(${heroBg})` }}>
         <div className="metodo-hero-overlay"></div>
         <div className="metodo-hero-content">
@@ -505,6 +511,9 @@ function BioLink() {
       <div className="bio-overlay-bg"></div>
       {/* 1. TOPO DE AUTORIDADE */}
       <header className="bio-header">
+        <Link to="/" className="bio-back-link">
+          <ChevronRight size={18} style={{ transform: 'rotate(180deg)' }} /> Voltar ao Site Oficial
+        </Link>
         <div className="bio-profile-card">
           <div className="bio-profile-wrapper">
             <img src={profileImg} alt="Vinícius Matoba" className="bio-profile-img" />
