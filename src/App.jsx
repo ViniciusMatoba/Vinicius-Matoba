@@ -237,7 +237,7 @@ function LandingPage() {
       {/* SECTION 7 — DIAGNÓSTICO ESTRATÉGICO */}
       <section id="diagnostico" className="premium-section bg-soft-gray">
         <div className="container-premium text-center">
-          <h2 className="premium-section-title mb-3">Ponto de Partida: Diagnóstico de Maturidade</h2>
+          <h2 className="premium-section-title mb-3">Diagnóstico Estratégico Online</h2>
           <p className="premium-section-text max-width-800 margin-auto mb-5">
             Uma análise profunda para identificar o que trava seu crescimento hoje, <br className="desktop-only-br" /> mapear gargalos na aquisição e traçar o plano de ação ideal.
           </p>
