@@ -29,7 +29,7 @@ function PremiumNav() {
           <img src={logo} alt="Vinícius Matoba" className="nav-logo" />
         </Link>
         <div className="nav-links">
-          <Link to="/metodo-vm" className="nav-link">Método</Link>
+          <Link to="/reuniao-estrategica" className="nav-link">Reunião</Link>
         </div>
         <div className="nav-cta">
           <Link to="/reuniao-estrategica" className="btn-vm-green-small">
@@ -63,17 +63,16 @@ function FloatingCTA() {
 
 function HeroSection() {
   return (
-    <section className="premium-hero-section bg-hero-cycle" style={{ backgroundImage: `url(${metodoCicloImg})` }}>
+    <section className="premium-hero-section" style={{ backgroundColor: '#f8fafc' }}>
       <div className="hero-overlay-soft"></div>
       <div className="container-premium hero-grid-premium">
         <div className="hero-content-left">
           <h1 className="hero-title-premium">Estratégia antes da postagem.</h1>
           <p className="hero-subtitle-premium">
-            Transformo presença digital em crescimento previsível <br className="desktop-only-br" /> através do <strong>Método VM — Ciclo de Crescimento Digital.</strong>
+            Transformo presença digital em crescimento previsível <br className="desktop-only-br" /> através de <strong>estratégia, processos e decisões orientadas por dados.</strong>
           </p>
           <div className="hero-buttons-wrapper">
-            <Link to="/reuniao-estrategica" className="btn-vm-green-large">Agendar Diagnóstico Estratégico</Link>
-            <Link to="/metodo-vm" className="btn-outline-navy">Conhecer o Método VM</Link>
+            <Link to="/reuniao-estrategica" className="btn-vm-green-large">Agendar Reunião Estratégica</Link>
           </div>
         </div>
         <div className="hero-content-right">
@@ -194,7 +193,7 @@ function MeetingSection() {
       <div className="container-premium">
         <h2 className="premium-section-title text-white">O primeiro passo é entender o seu cenário.</h2>
         <p className="premium-section-text text-white opacity-80 max-width-800 margin-auto mt-3 mb-5">
-          Escolha um horário para conversarmos sobre a implementação do Método VM no seu negócio.
+          Escolha um horário para conversarmos sobre a implementação estratégica no seu negócio.
         </p>
         <a href="https://wa.me/5519984522494?text=Olá+Vinícius,+completei+o+diagnóstico+e+quero+agendar+minha+conversa+estratégica" target="_blank" rel="noopener noreferrer" className="btn-vm-green-large">
           Solicitar Reunião Estratégica
