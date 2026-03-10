@@ -3,8 +3,6 @@ import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
 import './App.css'
 import logo from './assets/logo.png'
 import profileImg from './assets/profile.jpeg'
-import heroBg from './assets/metodo-hero-bg.jfif'
-import footerBg from './assets/metodo-footer-bg.png'
 import heroHomeBg from './assets/hero-home-new.png'
 import bioLinkBg from './assets/bio-link-bg.png'
 import VMLogin from './VMLogin'
@@ -446,176 +444,154 @@ function FullSitePage() {
 
 function MetodoVMPage() {
   return (
-    <div className="metodo-wrapper" translate="no">
+    <div className="metodo-vm-page-wrapper">
       <header className="site-mini-header">
         <Link to="/" className="back-link">
           <ChevronRight size={20} style={{ transform: 'rotate(180deg)' }} /> Voltar para o Início
         </Link>
         <img src={logo} alt="Logo VM" className="mini-logo" />
       </header>
-      <section className="metodo-hero" style={{ backgroundImage: `url(${heroBg})` }}>
-        <div className="metodo-hero-overlay"></div>
-        <div className="metodo-hero-content">
-          <h1 className="metodo-hero-title">Estratégia, Previsibilidade e Crescimento Digital.</h1>
-          <p className="metodo-hero-subtitle">
-            Não entregamos apenas postagens. Entregamos um sistema de aquisição de clientes através do Método VM.
+
+      {/* SECTION 1 — HERO */}
+      <section className="metodo-hero-strategic">
+        <div className="container-strategic text-center">
+          <h1 className="strategic-title max-width-1000">Método VM — Ciclo de Crescimento Digital</h1>
+          <p className="strategic-subtitle max-width-800">
+            Um processo estratégico contínuo para transformar presença digital em crescimento previsível.
           </p>
-          <a
-            href="https://wa.me/5519984522494?text=Quero+um+Diagnóstico+do+meu+Negócio"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-primary"
-          >
-            Quero um Diagnóstico do meu Negócio
-          </a>
+          <div className="mt-5">
+            <p className="highlight-text-navy max-width-800 margin-auto" style={{ fontSize: '1.2rem', fontWeight: '400', lineHeight: '1.8' }}>
+              O crescimento digital consistente não acontece por acaso. Ele acontece quando estratégia, posicionamento e execução trabalham de forma organizada.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* SECTION: STRATEGIC QUALIFICATION (MOVED FROM HUB) */}
-      <section className="strategic-qualification-fold section-padding bg-light">
+      {/* SECTION 2 — THE PROBLEM */}
+      <section className="strategic-section bg-soft">
+        <div className="container-narrow text-center">
+          <h2 className="strategic-title">A maioria das estratégias digitais falha por um motivo simples.</h2>
+          <div className="strategic-text-content mt-4 max-width-800 margin-auto">
+            <p className="text-lg mb-4">A execução vem antes do planejamento.</p>
+            <p>Muitos negócios contratam agências, designers e gestores de tráfego esperando um milagre de vendas. Criam posts, sobem campanhas, gravam vídeos. Tudo isso sem responder as perguntas fundamentais do próprio modelo de negócios.</p>
+            <p className="emphasis-text font-bold text-navy mt-4">Quando você executa sem estratégia, você gasta dinheiro para atrair o cliente errado.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 3 — THE CYCLE CONCEPT */}
+      <section className="strategic-section bg-navy text-white text-center">
+        <div className="container-strategic">
+          <h2 className="strategic-title text-white">Crescimento digital é um ciclo.</h2>
+          <p className="strategic-subtitle text-white opacity-80 max-width-800 margin-auto mb-5">
+            O Método VM não é uma campanha de marketing pontual. É um sistema cíclico projetado para melhorar continuamente a aquisição de clientes do seu negócio.
+          </p>
+
+          <div className="cycle-visualizer-premium">
+            <div className="cycle-track">
+              {['Diagnosticar', 'Posicionar', 'Planejar', 'Executar', 'Analisar', 'Otimizar'].map((step, idx) => (
+                <div key={idx} className="cycle-step-badge">
+                  <span className="step-num">{idx + 1}</span>
+                  <span className="step-name">{step}</span>
+                  {idx < 5 && <ChevronRight className="cycle-arrow text-green" size={24} />}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 4 — THE 6 STEPS GRID */}
+      <section className="strategic-section">
+        <div className="container-strategic">
+          <h2 className="strategic-title text-center mb-5">O Ciclo na Prática</h2>
+          <div className="six-step-grid-premium">
+            {VM_STEPS.map((step, index) => (
+              <div key={index} className="premium-step-card">
+                <div className="step-card-header">
+                  <div className="icon-wrapper-green">{step.icon}</div>
+                  <h3 className="step-card-title">{step.title}</h3>
+                </div>
+                <p className="step-card-desc">{step.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 5 — BENEFITS */}
+      <section className="strategic-section bg-soft">
         <div className="container-narrow">
-          <h2 className="strategic-headline text-center mb-5">Para quem é o Método VM</h2>
+          <h2 className="strategic-title text-center mb-5">O que muda quando existe método</h2>
+          <ul className="benefit-list-premium">
+            <li className="benefit-item">
+              <Check size={28} className="text-green flex-shrink-0 mt-1" />
+              <div>
+                <strong>Clareza Organizacional</strong>
+                <p>Você sabe exatamente o que está sendo feito, por que está sendo feito e o que esperar de resultado em cada etapa.</p>
+              </div>
+            </li>
+            <li className="benefit-item">
+              <Check size={28} className="text-green flex-shrink-0 mt-1" />
+              <div>
+                <strong>Atração do Cliente Certo</strong>
+                <p>A comunicação para de atrair curiosos e começa a conversar com quem tem real potencial de compra.</p>
+              </div>
+            </li>
+            <li className="benefit-item">
+              <Check size={28} className="text-green flex-shrink-0 mt-1" />
+              <div>
+                <strong>Previsibilidade de Crescimento</strong>
+                <p>Ações pontuais dão lugar a um sistema de aquisição validado, medido e otimizado mês a mês.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
 
-          <div className="qualification-grid">
-            <div className="qualification-card for-whom">
-              <h3 className="qual-title">O Método VM é para:</h3>
-              <ul className="qual-list">
-                <li><Check size={20} className="icon-check" /> Negócios locais que querem parar de depender apenas de indicação</li>
-                <li><Check size={20} className="icon-check" /> Profissionais liberais que precisam estruturar aquisição de clientes</li>
-                <li><Check size={20} className="icon-check" /> Empresas que já tentaram postar e impulsionar, mas não tiveram previsibilidade</li>
-                <li><Check size={20} className="icon-check" /> Quem entende que crescimento exige estratégia e investimento</li>
-              </ul>
-            </div>
+      {/* SECTION 6 — HOW THE METHOD IS APPLIED */}
+      <section className="strategic-section text-center">
+        <div className="container-narrow">
+          <h2 className="strategic-title">Como começamos a aplicar o método</h2>
+          <p className="strategic-subtitle max-width-800 margin-auto mt-4 mb-5">
+            Nenhuma implementação do Método VM começa com execução. O primeiro passo irrevogável é o Diagnóstico Estratégico.
+          </p>
+          <div className="diagnosis-highlight-box">
+            <Search size={48} className="text-green mb-3" />
+            <h3>Passo 0: Diagnóstico de Cenário</h3>
+            <p>Antes de definir qualquer plano de ação, precisamos olhar para onde a sua empresa está hoje, entender a fundo o seu modelo de negócios e identificar os gargalos atuais e ocultos.</p>
+          </div>
+        </div>
+      </section>
 
-            <div className="qualification-card not-for-whom">
-              <h3 className="qual-title">Para quem não é:</h3>
-              <ul className="qual-list">
-                <li><X size={20} className="icon-cross" /> Quem quer apenas posts ou artes isoladas</li>
-                <li><X size={20} className="icon-cross" /> Quem busca crescimento rápido sem estrutura</li>
-                <li><X size={20} className="icon-cross" /> Quem não está disposto a investir em aquisição</li>
-                <li><X size={20} className="icon-cross" /> Quem espera resultados sem consistência e acompanhamento</li>
-              </ul>
+      {/* SECTION 7 — FINAL CTA */}
+      <section className="strategic-section final-cta-diagnostico bg-navy text-white text-center">
+        <div className="container-narrow">
+          <h2 className="strategic-title text-white">O primeiro passo é entender o seu cenário.</h2>
+          <p className="strategic-subtitle text-white opacity-80 mb-5">
+            Agende um diagnóstico estratégico para avaliarmos se o Método VM é o encaixe ideal para o momento da sua empresa.
+          </p>
+          <div className="cta-final-box-diag">
+            <a
+              href="https://wa.me/5519984522494?text=Olá!+Li+sobre+o+Método+VM+e+quero+agendar+um+diagnóstico"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-vm-strategic scale-large"
+            >
+              Agendar Diagnóstico Estratégico
+            </a>
+            <div className="info-text-mini text-white opacity-70 mt-4">
+              <span>Duração: 45 minutos</span>
+              <span className="separator text-green">•</span>
+              <span>Online e Gratuito</span>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="metodo-cycle-section">
-        <div className="metodo-section-title">
-          <h3 className="consultative-label">O DIFERENCIAL</h3>
-          <h2>O Método VM</h2>
-          <p className="metodo-cycle-footer">"Nosso método garante que cada ação tenha um propósito. Estratégia + Execução + Análise + Ajuste Contínuo."</p>
-        </div>
-
-        <div className="metodo-cycle-grid">
-          {VM_STEPS.map((step, index) => (
-            <div key={index} className="metodo-step-card">
-              <div className="metodo-step-icon">{step.icon}</div>
-              <h3 className="metodo-step-title">{index + 1}. {step.title}</h3>
-              <p className="metodo-step-text">{step.description}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section id="planos" className="metodo-plans-section">
-        <div className="metodo-section-title">
-          <h3 className="consultative-label">ESTRUTURA</h3>
-          <h2 translate="no">Nossos Planos</h2>
-        </div>
-
-        <div className="metodo-plans-grid">
-          {/* Card 1: Start */}
-          <div className="metodo-plan-card">
-            <h3 className="metodo-plan-title">Plano Start</h3>
-            <p className="metodo-plan-foco">Implementação Estratégica</p>
-            <div className="metodo-plan-entregas-title">Entregas</div>
-            <ul className="metodo-plan-entregas-list">
-              <li>Diagnóstico de cenário</li>
-              <li>Ajuste de posicionamento/bio</li>
-              <li>Definição de público ideal</li>
-              <li>Estruturação de link estratégico</li>
-            </ul>
-            <div className="metodo-plan-indicado">
-              <strong>INDICADO PARA:</strong>
-              Quem precisa organizar a casa antes de acelerar.
-            </div>
-          </div>
-
-          {/* Card 2: Essencial */}
-          <div className="metodo-plan-card">
-            <h3 className="metodo-plan-title">Plano Essencial</h3>
-            <p className="metodo-plan-foco">Direcionamento Mensal</p>
-            <div className="metodo-plan-entregas-title">Entregas</div>
-            <ul className="metodo-plan-entregas-list">
-              <li>Reunião estratégica mensal</li>
-              <li>Planejamento de conteúdo direcionado</li>
-              <li>Acompanhamento de métricas básicas</li>
-              <li>Ajustes progressivos</li>
-            </ul>
-            <div className="metodo-plan-indicado">
-              <strong>INDICADO PARA:</strong>
-              Negócios que buscam sair da improvisação com um acompanhamento leve.
-            </div>
-          </div>
-
-          {/* Card 3: Performance */}
-          <div className="metodo-plan-card highlighted">
-            <div className="metodo-plan-badge">Mais Recomendado</div>
-            <h3 className="metodo-plan-title">Plano Performance</h3>
-            <p className="metodo-plan-foco">Crescimento Ativo</p>
-            <div className="metodo-plan-entregas-title">Entregas</div>
-            <ul className="metodo-plan-entregas-list">
-              <li>Estratégia ativa de conteúdo</li>
-              <li>Direcionamento de Tráfego Pago</li>
-              <li>Análise avançada de comportamento</li>
-              <li>Relatórios detalhados e otimização de funis</li>
-            </ul>
-            <div className="metodo-plan-indicado">
-              <strong>INDICADO PARA:</strong>
-              Negócios que querem transformar o Instagram em um canal previsível de vendas.
-            </div>
-          </div>
-
-          {/* Card 4: Autoridade Total */}
-          <div className="metodo-plan-card">
-            <h3 className="metodo-plan-title">Plano Autoridade Total</h3>
-            <p className="metodo-plan-foco">Gestão Avançada</p>
-            <div className="metodo-plan-entregas-title">Entregas</div>
-            <ul className="metodo-plan-entregas-list">
-              <li>Gestão estratégica completa</li>
-              <li>Campanhas sazonais</li>
-              <li>Análise de CPL (Custo por Lead)</li>
-              <li>Atuação da Agência VM como braço estratégico do negócio</li>
-            </ul>
-            <div className="metodo-plan-indicado">
-              <strong>INDICADO PARA:</strong>
-              Empresas que buscam consolidação e autoridade sólida no mercado local.
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="metodo-footer-conversion" style={{ backgroundImage: `url(${footerBg})` }}>
-        <div className="metodo-footer-overlay"></div>
-        <div className="metodo-footer-content">
-          <h2>Pronto para profissionalizar o seu marketing?</h2>
-          <p>Agende uma Reunião Estratégica para entendermos qual fase do Método VM o seu negócio precisa agora.</p>
-          <a
-            href="https://wa.me/5519984522494?text=Olá!+Quero+agendar+minha+reunião+estratégica"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-primary"
-          >
-            Falar com Estrategista no WhatsApp
-          </a>
-        </div>
-      </section>
-
-      <footer className="footer-triangle-container" style={{ marginTop: '0', backgroundColor: 'var(--base-white)' }}>
-        <div className="footer-triangle">
-          <img src={logo} alt="Logo" className="logo-white" />
-        </div>
+      <footer className="section-padding" style={{ backgroundColor: '#05161D', color: 'white', textAlign: 'center' }}>
+        <img src={logo} alt="Logo" style={{ width: '180px', marginBottom: '1.5rem', filter: 'brightness(0) invert(1)' }} />
+        <p style={{ opacity: 0.5 }}>© 2026 VM Estratégia Digital. Todos os direitos reservados.</p>
       </footer>
     </div>
   );
