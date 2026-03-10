@@ -4,6 +4,7 @@ import './App.css'
 import logo from './assets/logo.png'
 import profileImg from './assets/profile.jpeg'
 import bioLinkBg from './assets/bio-link-bg.png'
+import metodoCicloImg from './assets/metodo-ciclo.jpeg'
 import VMLogin from './VMLogin'
 import Dashboard from './Dashboard'
 import { auth } from './firebase'
@@ -423,7 +424,6 @@ function FullSitePage() {
 }
 
 function MetodoVMPage() {
-  const [activeStep, setActiveStep] = useState(null);
 
   return (
     <div className="metodo-vm-page-wrapper bg-base-white">
@@ -458,40 +458,13 @@ function MetodoVMPage() {
             Um sistema cíclico projetado para melhorar continuamente a aquisição de clientes.
           </p>
 
-          <div className="orbital-diagram-container">
-            <div className="orbital-center">
-              Método VM<br /><span>Ciclo de Crescimento Digital</span>
-            </div>
-
-            {/* The circular track line */}
-            <div className="orbital-track"></div>
-
-            {VM_STEPS.map((step, idx) => {
-              // 6 steps = 60 degrees each. Subtract 90 to start from top.
-              const angle = (idx * 60) - 90;
-
-              return (
-                <div
-                  key={idx}
-                  className={`orbital-node ${activeStep === idx ? 'active' : ''}`}
-                  style={{ '--angle': `${angle}deg` }}
-                  onMouseEnter={() => setActiveStep(idx)}
-                  onMouseLeave={() => setActiveStep(null)}
-                  onClick={() => setActiveStep(activeStep === idx ? null : idx)}
-                >
-                  <div className="orbital-node-circle">
-                    {step.icon}
-                  </div>
-                  <div className="orbital-node-label">{step.title}</div>
-
-                  {/* Tooltip */}
-                  <div className="orbital-tooltip">
-                    <strong>{step.title}</strong>
-                    <p>{step.description}</p>
-                  </div>
-                </div>
-              );
-            })}
+          <div className="metodo-ciclo-photo-container">
+            <img
+              src={metodoCicloImg}
+              alt="Método VM - Ciclo de Crescimento"
+              className="margin-auto"
+              style={{ maxWidth: '100%', borderRadius: '16px', boxShadow: 'var(--shadow-lg)' }}
+            />
           </div>
 
           <p className="orbital-subtext text-white opacity-70 mt-5">
