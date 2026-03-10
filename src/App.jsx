@@ -47,34 +47,34 @@ import {
 
 const VM_STEPS = [
   {
-    title: '1. Diagnosticar',
-    description: 'Entender cenário, posicionamento, público e oportunidades reais.',
-    icon: <Search className="mb-1" style={{ color: '#0F2D3A' }} />
+    title: 'Diagnosticar',
+    description: 'Entender o cenário atual e identificar gargalos estratégicos.',
+    icon: <Search className="mb-1 cycle-icon-base" />
   },
   {
-    title: '2. Posicionar',
-    description: 'Definir clareza de mercado, proposta de valor e diferenciação.',
-    icon: <Target className="mb-1" style={{ color: '#0F2D3A' }} />
+    title: 'Posicionar',
+    description: 'Definir como o mercado deve perceber o seu negócio.',
+    icon: <Target className="mb-1 cycle-icon-base" />
   },
   {
-    title: '3. Planejar',
-    description: 'Organizar estratégia de conteúdo, funil e aquisição.',
-    icon: <Briefcase className="mb-1" style={{ color: '#0F2D3A' }} />
+    title: 'Planejar',
+    description: 'Estruturar a estratégia de comunicação e crescimento.',
+    icon: <Briefcase className="mb-1 cycle-icon-base" />
   },
   {
-    title: '4. Executar',
-    description: 'Aplicar conteúdo e tráfego com direção clara.',
-    icon: <Settings className="mb-1" style={{ color: '#0F2D3A' }} />
+    title: 'Executar',
+    description: 'Colocar o plano em prática com consistência.',
+    icon: <Check className="mb-1 cycle-icon-base" />
   },
   {
-    title: '5. Analisar',
-    description: 'Medir dados, comportamento e desempenho real.',
-    icon: <LineChart className="mb-1" style={{ color: '#0F2D3A' }} />
+    title: 'Analisar',
+    description: 'Avaliar dados para entender o que realmente funciona.',
+    icon: <LineChart className="mb-1 cycle-icon-base" />
   },
   {
-    title: '6. Otimizar',
-    description: 'Ajustar continuamente para gerar previsibilidade.',
-    icon: <TrendingUp className="mb-1" style={{ color: '#0F2D3A' }} />
+    title: 'Otimizar',
+    description: 'Ajustar continuamente a estratégia para evoluir.',
+    icon: <TrendingUp className="mb-1 cycle-icon-base" />
   }
 ];
 
@@ -443,6 +443,8 @@ function FullSitePage() {
 }
 
 function MetodoVMPage() {
+  const [activeStep, setActiveStep] = useState(null);
+
   return (
     <div className="metodo-vm-page-wrapper">
       <header className="site-mini-header">
@@ -487,37 +489,50 @@ function MetodoVMPage() {
             O Método VM não é uma campanha de marketing pontual. É um sistema cíclico projetado para melhorar continuamente a aquisição de clientes do seu negócio.
           </p>
 
-          <div className="cycle-visualizer-premium">
-            <div className="cycle-track">
-              {['Diagnosticar', 'Posicionar', 'Planejar', 'Executar', 'Analisar', 'Otimizar'].map((step, idx) => (
-                <div key={idx} className="cycle-step-badge">
-                  <span className="step-num">{idx + 1}</span>
-                  <span className="step-name">{step}</span>
-                  {idx < 5 && <ChevronRight className="cycle-arrow text-green" size={24} />}
-                </div>
-              ))}
+          <div className="orbital-diagram-container">
+            <div className="orbital-center">
+              Método VM<br /><span>Ciclo de Crescimento Digital</span>
             </div>
+
+            {/* The circular track line */}
+            <div className="orbital-track"></div>
+
+            {VM_STEPS.map((step, idx) => {
+              // 6 steps = 60 degrees each. Subtract 90 to start from top.
+              const angle = (idx * 60) - 90;
+
+              // We'll use CSS custom properties to pass the angle and let CSS handle the orbit math
+              return (
+                <div
+                  key={idx}
+                  className={`orbital-node ${activeStep === idx ? 'active' : ''}`}
+                  style={{ '--angle': `${angle}deg` }}
+                  onMouseEnter={() => setActiveStep(idx)}
+                  onMouseLeave={() => setActiveStep(null)}
+                  onClick={() => setActiveStep(activeStep === idx ? null : idx)}
+                >
+                  <div className="orbital-node-circle">
+                    {step.icon}
+                  </div>
+                  <div className="orbital-node-label">{step.title}</div>
+
+                  {/* Tooltip */}
+                  <div className="orbital-tooltip">
+                    <strong>{step.title}</strong>
+                    <p>{step.description}</p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
+
+          <p className="orbital-subtext text-white opacity-70 mt-5">
+            Diagnosticar → Posicionar → Planejar → Executar → Analisar → Otimizar<br />
+            <span className="text-green font-bold">E o ciclo recomeça.</span>
+          </p>
         </div>
       </section>
 
-      {/* SECTION 4 — THE 6 STEPS GRID */}
-      <section className="strategic-section">
-        <div className="container-strategic">
-          <h2 className="strategic-title text-center mb-5">O Ciclo na Prática</h2>
-          <div className="six-step-grid-premium">
-            {VM_STEPS.map((step, index) => (
-              <div key={index} className="premium-step-card">
-                <div className="step-card-header">
-                  <div className="icon-wrapper-green">{step.icon}</div>
-                  <h3 className="step-card-title">{step.title}</h3>
-                </div>
-                <p className="step-card-desc">{step.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* SECTION 5 — BENEFITS */}
       <section className="strategic-section bg-soft">

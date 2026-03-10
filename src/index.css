@@ -1054,6 +1054,195 @@ a {
     }
   }
 
+  /* --- ORBITAL DIAGRAM STYLES --- */
+  .orbital-diagram-container {
+    position: relative;
+    width: 600px;
+    height: 600px;
+    margin: 5rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .orbital-track {
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    border: 2px solid #e2e8f0;
+    /* light gray orbital line */
+    border-radius: 50%;
+    z-index: 1;
+  }
+
+  .orbital-center {
+    width: 200px;
+    height: 200px;
+    background: var(--primary-navy);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 800;
+    font-size: 1.2rem;
+    text-align: center;
+    z-index: 2;
+    box-shadow: 0 10px 30px rgba(15, 45, 58, 0.2);
+    line-height: 1.4;
+  }
+
+  .orbital-center span {
+    font-size: 0.9rem;
+    font-weight: 400;
+    opacity: 0.8;
+  }
+
+  .orbital-node {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* 225px is the radius (half of orbital-track width) */
+    transform: translate(-50%, -50%) rotate(var(--angle)) translate(225px) rotate(calc(-1 * var(--angle)));
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .orbital-node-circle {
+    width: 60px;
+    height: 60px;
+    background: white;
+    border: 2px solid var(--primary-navy);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .cycle-icon-base {
+    color: var(--accent-green);
+    transition: color 0.3s ease;
+  }
+
+  .orbital-node-label {
+    margin-top: 0.8rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--primary-navy);
+    background: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+
+  /* Active states */
+  .orbital-node.active .orbital-node-circle,
+  .orbital-node:hover .orbital-node-circle {
+    background: var(--primary-navy);
+    border-color: var(--primary-navy);
+    box-shadow: 0 0 15px rgba(15, 45, 58, 0.4);
+    transform: scale(1.1);
+  }
+
+  .orbital-node.active .cycle-icon-base,
+  .orbital-node:hover .cycle-icon-base {
+    color: white !important;
+  }
+
+  /* Tooltip */
+  .orbital-tooltip {
+    position: absolute;
+    top: calc(100% + 15px);
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: white;
+    border: 1px solid #e2e8f0;
+    padding: 1rem;
+    border-radius: 8px;
+    width: 220px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .orbital-node.active .orbital-tooltip,
+  .orbital-node:hover .orbital-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .orbital-tooltip strong {
+    display: block;
+    color: var(--primary-navy);
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .orbital-tooltip p {
+    color: #4a5568;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .orbital-subtext {
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+
+  @media (max-width: 768px) {
+    .orbital-diagram-container {
+      width: 100%;
+      height: 400px;
+      margin: 3rem 0;
+    }
+
+    .orbital-track {
+      width: 280px;
+      height: 280px;
+    }
+
+    .orbital-center {
+      width: 130px;
+      height: 130px;
+      font-size: 0.9rem;
+    }
+
+    .orbital-center span {
+      font-size: 0.75rem;
+    }
+
+    .orbital-node {
+      transform: translate(-50%, -50%) rotate(var(--angle)) translate(140px) rotate(calc(-1 * var(--angle)));
+    }
+
+    .orbital-node-circle {
+      width: 45px;
+      height: 45px;
+    }
+
+    .orbital-node-label {
+      font-size: 0.8rem;
+    }
+
+    .orbital-tooltip {
+      width: 180px;
+      padding: 0.8rem;
+    }
+  }
+
   /* --- DIAGNÓSTICO ESTRATÉGICO PAGE STYLES --- */
 
   .diagnostico-page-wrapper {
