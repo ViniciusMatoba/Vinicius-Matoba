@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
 import './App.css'
 import logo from './assets/logo.png'
 import profileImg from './assets/profile.jpeg'
@@ -8,6 +8,7 @@ import VMLogin from './VMLogin'
 import Dashboard from './Dashboard'
 import { auth } from './firebase'
 import { onAuthStateChanged } from 'firebase/auth'
+import InteractiveDiagnosis from './InteractiveDiagnosis'; // New Tool
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -259,7 +260,7 @@ function LandingPage() {
             Agendar Diagnóstico Estratégico
           </Link>
         </div>
-      </section>
+      </section >
 
       <footer className="section-padding premium-footer" style={{ backgroundColor: '#0B222C', color: 'white', textAlign: 'center' }}>
         <img src={logo} alt="Logo VM" style={{ width: '180px', marginBottom: '1.5rem', filter: 'brightness(0) invert(1)' }} />
@@ -271,7 +272,7 @@ function LandingPage() {
 
       {/* FLOATING ACTION BUTTON */}
       <FloatingCTA />
-    </div>
+    </div >
   );
 }
 
@@ -670,7 +671,7 @@ function ReuniaoEstrategicaPage() {
               href="https://wa.me/5519984522494?text=Olá+Vinícius,+conheci+as+etapas+pelo+site+e+quero+agendar+minha+reunião+estratégica"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-primary btn-cta-wa"
+              className="btn-strategic-final"
               style={{ padding: '1.3rem 3rem', fontSize: '1.2rem' }}
             >
               Agendar Minha Reunião Estratégica <ChevronRight size={22} />
@@ -689,33 +690,32 @@ function ReuniaoEstrategicaPage() {
 }
 
 function DiagnosticoPage() {
+  const handleWhatsAppClick = () => {
+    window.open("https://wa.me/5519984522494?text=Olá!+Quero+agendar+meu+diagnóstico+estratégico", "_blank");
+  };
+
   return (
     <div className="diagnostico-page-wrapper">
       <PremiumNav />
 
-      {/* SECTION 1 — HERO */}
-      <section className="premium-hero-section">
-        <div className="container-premium text-center">
-          <h1 className="hero-title-premium max-width-1000 margin-auto">Diagnóstico Estratégico de Crescimento Digital</h1>
-          <p className="hero-subtitle-premium max-width-800 margin-auto mt-4 mb-5">
-            Uma análise estruturada para entender o que está travando o crescimento do seu negócio e quais caminhos estratégicos podem destravar resultados.
+      {/* S1: HERO */}
+      <section className="premium-hero-section bg-base-white text-center">
+        <div className="container-premium max-width-1000 margin-auto px-4">
+          <h1 className="hero-title-premium mb-3">Diagnóstico Estratégico</h1>
+          <p className="hero-subtitle-premium mb-4 max-width-800 mx-auto">
+            Uma análise profunda para identificar o que trava o crescimento da sua empresa hoje, mapear gargalos na aquisição e traçar o plano de ação ideal.
           </p>
-          <div className="cta-wrapper-diagnostico mt-5">
-            <a
-              href="https://wa.me/5519984522494?text=Olá!+Quero+agendar+meu+diagnóstico+estratégico"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-vm-green-large"
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
+            <Link to="/ferramenta-diagnostico" className="btn-vm-green-large">
+              Fazer o Diagnóstico Rápido
+            </Link>
+            <button
+              onClick={handleWhatsAppClick}
+              className="btn-ghost-premium"
+              style={{ padding: '1rem 2rem', border: '1px solid var(--gray-200)', borderRadius: '50px', background: 'white' }}
             >
-              Agendar Diagnóstico Estratégico
-            </a>
-            <div className="info-text-mini mt-4">
-              <span>Duração: 45 minutos</span>
-              <span className="separator">•</span>
-              <span>Formato: Online</span>
-              <span className="separator">•</span>
-              <span>Custo: Gratuito</span>
-            </div>
+              Agendar Reunião Completa
+            </button>
           </div>
         </div>
       </section>
@@ -877,7 +877,7 @@ function ScrollToTop() {
 
 function App() {
   return (
-    <>
+    <Router>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -888,9 +888,10 @@ function App() {
         <Route path="/site" element={<FullSitePage />} />
         <Route path="/login" element={<VMLogin />} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/ferramenta-diagnostico" element={<InteractiveDiagnosis />} />
         <Route path="*" element={<LandingPage />} />
       </Routes>
-    </>
+    </Router>
   );
 }
 
