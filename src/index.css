@@ -121,6 +121,52 @@ a {
   background-color: var(--primary-navy);
 }
 
+.bg-metodo-hero {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.bg-metodo-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(248, 250, 252, 0.9); /* soft-gray overlay */
+  z-index: 1;
+}
+
+.bg-metodo-hero > div {
+  position: relative;
+  z-index: 2;
+}
+
+.bg-premium-footer {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.bg-premium-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(11, 34, 44, 0.95); /* navy overlay */
+  z-index: 1;
+}
+
+.bg-premium-footer > * {
+  position: relative;
+  z-index: 2;
+}
+
 .container-premium {
   max-width: 1200px;
   margin: 0 auto;

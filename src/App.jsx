@@ -3,8 +3,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } f
 import './App.css'
 import logo from './assets/logo.png'
 import profileImg from './assets/profile.jpeg'
+import heroHomeNewImg from './assets/hero-home-new.png'
 import bioLinkBg from './assets/bio-link-bg.png'
 import metodoCicloImg from './assets/metodo-ciclo.jpeg.png'
+import metodoHeroBg from './assets/metodo-hero-bg.jfif'
+import metodoFooterBg from './assets/metodo-footer-bg.png'
 import VMLogin from './VMLogin'
 import Dashboard from './Dashboard'
 import { auth } from './firebase'
@@ -149,7 +152,7 @@ function LandingPage() {
           </div>
           <div className="hero-content-right">
             <div className="hero-image-frame">
-              <img src={profileImg} alt="Vinícius Matoba" className="hero-img-consultant" />
+              <img src={heroHomeNewImg} alt="Vinícius Matoba" className="hero-img-consultant" />
             </div>
           </div>
         </div>
@@ -193,7 +196,7 @@ function LandingPage() {
       </section>
 
       {/* SECTION 4 — MÉTODO VM INTRO */}
-      <section id="metodo" className="premium-section bg-soft-gray">
+      <section id="metodo" className="premium-section bg-metodo-hero" style={{ backgroundImage: `url(${metodoHeroBg})` }}>
         <div className="container-premium text-center">
           <h2 className="premium-section-title max-width-800 margin-auto">Método VM — Ciclo de Crescimento Digital</h2>
           <p className="premium-section-text max-width-800 margin-auto mt-3 mb-5">
@@ -211,8 +214,7 @@ function LandingPage() {
           </div>
 
           <p className="orbital-subtext text-navy opacity-70 mb-5">
-            Diagnosticar → Posicionar → Planejar → Executar → Analisar → Otimizar<br />
-            <span className="text-accent-green font-bold">E o ciclo recomeça continuamente.</span>
+            <span className="text-accent-green font-bold">O ciclo de crescimento que transforma presença em lucro.</span>
           </p>
         </div>
       </section>
@@ -273,7 +275,7 @@ function LandingPage() {
         </div>
       </section>
 
-      <footer className="section-padding premium-footer" style={{ backgroundColor: '#0B222C', color: 'white', textAlign: 'center' }}>
+      <footer className="section-padding premium-footer bg-premium-footer" style={{ backgroundImage: `url(${metodoFooterBg})`, color: 'white', textAlign: 'center' }}>
         <img src={logo} alt="Logo VM" style={{ width: '180px', marginBottom: '1.5rem', filter: 'brightness(0) invert(1)' }} />
         <p style={{ opacity: 0.6, fontSize: '0.9rem' }}>© 2026 Vinícius Matoba. Estratégia Digital. Todos os direitos reservados.</p>
         <Link to="/login" className="footer-login-link" style={{ display: 'inline-block', marginTop: '1rem', color: 'var(--accent-green)', textDecoration: 'none', fontSize: '0.85rem' }}>
