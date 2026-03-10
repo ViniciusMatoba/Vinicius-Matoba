@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
 import './App.css'
 import logo from './assets/logo.png'
@@ -7,31 +7,7 @@ import bioLinkBg from './assets/bio-link-bg.png'
 import metodoCicloImg from './assets/metodo-ciclo.jpeg.png'
 import metodoHeroBg from './assets/metodo-hero-bg.jfif'
 import metodoFooterBg from './assets/metodo-footer-bg.png'
-import VMLogin from './VMLogin'
-import Dashboard from './Dashboard'
-import { auth } from './firebase'
-import { onAuthStateChanged } from 'firebase/auth'
 import InteractiveDiagnosis from './InteractiveDiagnosis';
-
-// --- UTILITIES ---
-
-const ProtectedRoute = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
-
-  if (loading) return <div style={{ background: '#050505', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>Carregando...</div>;
-  if (!user) return <Navigate to="/login" />;
-
-  return children;
-};
 
 import {
   MessageCircle,
@@ -54,7 +30,6 @@ function PremiumNav() {
         </Link>
         <div className="nav-links">
           <Link to="/metodo-vm" className="nav-link">Método</Link>
-          <Link to="/diagnostico-online" className="nav-link">Diagnóstico</Link>
         </div>
         <div className="nav-cta">
           <Link to="/reuniao-estrategica" className="btn-vm-green-small">
@@ -71,9 +46,6 @@ function Footer() {
     <footer className="section-padding premium-footer bg-premium-footer" style={{ backgroundImage: `url(${metodoFooterBg})`, color: 'white', textAlign: 'center' }}>
       <img src={logo} alt="Logo VM" style={{ width: '180px', marginBottom: '1.5rem', filter: 'brightness(0) invert(1)' }} />
       <p style={{ opacity: 0.6, fontSize: '0.9rem' }}>© 2026 Vinícius Matoba. Estratégia Digital. Todos os direitos reservados.</p>
-      <Link to="/login" className="footer-login-link" style={{ display: 'inline-block', marginTop: '1rem', color: 'var(--accent-green)', textDecoration: 'none', fontSize: '0.85rem' }}>
-        Acesso Agência
-      </Link>
     </footer>
   );
 }
@@ -283,19 +255,6 @@ function MeetingPage() {
   );
 }
 
-function DiagnosisPage() {
-  return (
-    <div className="landing-wrapper">
-      <PremiumNav />
-      <div style={{ paddingTop: '100px', paddingBottom: '60px', background: 'var(--soft-gray)' }}>
-        <DiagnosisSection />
-      </div>
-      <Footer />
-      <FloatingCTA />
-    </div>
-  );
-}
-
 function BioLink() {
   const cards = [
     { title: "Eu quero uma Reunião Estratégica", subtitle: "Descubra os gargalos que impedem seu lucro.", image: "https://images.unsplash.com/photo-1554224155-1696413565d3?q=80&w=800", link: "/reuniao-estrategica", isInternal: true },
@@ -373,10 +332,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/metodo-vm" element={<MetodoPage />} />
         <Route path="/reuniao-estrategica" element={<MeetingPage />} />
-        <Route path="/diagnostico-online" element={<DiagnosisPage />} />
         <Route path="/linknabio" element={<BioLink />} />
-        <Route path="/login" element={<VMLogin />} />
-        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
