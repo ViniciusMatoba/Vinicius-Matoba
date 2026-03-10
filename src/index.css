@@ -620,6 +620,54 @@ a {
   margin-top: 2rem;
 }
 
+/* Floating WhatsApp Button */
+.floating-whatsapp-btn {
+  position: fixed;
+  bottom: 2.5rem;
+  right: 2.5rem;
+  width: 70px;
+  height: 70px;
+  background-color: var(--accent-green);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(29, 185, 84, 0.4);
+  z-index: 1000;
+  transition: var(--transition);
+  animation: pulse-green 2s infinite;
+}
+
+.floating-whatsapp-btn:hover {
+  transform: scale(1.1) translateY(-5px);
+  background-color: var(--accent-green-hover);
+  box-shadow: 0 15px 35px rgba(29, 185, 84, 0.5);
+}
+
+@keyframes pulse-green {
+  0% {
+    box-shadow: 0 0 0 0 rgba(29, 185, 84, 0.7);
+  }
+
+  70% {
+    box-shadow: 0 0 0 15px rgba(29, 185, 84, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(29, 185, 84, 0);
+  }
+}
+
+@media (max-width: 768px) {
+  .floating-whatsapp-btn {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 60px;
+    height: 60px;
+  }
+}
+
 /* Responsive adjustments for premium sections */
 @media (max-width: 1024px) {
   .metodo-grid-premium {
