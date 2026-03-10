@@ -220,7 +220,6 @@ function LandingPage() {
       <HeroSection />
       <MarketProblemSection />
       <AboutSection />
-      <MethodSection />
       <DiagnosisSection />
       <MeetingSection />
       <Footer />
