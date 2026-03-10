@@ -4,7 +4,7 @@ import './App.css'
 import logo from './assets/logo.png'
 import profileImg from './assets/profile.jpeg'
 import bioLinkBg from './assets/bio-link-bg.png'
-import metodoCicloImg from './assets/metodo-ciclo.jpeg'
+import metodoCicloImg from './assets/metodo-ciclo.jpeg.png'
 import VMLogin from './VMLogin'
 import Dashboard from './Dashboard'
 import { auth } from './firebase'
@@ -60,15 +60,15 @@ function PremiumNav() {
 
         {/* Center: Desktop Links */}
         <div className="nav-links">
-          <Link to="/metodo-vm" className="nav-link">Método VM</Link>
-          <Link to="/diagnostico" className="nav-link">Diagnóstico Estratégico</Link>
+          <a href="#metodo" className="nav-link">Método</a>
+          <a href="#diagnostico" className="nav-link">Diagnóstico</a>
         </div>
 
         {/* Right: CTA (Desktop) */}
         <div className="nav-cta">
-          <Link to="/diagnostico" className="btn-vm-green-small">
+          <a href="#agendar" className="btn-vm-green-small">
             Agendar Diagnóstico
-          </Link>
+          </a>
         </div>
       </div>
     </nav>
@@ -78,14 +78,12 @@ function PremiumNav() {
 function FloatingCTA() {
   return (
     <a
-      href="https://wa.me/5519984522494?text=Olá!+Vi+seu+site+e+quero+agendar+um+diagnóstico+estratégico"
-      target="_blank"
-      rel="noopener noreferrer"
+      href="#agendar"
       className="floating-cta-expanded"
-      aria-label="Agendar via WhatsApp"
+      aria-label="Agendar Diagnóstico"
     >
       <MessageCircle size={24} />
-      <span>Agendar Diagnóstico Estratégico</span>
+      <span>Agendar Diagnóstico</span>
     </a>
   );
 }
@@ -138,15 +136,15 @@ function LandingPage() {
               Estratégia antes da postagem.
             </h1>
             <p className="hero-subtitle-premium">
-              Transformo presença digital em crescimento previsível através do <strong>Método VM — Ciclo de Crescimento Digital.</strong>
+              Transformo presença digital em crescimento previsível <br className="desktop-only-br" /> através do <strong>Método VM — Ciclo de Crescimento Digital.</strong>
             </p>
             <div className="hero-buttons-wrapper">
-              <Link to="/diagnostico" className="btn-vm-green-large">
+              <a href="#agendar" className="btn-vm-green-large">
                 Agendar Diagnóstico Estratégico
-              </Link>
-              <Link to="/metodo-vm" className="btn-outline-navy">
+              </a>
+              <a href="#metodo" className="btn-outline-navy">
                 Conhecer o Método VM
-              </Link>
+              </a>
             </div>
           </div>
           <div className="hero-content-right">
@@ -157,28 +155,28 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* SECTION 2 — MARKET PROBLEM */}
-      <section className="premium-section bg-soft-gray">
+      {/* SECTION 2 — THE MARKET PROBLEM */}
+      <section id="market-problem" className="premium-section bg-soft-gray">
         <div className="container-premium text-center">
           <h2 className="premium-section-title max-width-1000 margin-auto">
             A maioria das empresas não tem um problema de marketing.<br />
             <span className="text-accent-green">Tem um problema de estratégia.</span>
           </h2>
           <p className="premium-section-text max-width-800 margin-auto mt-4">
-            Muitos negócios postam com frequência, criam conteúdo e investem muito tempo tentando crescer. Mas os resultados não vêm. Isso acontece porque a execução está vindo antes de entender o público, o posicionamento e a própria estratégia.
+            Muitos negócios postam com frequência, criam conteúdo e investem muito tempo tentando crescer. <br className="desktop-only-br" /> Mas os resultados não vêm. Isso acontece porque a execução está vindo antes de entender o público, o posicionamento e a própria estratégia.
           </p>
         </div>
       </section>
 
-      {/* SECTION 3 — AUTHORITY (VINÍCIUS MATOBA) */}
-      <section className="premium-section bg-base-white">
+      {/* SECTION 3 — ABOUT VINÍCIUS MATOBA */}
+      <section id="sobre" className="premium-section bg-base-white">
         <div className="container-premium authority-grid">
           <div className="authority-text">
             <h2 className="premium-section-title">Estratégia orientada a resultados.</h2>
             <div className="premium-section-text mt-4">
               <p>Sou Vinícius Matoba, estrategista digital.</p>
-              <p>Minha trajetória não começou na criação de conteúdo, mas em ambientes corporativos focados em processos, dados e tomada de decisão.</p>
-              <p>Trago essa visão analítica para o digital: meu objetivo é construir sistemas de aquisição de clientes que dependam menos de achismos e mais de estratégia validada.</p>
+              <p>Minha trajetória não começou na criação de conteúdo, <br className="desktop-only-br" /> mas em ambientes corporativos focados em processos, dados e tomada de decisão.</p>
+              <p>Trago essa visão analítica para o digital: meu objetivo é construir sistemas de aquisição de clientes <br className="desktop-only-br" /> que dependam menos de achismos e mais de estratégia validada.</p>
             </div>
           </div>
           <div className="authority-stats bg-navy text-white">
@@ -194,287 +192,32 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* SECTION 4 — MÉTODO VM PREVIEW */}
-      <section className="premium-section bg-soft-gray">
+      {/* SECTION 4 — MÉTODO VM INTRO */}
+      <section id="metodo" className="premium-section bg-soft-gray">
         <div className="container-premium text-center">
-          <h2 className="premium-section-title max-width-800 margin-auto">O motor do seu crescimento.</h2>
+          <h2 className="premium-section-title max-width-800 margin-auto">Método VM — Ciclo de Crescimento Digital</h2>
           <p className="premium-section-text max-width-800 margin-auto mt-3 mb-5">
-            O Método VM não é uma promessa mágica, é um processo de engenharia aplicado ao marketing digital.
+            O Método VM não é uma promessa mágica, <br className="desktop-only-br" /> é um processo de engenharia aplicado ao marketing digital.
           </p>
 
-          <div className="method-preview-box">
-            <div className="preview-badges">
-              <span>Diagnosticar</span>
-              <ChevronRight size={16} />
-              <span>Posicionar</span>
-              <ChevronRight size={16} />
-              <span>Planejar</span>
-              <ChevronRight size={16} />
-              <span>Executar</span>
-              <ChevronRight size={16} />
-              <span>Analisar</span>
-              <ChevronRight size={16} />
-              <span>Otimizar</span>
-            </div>
-          </div>
-
-          <div className="mt-5">
-            <Link to="/metodo-vm" className="btn-outline-navy btn-large">
-              Explorar o Método VM
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 5 — BENEFITS */}
-      <section className="premium-section bg-base-white">
-        <div className="container-premium">
-          <h2 className="premium-section-title text-center mb-5">O que muda com uma estratégia sólida</h2>
-          <div className="benefits-premium-grid">
-            <div className="benefit-premium-card">
-              <Check size={24} className="text-accent-green mb-3" />
-              <h3>Clareza de Direção</h3>
-              <p>Saber exatamente o que postar, para quem e com qual objetivo.</p>
-            </div>
-            <div className="benefit-premium-card">
-              <Check size={24} className="text-accent-green mb-3" />
-              <h3>Posicionamento Forte</h3>
-              <p>Ser percebido pelo mercado com alto valor, fugindo da guerra de preços.</p>
-            </div>
-            <div className="benefit-premium-card">
-              <Check size={24} className="text-accent-green mb-3" />
-              <h3>Crescimento Previsível</h3>
-              <p>Deixar de depender da sorte e criar um processo replicável de vendas.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 6 — FINAL CTA */}
-      <section className="premium-section bg-navy text-white text-center">
-        <div className="container-premium">
-          <h2 className="premium-section-title text-white">Vamos analisar o seu cenário?</h2>
-          <p className="premium-section-text text-white opacity-80 max-width-800 margin-auto mt-3 mb-5">
-            O primeiro passo para destravar seu crescimento digital é entender a fundo onde o seu negócio está e para onde ele deve ir.
-          </p>
-          <Link to="/diagnostico" className="btn-vm-green-large">
-            Agendar Diagnóstico Estratégico
-          </Link>
-        </div>
-      </section >
-
-      <footer className="section-padding premium-footer" style={{ backgroundColor: '#0B222C', color: 'white', textAlign: 'center' }}>
-        <img src={logo} alt="Logo VM" style={{ width: '180px', marginBottom: '1.5rem', filter: 'brightness(0) invert(1)' }} />
-        <p style={{ opacity: 0.6, fontSize: '0.9rem' }}>© 2026 Vinícius Matoba. Estratégia Digital. Todos os direitos reservados.</p>
-        <Link to="/login" className="footer-login-link" style={{ display: 'inline-block', marginTop: '1rem', color: 'var(--accent-green)', textDecoration: 'none', fontSize: '0.85rem' }}>
-          Acesso Agência
-        </Link>
-      </footer>
-
-      {/* FLOATING ACTION BUTTON */}
-      <FloatingCTA />
-    </div >
-  );
-}
-
-function FullSitePage() {
-  return (
-    <div className="full-site-wrapper">
-      <header className="site-mini-header">
-        <Link to="/" className="back-link">
-          <ChevronRight size={20} style={{ transform: 'rotate(180deg)' }} /> Voltar para o Início
-        </Link>
-        <img src={logo} alt="Logo VM" className="mini-logo" />
-      </header>
-
-      {/* SECTION: SOBRE (WHO IS VINICIUS) - MOVED TO TOP */}
-      <section className="section-padding bio-section-home">
-        <div className="container-narrow mb-4">
-          <h2 className="strategic-headline text-center">Quem é Vinicius Matoba:</h2>
-        </div>
-        <div className="bio-grid-home">
-          <div className="photo-container-home">
-            <div className="photo-frame">
-              <img src={profileImg} alt="Vinícius Matoba" className="photo-frame-img" />
-            </div>
-          </div>
-          <div className="bio-text-content">
-            <h2 className="mb-2">Estratégia não nasce do acaso.<br />Nasce de experiência.</h2>
-            <div className="consultative-text">
-              <p className="mb-2">
-                Minha trajetória profissional não começou no marketing digital. Começou em ambientes corporativos exigentes, onde estratégia, decisão e responsabilidade impactam resultados reais.
-              </p>
-
-              <div className="trajectory-blocks">
-                <div className="trajectory-item">
-                  <strong>Multinacionais & Tradução</strong>
-                  <p>Atuei como tradutor em multinacionais do setor automobilístico, incluindo a Toyota, trabalhando diretamente com gerências e alta direção.</p>
-                </div>
-                <div className="trajectory-item">
-                  <strong>Recursos Humanos (6 Anos)</strong>
-                  <p>Construí uma carreira sólida no RH, com foco em Recrutamento e Seleção, desenvolvimento e apoio direto a colaboradores.</p>
-                </div>
-                <div className="trajectory-item">
-                  <strong>Custos & Contabilidade</strong>
-                  <p>Atuei na área de custos — aprendendo a olhar números como direcionamento estratégico, não apenas como relatório.</p>
-                </div>
-              </div>
-
-              <div className="differentiator-box">
-                <p>Essa combinação me deu algo que poucos possuem:</p>
-                <h4 className="differentiator-text">Visão estratégica baseada em pessoas, processos e dados.</h4>
-              </div>
-
-              <p className="mb-2">
-                Com formação em Publicidade e Propaganda e especializações em marketing digital e tráfego pago, desenvolvi meu próprio modelo de trabalho: <strong>O Método VM — Ciclo de Crescimento Digital.</strong>
-              </p>
-
-              <div className="final-authority-punch">
-                <p>Porque Marketing não é sobre aparecer.</p>
-                <p className="highlight-green">É sobre direcionar o crescimento.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION: METHOD INTRO & CTA */}
-      <section className="strategic-method-fold section-padding bg-light">
-        <div className="container-narrow text-center">
-          <h2 className="strategic-headline">
-            Crescimento não é improviso.<br />
-            <span className="text-secondary-green">É processo.</span>
-          </h2>
-
-          <div className="strategic-body mb-4">
-            <h4 className="method-name mb-3">Método VM — Ciclo de Crescimento Digital</h4>
-            <p>Para transformar redes sociais em um canal previsível de aquisição, não basta postar mais.</p>
-            <p className="highlight-text-navy">É preciso estruturar.</p>
-          </div>
-
-          <div className="site-cta-group mt-4">
-            <Link to="/metodo-vm" className="btn-site-navy">
-              Conheça o Método VM
-            </Link>
-            <Link to="/metodo-vm#planos" className="btn-site-green">
-              Verificar os Planos
-            </Link>
-          </div>
-        </div>
-      </section>
-
-
-      {/* SECTION: STRATEGIC SIXTH FOLD (ENTRY PROCESS) */}
-      <section className="strategic-entry-fold section-padding">
-        <div className="container-narrow text-center">
-          <h2 className="strategic-headline">Como funciona a reunião estratégica</h2>
-
-          <div className="entry-intro-box">
-            <p className="large-text">O primeiro passo não é contratar.</p>
-            <p className="accent-text">É entender.</p>
-          </div>
-
-          <div className="entry-benefits-grid">
-            <div className="benefit-item">
-              <Check size={24} className="icon-check" />
-              <p>Analisar seu cenário atual</p>
-            </div>
-            <div className="benefit-item">
-              <Check size={24} className="icon-check" />
-              <p>Entender seu modelo de negócio</p>
-            </div>
-            <div className="benefit-item">
-              <Check size={24} className="icon-check" />
-              <p>Identificar gargalos de aquisição</p>
-            </div>
-            <div className="benefit-item">
-              <Check size={24} className="icon-check" />
-              <p>Avaliar se o Método VM faz sentido para você</p>
-            </div>
-          </div>
-
-          <div className="final-cta-block">
-            <h3 className="cta-question">Pronto para estruturar seu crescimento?</h3>
-            <a
-              href="https://wa.me/5519984522494?text=Olá+Vinícius,+quero+agendar+minha+reunião+estratégica"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-strategic-final"
-            >
-              Agendar Reunião Estratégica
-              <ChevronRight size={20} />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <div className="vm-footer-access">
-        <Link to="/login" className="btn-access-backstage">
-          <span>Acessar Agência VM</span>
-          <ChevronRight size={16} />
-        </Link>
-      </div>
-      <footer className="section-padding premium-footer" style={{ backgroundColor: '#0F2D3A', color: 'white', textAlign: 'center' }}>
-        <img src={logo} alt="Logo" style={{ width: '200px', marginBottom: '1.5rem', filter: 'brightness(0) invert(1)' }} />
-        <p style={{ opacity: 0.6 }}>© 2026 VM Estratégia Digital. Todos os direitos reservados.</p>
-      </footer>
-      <FloatingCTA />
-    </div>
-  );
-}
-
-function MetodoVMPage() {
-
-  return (
-    <div className="metodo-vm-page-wrapper bg-base-white">
-      <PremiumNav />
-
-      {/* SECTION 1 — HERO */}
-      <section className="premium-hero-section">
-        <div className="container-premium text-center">
-          <h1 className="hero-title-premium max-width-1000 margin-auto">Método VM — Ciclo de Crescimento Digital</h1>
-          <p className="hero-subtitle-premium max-width-800 margin-auto mt-4">
-            Um processo estratégico contínuo para transformar presença digital em crescimento previsível.
-          </p>
-        </div>
-      </section>
-
-      {/* SECTION 2 — THE PROBLEM */}
-      <section className="premium-section bg-soft-gray">
-        <div className="container-premium text-center">
-          <h2 className="premium-section-title">A maioria das estratégias digitais falha por um motivo simples.</h2>
-          <div className="premium-section-text mt-4 max-width-800 margin-auto">
-            <p className="font-bold text-navy mb-3">A execução vindo antes do planejamento.</p>
-            <p>Muitos negócios criam posts, sobem campanhas e gravam vídeos sem responder as perguntas fundamentais do próprio negócio. Quando você executa sem estratégia, gasta tempo e dinheiro para atrair o cliente errado.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 3 — THE STRATEGIC CYCLE (ORBITAL) */}
-      <section className="premium-section bg-navy text-white text-center">
-        <div className="container-premium">
-          <h2 className="premium-section-title text-white">Crescimento digital é um ciclo.</h2>
-          <p className="premium-section-text text-white opacity-80 max-width-800 margin-auto mb-5">
-            Um sistema cíclico projetado para melhorar continuamente a aquisição de clientes.
-          </p>
-
-          <div className="metodo-ciclo-photo-container">
+          {/* SECTION 5 — INTERACTIVE METHOD DIAGRAM */}
+          <div className="metodo-ciclo-photo-container mb-5">
             <img
               src={metodoCicloImg}
               alt="Método VM - Ciclo de Crescimento"
               className="margin-auto"
-              style={{ maxWidth: '100%', borderRadius: '16px', boxShadow: 'var(--shadow-lg)' }}
+              style={{ maxWidth: '100%', borderRadius: '16px', boxShadow: 'var(--shadow-lg)', backgroundColor: 'white', padding: '1rem' }}
             />
           </div>
 
-          <p className="orbital-subtext text-white opacity-70 mt-5">
+          <p className="orbital-subtext text-navy opacity-70 mb-5">
             Diagnosticar → Posicionar → Planejar → Executar → Analisar → Otimizar<br />
-            <span className="text-green font-bold">E o ciclo recomeça.</span>
+            <span className="text-accent-green font-bold">E o ciclo recomeça continuamente.</span>
           </p>
         </div>
       </section>
 
-      {/* SECTION 4 — EXPLANATION OF EACH STEP */}
+      {/* SECTION 6 — METHOD EXPLANATION */}
       <section className="premium-section bg-base-white">
         <div className="container-premium">
           <h2 className="premium-section-title text-center mb-5">Como funciona cada etapa do ciclo</h2>
@@ -490,22 +233,52 @@ function MetodoVMPage() {
         </div>
       </section>
 
-      {/* SECTION 5 — CTA */}
-      <section className="premium-section bg-soft-gray text-center">
-        <div className="container-premium">
-          <h2 className="premium-section-title">O primeiro passo é entender o seu cenário.</h2>
-          <p className="premium-section-text max-width-800 margin-auto mt-3 mb-5">
-            Nenhuma implementação do Método VM começa com execução. Tudo parte de um diagnóstico profundo.
+      {/* SECTION 7 — DIAGNÓSTICO ESTRATÉGICO */}
+      <section id="diagnostico" className="premium-section bg-soft-gray">
+        <div className="container-premium text-center">
+          <h2 className="premium-section-title mb-3">Diagnóstico Estratégico de Crescimento Digital</h2>
+          <p className="premium-section-text max-width-800 margin-auto mb-5">
+            Uma análise profunda para identificar o que trava o crescimento da sua empresa hoje, <br className="desktop-only-br" /> mapear gargalos na aquisição e traçar o plano de ação ideal.
           </p>
-          <Link to="/diagnostico" className="btn-vm-green-large">
+
+          {/* EMBEDDED DIAGNOSIS TOOL */}
+          <div className="embedded-diagnosis-wrapper" style={{ marginTop: '2rem' }}>
+            <InteractiveDiagnosis isEmbedded={true} />
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 8 — FINAL CALL TO ACTION */}
+      <section id="agendar" className="premium-section bg-navy text-white text-center">
+        <div className="container-premium">
+          <h2 className="premium-section-title text-white">O primeiro passo é entender o seu cenário.</h2>
+          <p className="premium-section-text text-white opacity-80 max-width-800 margin-auto mt-3 mb-5">
+            Escolha um horário para conversarmos sobre a implementação do Método VM no seu negócio.
+          </p>
+          <a
+            href="https://wa.me/5519984522494?text=Olá+Vinícius,+completei+o+diagnóstico+e+quero+agendar+minha+conversa+estratégica"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-vm-green-large"
+          >
             Agendar Diagnóstico Estratégico
-          </Link>
+          </a>
+          <div className="info-text-mini text-white opacity-70 mt-4">
+            <span>Duração: 45 minutos</span>
+            <span className="separator text-green">•</span>
+            <span>Formato: Online</span>
+            <span className="separator text-green">•</span>
+            <span>Custo: Gratuito</span>
+          </div>
         </div>
       </section>
 
       <footer className="section-padding premium-footer" style={{ backgroundColor: '#0B222C', color: 'white', textAlign: 'center' }}>
         <img src={logo} alt="Logo VM" style={{ width: '180px', marginBottom: '1.5rem', filter: 'brightness(0) invert(1)' }} />
         <p style={{ opacity: 0.6, fontSize: '0.9rem' }}>© 2026 Vinícius Matoba. Estratégia Digital. Todos os direitos reservados.</p>
+        <Link to="/login" className="footer-login-link" style={{ display: 'inline-block', marginTop: '1rem', color: 'var(--accent-green)', textDecoration: 'none', fontSize: '0.85rem' }}>
+          Acesso Agência
+        </Link>
       </footer>
 
       <FloatingCTA />
@@ -527,7 +300,7 @@ function BioLink() {
       title: "Crescimento Estruturado — Método VM",
       subtitle: "Posicionamento, conteúdo e tráfego por dados.",
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800",
-      link: "/metodo-vm",
+      link: "/metodo",
       isModal: false,
       isInternal: true
     },
@@ -560,7 +333,7 @@ function BioLink() {
           <div className="bio-profile-text">
             <h1 className="bio-name">Vinícius Matoba</h1>
             <p className="bio-description">
-              Estrategista digital para negócios locais. Estruturo crescimento previsível através do Método VM — posicionamento, conteúdo e reunião estratégica orientada por dados.
+              Estrategista digital para negócios locais. <br/> Estruturo crescimento previsível através do Método VM — posicionamento, conteúdo e reunião estratégica orientada por dados.
             </p>
           </div>
         </div>
@@ -602,235 +375,6 @@ function BioLink() {
   );
 }
 
-function ReuniaoEstrategicaPage() {
-  return (
-    <div className="metodo-wrapper" translate="no" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <header className="site-mini-header">
-        <Link to="/linknabio" className="back-link">
-          <ChevronRight size={20} style={{ transform: 'rotate(180deg)' }} /> Voltar para os Links
-        </Link>
-        <img src={logo} alt="Logo VM" className="mini-logo" />
-      </header>
-
-      <section className="strategic-method-fold section-padding" style={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
-        <div className="container-narrow text-center">
-          <div className="vm-step-counter">O Primeiro Passo</div>
-          <h2 className="strategic-headline mb-5" style={{ color: 'var(--primary-navy)', fontSize: '2.2rem' }}>
-            Como funciona a nossa<br />
-            <span className="text-secondary-green">Reunião Estratégica:</span>
-          </h2>
-
-          <div className="entry-benefits-grid mb-5" style={{ display: 'grid', gap: '1.5rem', textAlign: 'left', maxWidth: '600px', margin: '0 auto 3rem' }}>
-            <div className="benefit-item" style={{ display: 'flex', alignItems: 'center', gap: '15px', background: 'white', padding: '1.2rem', borderRadius: '12px', boxShadow: '0 4px 12px rgba(15, 45, 58, 0.05)' }}>
-              <Check size={24} style={{ color: 'var(--accent-green)', flexShrink: 0 }} />
-              <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: '500' }}>Analisar seu cenário atual de ponta a ponta</p>
-            </div>
-            <div className="benefit-item" style={{ display: 'flex', alignItems: 'center', gap: '15px', background: 'white', padding: '1.2rem', borderRadius: '12px', boxShadow: '0 4px 12px rgba(15, 45, 58, 0.05)' }}>
-              <Check size={24} style={{ color: 'var(--accent-green)', flexShrink: 0 }} />
-              <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: '500' }}>Entender profundamente seu modelo de negócio</p>
-            </div>
-            <div className="benefit-item" style={{ display: 'flex', alignItems: 'center', gap: '15px', background: 'white', padding: '1.2rem', borderRadius: '12px', boxShadow: '0 4px 12px rgba(15, 45, 58, 0.05)' }}>
-              <Check size={24} style={{ color: 'var(--accent-green)', flexShrink: 0 }} />
-              <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: '500' }}>Identificar os reais gargalos de aquisição</p>
-            </div>
-            <div className="benefit-item" style={{ display: 'flex', alignItems: 'center', gap: '15px', background: 'white', padding: '1.2rem', borderRadius: '12px', boxShadow: '0 4px 12px rgba(15, 45, 58, 0.05)' }}>
-              <Check size={24} style={{ color: 'var(--accent-green)', flexShrink: 0 }} />
-              <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: '500' }}>Avaliar se o Método VM é a melhor solução agora</p>
-            </div>
-          </div>
-
-          <div className="text-center">
-            <a
-              href="https://wa.me/5519984522494?text=Olá+Vinícius,+conheci+as+etapas+pelo+site+e+quero+agendar+minha+reunião+estratégica"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-strategic-final"
-              style={{ padding: '1.3rem 3rem', fontSize: '1.2rem' }}
-            >
-              Agendar Minha Reunião Estratégica <ChevronRight size={22} />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <footer className="section-padding premium-footer" style={{ backgroundColor: '#0F2D3A', color: 'white', textAlign: 'center' }}>
-        <img src={logo} alt="Logo" style={{ width: '200px', marginBottom: '1.5rem', filter: 'brightness(0) invert(1)' }} />
-        <p style={{ opacity: 0.6 }}>© 2026 VM Estratégia Digital. Todos os direitos reservados.</p>
-      </footer>
-      <FloatingCTA />
-    </div>
-  );
-}
-
-function DiagnosticoPage() {
-  const handleWhatsAppClick = () => {
-    window.open("https://wa.me/5519984522494?text=Olá!+Quero+agendar+meu+diagnóstico+estratégico", "_blank");
-  };
-
-  return (
-    <div className="diagnostico-page-wrapper">
-      <PremiumNav />
-
-      {/* S1: HERO */}
-      <section className="premium-hero-section bg-base-white text-center">
-        <div className="container-premium max-width-1000 margin-auto px-4">
-          <h1 className="hero-title-premium mb-3">Diagnóstico Estratégico</h1>
-          <p className="hero-subtitle-premium mb-4 max-width-800 mx-auto">
-            Uma análise profunda para identificar o que trava o crescimento da sua empresa hoje, mapear gargalos na aquisição e traçar o plano de ação ideal.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
-            <Link to="/ferramenta-diagnostico" className="btn-vm-green-large">
-              Fazer o Diagnóstico Rápido
-            </Link>
-            <button
-              onClick={handleWhatsAppClick}
-              className="btn-ghost-premium"
-              style={{ padding: '1rem 2rem', border: '1px solid var(--gray-200)', borderRadius: '50px', background: 'white' }}
-            >
-              Agendar Reunião Completa
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 2 — THE PROBLEM */}
-      <section className="premium-section bg-soft-gray">
-        <div className="container-premium text-center">
-          <h2 className="premium-section-title">A maioria das empresas tenta crescer executando antes de entender.</h2>
-          <div className="premium-section-text margin-auto mt-4 max-width-800">
-            <p className="mb-4">Muitos negócios estão presentes nas redes sociais. Postam conteúdo, testam campanhas, e seguem tendências.</p>
-            <p className="font-bold text-navy my-4">Mas sem clareza estratégica, o resultado é simples:</p>
-            <ul className="strategic-list-minimal center-list mb-0">
-              <li>esforço alto</li>
-              <li>retorno baixo</li>
-              <li>crescimento inconsistente</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 3 — WHAT HAPPENS DURING THE DIAGNOSIS */}
-      <section className="premium-section bg-base-white">
-        <div className="container-premium">
-          <div className="two-col-grid">
-            <div className="grid-text-side">
-              <h2 className="premium-section-title">O que acontece durante o diagnóstico estratégico</h2>
-              <p className="premium-section-text mb-4 mt-3 opacity-80">Durante a conversa analisamos os principais pontos do seu cenário digital.</p>
-              <ul className="strategic-check-list">
-                <li>Seu posicionamento atual</li>
-                <li>Como seu negócio está sendo percebido</li>
-                <li>Sua comunicação digital</li>
-                <li>Possíveis gargalos estratégicos</li>
-                <li>Oportunidades de crescimento</li>
-              </ul>
-            </div>
-            <div className="grid-visual-side bg-navy-accent" style={{ borderRadius: '12px' }}>
-              <div className="visual-content-placeholder">
-                <Target size={80} className="text-accent-green opacity-40" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 4 — WHAT YOU GET FROM THE CALL */}
-      <section className="premium-section bg-soft-gray">
-        <div className="container-premium">
-          <h2 className="premium-section-title text-center mb-5">O que você leva dessa conversa</h2>
-          <div className="benefits-premium-grid">
-            {[
-              { title: 'Clareza sobre seu posicionamento', icon: <Eye size={32} /> },
-              { title: 'Identificação de gargalos estratégicos', icon: <TrendingUp size={32} /> },
-              { title: 'Direcionamento de crescimento', icon: <Target size={32} /> },
-              { title: 'Recomendações práticas', icon: <Settings size={32} /> }
-            ].map((item, idx) => (
-              <div key={idx} className="benefit-premium-card border-navy text-center">
-                <div className="icon-wrapper-green mx-auto mb-3" style={{ width: '60px', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#e2f5ec', color: 'var(--accent-green)', borderRadius: '50%' }}>{item.icon}</div>
-                <h3 className="font-bold">{item.title}</h3>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 5 & 6 — WHO THIS IS FOR / NOT FOR */}
-      <section className="premium-section bg-base-white">
-        <div className="container-premium">
-          <div className="qualification-grid-premium">
-            <div className="qual-box-premium border-green bg-soft-green">
-              <h2 className="premium-section-title" style={{ fontSize: '1.8rem' }}>Essa conversa é para você se</h2>
-              <ul className="strategic-check-list mt-4">
-                <li>Quer crescer com estratégia</li>
-                <li>Sente que está executando sem clareza</li>
-                <li>Quer melhorar posicionamento digital</li>
-                <li>Busca crescimento previsível</li>
-              </ul>
-            </div>
-            <div className="qual-box-premium border-gray bg-soft-gray">
-              <h2 className="premium-section-title text-gray" style={{ fontSize: '1.8rem' }}>Essa conversa não é para você se</h2>
-              <ul className="strategic-list-minimal mt-4">
-                <li>Procura apenas alguém para fazer posts soltos</li>
-                <li>Busca "fórmulas mágicas" e soluções rápidas sem estratégia</li>
-                <li>Não está disposto a analisar a fundo o seu negócio</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 7 — ABOUT VINÍCIUS MATOBA */}
-      <section className="premium-section bg-soft-gray">
-        <div className="container-premium authority-grid">
-          <div className="authority-text">
-            <h2 className="premium-section-title">Quem conduz o diagnóstico</h2>
-            <div className="premium-section-text mt-4">
-              <p>Sou Vinícius Matoba, estrategista digital.</p>
-              <p>Ajudo empresas e profissionais a transformarem presença digital em crescimento estruturado através do Método VM — Ciclo de Crescimento Digital.</p>
-              <p className="font-bold text-navy mt-3">Meu trabalho começa com estratégia antes da execução.</p>
-            </div>
-          </div>
-          <div className="authority-image text-center">
-            <img src={profileImg} alt="Vinícius Matoba" className="premium-bio-img" style={{ maxWidth: '300px' }} />
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 8 — FINAL CALL TO ACTION */}
-      <section className="premium-section bg-navy text-white text-center">
-        <div className="container-premium">
-          <h2 className="premium-section-title text-white">Vamos analisar o seu cenário?</h2>
-          <p className="premium-section-text text-white opacity-80 mb-5 max-width-800 margin-auto mt-3">
-            Escolha um horário disponível para o diagnóstico estratégico.
-          </p>
-
-          <div className="cta-final-box-diag mt-4">
-            <a
-              href="https://wa.me/5519984522494?text=Olá!+Quero+agendar+meu+diagnóstico+estratégico"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-vm-green-large"
-            >
-              Agendar Diagnóstico Estratégico
-            </a>
-            <div className="info-text-mini text-white opacity-70 mt-4">
-              <span>Duração: 45 minutos</span>
-              <span className="separator text-green">•</span>
-              <span>Formato: Online</span>
-              <span className="separator text-green">•</span>
-              <span>Custo: Gratuito</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <footer className="section-padding" style={{ backgroundColor: '#05161D', color: 'white', textAlign: 'center' }}>
-        <img src={logo} alt="Logo" style={{ width: '180px', marginBottom: '1.5rem', filter: 'brightness(0) invert(1)' }} />
-        <p style={{ opacity: 0.5 }}>© 2026 VM Estratégia Digital. Todos os direitos reservados.</p>
-      </footer>
-    </div>
-  );
-}
-
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
 
@@ -855,13 +399,13 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/linknabio" element={<BioLink />} />
-        <Route path="/reuniao-estrategica" element={<ReuniaoEstrategicaPage />} />
-        <Route path="/diagnostico" element={<DiagnosticoPage />} />
-        <Route path="/metodo-vm" element={<MetodoVMPage />} />
-        <Route path="/site" element={<FullSitePage />} />
         <Route path="/login" element={<VMLogin />} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path="/ferramenta-diagnostico" element={<InteractiveDiagnosis />} />
+        {/* Redirect old pages to home for a cleaner experience */}
+        <Route path="/metodo" element={<LandingPage />} />
+        <Route path="/reuniao-estrategica" element={<LandingPage />} />
+        <Route path="/diagnostico-estrategico" element={<LandingPage />} />
+        <Route path="/ferramenta-diagnostico" element={<LandingPage />} />
         <Route path="*" element={<LandingPage />} />
       </Routes>
     </Router>

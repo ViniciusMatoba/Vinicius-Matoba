@@ -24,7 +24,7 @@ const FormLayout = ({ children, title }) => (
     </div>
 );
 
-export default function InteractiveDiagnosis() {
+export default function InteractiveDiagnosis({ isEmbedded = false }) {
     const [currentStep, setCurrentStep] = useState(0);
 
     // Form State
@@ -152,12 +152,14 @@ export default function InteractiveDiagnosis() {
     };
 
     return (
-        <div className="interactive-diagnosis-page bg-soft-gray" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-            <header className="site-mini-header" style={{ display: 'flex', justifyContent: 'center', padding: '1.5rem', background: 'white', borderBottom: '1px solid var(--gray-200)' }}>
-                <img src={logo} alt="Logo VM" style={{ height: '30px' }} />
-            </header>
+        <div className={`interactive-diagnosis-page ${isEmbedded ? '' : 'bg-soft-gray'}`} style={{ minHeight: isEmbedded ? 'auto' : '100vh', display: 'flex', flexDirection: 'column' }}>
+            {!isEmbedded && (
+                <header className="site-mini-header" style={{ display: 'flex', justifyContent: 'center', padding: '1.5rem', background: 'white', borderBottom: '1px solid var(--gray-200)' }}>
+                    <img src={logo} alt="Logo VM" style={{ height: '30px' }} />
+                </header>
+            )}
 
-            <main className="diagnosis-main-content" style={{ flexGrow: 1, padding: '4rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <main className="diagnosis-main-content" style={{ flexGrow: 1, padding: isEmbedded ? '2rem 0' : '4rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 {renderProgressBar()}
 
                 {/* STEP 0: ENTRY */}
