@@ -118,42 +118,158 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* SECTION: STRATEGIC SECOND FOLD */}
-      <section className="strategic-fold section-padding">
-        <div className="container-narrow text-center">
-          <h2 className="strategic-headline">
-            O problema não é falta de esforço.<br />
-            <span className="text-secondary-green">É falta de direção.</span>
+      {/* SECTION 2 — THE MARKET PROBLEM */}
+      <section className="strategic-section market-problem">
+        <div className="container-strategic">
+          <h2 className="strategic-title">
+            A maioria das empresas não tem um problema de marketing. <span className="text-highlight">Tem um problema de estratégia.</span>
           </h2>
+          <div className="strategic-text-content">
+            <p>Muitos negócios estão presentes nas redes sociais.</p>
+            <ul className="strategic-list-minimal">
+              <li>Postam com frequência.</li>
+              <li>Criam conteúdo.</li>
+              <li>Investem tempo tentando crescer.</li>
+            </ul>
+            <p>Mas mesmo assim o crescimento não acontece.</p>
+            <p className="emphasis-text">Isso acontece porque executam antes de entender:</p>
+            <ul className="strategic-list-minimal">
+              <li>quem querem alcançar,</li>
+              <li>como devem se posicionar,</li>
+              <li>qual estratégia sustenta o crescimento.</li>
+            </ul>
+            <p className="final-statement">Sem estratégia, marketing vira tentativa.</p>
+          </div>
+        </div>
+      </section>
 
-          <div className="strategic-body">
-            <p>A maioria dos negócios locais e profissionais liberais não sofre por falta de dedicação.</p>
-            <p className="highlight-text-navy">Sofre por crescer sem estrutura.</p>
+      {/* SECTION 3 — ABOUT VINÍCIUS MATOBA */}
+      <section className="strategic-section about-vinicius bg-soft">
+        <div className="container-strategic bio-grid-strategic">
+          <div className="bio-photo-area">
+            <div className="premium-photo-wrapper">
+              <img src={profileImg} alt="Vinícius Matoba" className="premium-bio-img" />
+            </div>
+          </div>
+          <div className="bio-text-area">
+            <h2 className="strategic-title">Estratégia digital orientada por método.</h2>
+            <div className="strategic-text-content">
+              <p>Sou Vinícius Matoba, estrategista digital.</p>
+              <p>Depois de anos trabalhando com recrutamento, comportamento e tomada de decisão, entendi algo essencial:</p>
+              <p className="insight-box">
+                "as pessoas não escolhem apenas com lógica. Elas escolhem com percepção."
+              </p>
+              <p>Hoje aplico esse entendimento para ajudar empresas e profissionais a transformarem presença digital em crescimento real.</p>
+              <p>Meu trabalho não começa com postagens.</p>
+              <p className="text-strong">Começa com estratégia.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-            <div className="pain-points-list">
-              <div className="pain-item">Postam quando dá.</div>
-              <div className="pain-item">Impulsionam quando sobra dinheiro.</div>
-              <div className="pain-item">Testam ideias sem saber o que medir.</div>
+      {/* SECTION 4 — MÉTODO VM */}
+      <section className="strategic-section metodo-vm-section">
+        <div className="container-strategic">
+          <div className="section-header-center">
+            <h2 className="strategic-title">Método VM — Ciclo de Crescimento Digital</h2>
+            <p className="strategic-subtitle">Um processo estratégico contínuo que organiza o crescimento digital em seis etapas.</p>
+          </div>
+
+          <div className="metodo-grid-premium">
+            {[
+              { id: '1', title: 'DIAGNOSTICAR', desc: 'Entender o cenário atual e identificar gargalos.' },
+              { id: '2', title: 'POSICIONAR', desc: 'Definir como o negócio deve ser percebido pelo mercado.' },
+              { id: '3', title: 'PLANEJAR', desc: 'Construir um plano estratégico de comunicação e crescimento.' },
+              { id: '4', title: 'EXECUTAR', desc: 'Aplicar a estratégia com consistência.' },
+              { id: '5', title: 'ANALISAR', desc: 'Avaliar dados e resultados.' },
+              { id: '6', title: 'OTIMIZAR', desc: 'Melhorar continuamente a estratégia.' }
+            ].map((step) => (
+              <div key={step.id} className="metodo-card-premium">
+                <span className="step-number">{step.id}</span>
+                <h3 className="step-title-premium">{step.title}</h3>
+                <p className="step-desc-premium">{step.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 5 — WHO THIS IS FOR */}
+      <section className="strategic-section target-audience bg-soft">
+        <div className="container-strategic">
+          <h2 className="strategic-title center-text">Para quem esse trabalho faz sentido</h2>
+          <div className="list-container-center">
+            <ul className="strategic-check-list">
+              <li>Profissionais que querem construir autoridade</li>
+              <li>Negócios locais que querem crescer com previsibilidade</li>
+              <li>Empresas que já tentaram marketing digital sem estratégia</li>
+              <li>Pessoas que querem parar de postar sem direção</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 6 — WHAT CHANGES WITH STRATEGY */}
+      <section className="strategic-section transformation">
+        <div className="container-strategic">
+          <h2 className="strategic-title center-text">O que muda quando existe estratégia</h2>
+          <div className="transformation-grid">
+            {[
+              'Clareza de posicionamento',
+              'Conteúdo com objetivo',
+              'Comunicação alinhada ao público certo',
+              'Crescimento mais previsível',
+              'Decisões orientadas por dados'
+            ].map((item, idx) => (
+              <div key={idx} className="transformation-item">
+                <Check size={20} className="text-green" />
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 7 — TRUST SECTION */}
+      <section className="strategic-section trust-section bg-navy text-white">
+        <div className="container-strategic text-center">
+          <h2 className="strategic-title text-white">Estratégia aplicada com foco em resultado</h2>
+          <div className="trust-content">
+            <p className="large-quote">"Você não precisa postar mais."</p>
+            <p className="trust-subtext">Precisa entender melhor:</p>
+            <div className="trust-pokes">
+              <span>seu público</span>
+              <span className="dot">•</span>
+              <span>seu posicionamento</span>
+              <span className="dot">•</span>
+              <span>sua estratégia</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 8 — FINAL CALL TO ACTION */}
+      <section className="strategic-section final-cta-section">
+        <div className="container-strategic text-center">
+          <h2 className="strategic-title">O primeiro passo é entender o seu cenário.</h2>
+          <div className="final-cta-content">
+            <p className="final-cta-intro">No diagnóstico estratégico analisamos:</p>
+            <div className="final-cta-bullets">
+              <span>seu posicionamento</span>
+              <span>sua comunicação</span>
+              <span>suas oportunidades de crescimento</span>
             </div>
 
-            <p className="conclusion-text">
-              E quando não funciona, acreditam que o problema é o Instagram.
-            </p>
-
-            <div className="impact-box-minimal">
-              <p>Mas não é.</p>
+            <div className="cta-wrapper-final">
+              <a
+                href="https://wa.me/5519984522494?text=Olá!+Vi+seu+site+e+quero+agendar+um+diagnóstico+estratégico"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-vm-strategic"
+              >
+                Agendar Diagnóstico Estratégico
+              </a>
             </div>
-
-            <p className="solution-text">
-              O que falta é um <strong>sistema claro de aquisição</strong> —<br />
-              com posicionamento definido, estratégia consistente e decisões orientadas por dados.
-            </p>
-
-            <p className="final-punch">
-              Crescimento previsível não acontece por acaso. <strong>Ele é construído.</strong>
-            </p>
-
-            <p className="vm-final-note">E é exatamente isso que eu estruturo.</p>
           </div>
         </div>
       </section>
