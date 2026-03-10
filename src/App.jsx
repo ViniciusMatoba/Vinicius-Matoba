@@ -284,6 +284,17 @@ function LandingPage() {
         <img src={logo} alt="Logo" style={{ width: '200px', marginBottom: '1.5rem', filter: 'brightness(0) invert(1)' }} />
         <p style={{ opacity: 0.6 }}>© 2026 VM Estratégia Digital. Todos os direitos reservados.</p>
       </footer>
+
+      {/* FLOATING ACTION BUTTON */}
+      <a
+        href="https://wa.me/5519984522494?text=Olá!+Vi+seu+site+e+quero+agendar+um+diagnóstico+estratégico"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="floating-whatsapp-btn"
+        aria-label="Agendar via WhatsApp"
+      >
+        <MessageCircle size={32} />
+      </a>
     </div>
   );
 }
