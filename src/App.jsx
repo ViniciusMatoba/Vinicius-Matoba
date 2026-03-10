@@ -299,8 +299,8 @@ function BioLink() {
     {
       title: "Crescimento Estruturado — Método VM",
       subtitle: "Posicionamento, conteúdo e tráfego por dados.",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800",
-      link: "/metodo",
+      image: metodoCicloImg,
+      link: "/metodo-vm",
       isModal: false,
       isInternal: true
     },
