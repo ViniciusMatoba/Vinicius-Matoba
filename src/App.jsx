@@ -131,7 +131,8 @@ function LandingPage() {
       <PremiumNav />
 
       {/* SECTION 1 — HERO */}
-      <section className="premium-hero-section">
+      <section className="premium-hero-section bg-hero-cycle" style={{ backgroundImage: `url(${metodoCicloImg})` }}>
+        <div className="hero-overlay-soft"></div>
         <div className="container-premium hero-grid-premium">
           <div className="hero-content-left">
             <h1 className="hero-title-premium">

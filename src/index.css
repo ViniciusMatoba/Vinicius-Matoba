@@ -185,7 +185,26 @@ a {
   margin-right: auto;
 }
 
+.bg-hero-cycle {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.hero-overlay-soft {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.92); /* Soft white overlay to keep text readable */
+  z-index: 1;
+}
+
 .hero-title-premium {
+  position: relative;
+  z-index: 2;
   font-size: clamp(2.5rem, 5vw, 4rem);
   color: var(--primary-navy);
   line-height: 1.1;
@@ -194,10 +213,22 @@ a {
 }
 
 .hero-subtitle-premium {
+  position: relative;
+  z-index: 2;
   font-size: clamp(1.1rem, 2vw, 1.4rem);
   color: var(--gray-800);
   line-height: 1.6;
   font-weight: 300;
+}
+
+.hero-buttons-wrapper {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-content-right {
+  position: relative;
+  z-index: 2;
 }
 
 .premium-section-title {
