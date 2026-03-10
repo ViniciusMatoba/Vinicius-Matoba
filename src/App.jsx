@@ -5,7 +5,7 @@ import logo from './assets/logo.png'
 import profileImg from './assets/profile.jpeg'
 import heroBg from './assets/metodo-hero-bg.jfif'
 import footerBg from './assets/metodo-footer-bg.png'
-import heroHomeBg from './assets/hero-home-bg.jpeg'
+import heroHomeBg from './assets/hero-home-new.png'
 import bioLinkBg from './assets/bio-link-bg.png'
 import VMLogin from './VMLogin'
 import Dashboard from './Dashboard'
@@ -84,47 +84,36 @@ function LandingPage() {
 
   return (
     <div className="landing-wrapper">
-      {/* SECTION: HERO & DATA BANNER */}
-      <section className="hero-container" style={{ backgroundImage: `url(${heroHomeBg})` }}>
-        <div className="hero-overlay"></div>
-        <div className="hero-content">
-          <h1 className="hero-title">
-            Você trabalha muito, mas seu negócio ainda depende de indicação?
-          </h1>
+      {/* SECTION: STRATEGIC HERO (FIRST FOLD) */}
+      <section className="strategic-hero">
+        <div className="container-strategic strategic-hero-grid">
+          <div className="strategic-hero-left">
+            <h1 className="hero-headline">
+              Estratégia antes da postagem.
+            </h1>
+            <p className="hero-subheadline">
+              Transformo presença digital em crescimento previsível através do <strong>Método VM — Ciclo de Crescimento Digital.</strong>
+            </p>
 
-          <div className="hero-sequence">
-            <span>Você posta.</span>
-            <span>Você impulsiona.</span>
-            <span>Você tenta aparecer.</span>
+            <div className="hero-cta-area">
+              <a
+                href="https://wa.me/5519984522494?text=Olá!+Vi+seu+site+e+quero+agendar+um+diagnóstico+estratégico"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-vm-strategic"
+              >
+                Agendar Diagnóstico Estratégico
+              </a>
+              <p className="hero-cta-subtext">
+                Descubra o que está travando o crescimento do seu negócio.
+              </p>
+            </div>
           </div>
 
-          <p className="hero-unstable">Mas o crescimento continua instável.</p>
-
-          <div className="hero-insight">
-            <p>O problema não é o Instagram. <strong>É a falta de estrutura.</strong></p>
-          </div>
-
-          <p className="hero-philosophy">
-            Crescimento real não vem de seguidores.<br />
-            Vem de <strong>estratégia, posicionamento e aquisição previsível de clientes.</strong>
-          </p>
-
-          <p className="hero-description-new">
-            Eu ajudo negócios locais e profissionais liberais a transformar o Instagram em um canal estruturado de geração de clientes — com método, dados e direcionamento claro.
-          </p>
-
-          <div className="hero-ctas">
-            <Link to="/site" className="btn btn-primary btn-cta-site">
-              Conheça o Vinicius Matoba <ChevronRight size={18} />
-            </Link>
-            <a
-              href="https://wa.me/5519984522494?text=Olá!+Vi+seu+site+e+quero+agendar+um+diagnóstico+estratégico"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-secondary btn-cta-wa"
-            >
-              Falar no WhatsApp
-            </a>
+          <div className="strategic-hero-right">
+            <div className="hero-image-wrapper">
+              <img src={heroHomeBg} alt="Vinícius Matoba" className="hero-main-img" />
+            </div>
           </div>
         </div>
       </section>
