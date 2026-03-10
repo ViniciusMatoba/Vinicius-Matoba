@@ -771,6 +771,189 @@ function ReuniaoEstrategicaPage() {
   );
 }
 
+function DiagnosticoPage() {
+  return (
+    <div className="diagnostico-page-wrapper">
+      <header className="site-mini-header">
+        <Link to="/" className="back-link">
+          <ChevronRight size={20} style={{ transform: 'rotate(180deg)' }} /> Voltar para o Início
+        </Link>
+        <img src={logo} alt="Logo VM" className="mini-logo" />
+      </header>
+
+      {/* SECTION 1 — HERO */}
+      <section className="diagnostico-hero">
+        <div className="container-strategic text-center">
+          <h1 className="strategic-title">Diagnóstico Estratégico de Crescimento Digital</h1>
+          <p className="strategic-subtitle max-width-800">
+            Uma análise estruturada para entender o que está travando o crescimento do seu negócio e quais caminhos estratégicos podem destravar resultados.
+          </p>
+          <div className="cta-wrapper-diagnostico">
+            <a
+              href="https://wa.me/5519984522494?text=Olá!+Quero+agendar+meu+diagnóstico+estratégico"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-vm-strategic"
+            >
+              Agendar Diagnóstico Estratégico
+            </a>
+            <div className="info-text-mini">
+              <span>Duração: 45 minutos</span>
+              <span className="separator">•</span>
+              <span>Formato: Online</span>
+              <span className="separator">•</span>
+              <span>Custo: Gratuito</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 2 — THE PROBLEM */}
+      <section className="strategic-section bg-soft">
+        <div className="container-narrow">
+          <h2 className="strategic-title text-center">A maioria das empresas tenta crescer executando antes de entender.</h2>
+          <div className="strategic-text-content text-center margin-auto">
+            <p className="mb-4">Muitos negócios estão presentes nas redes sociais.</p>
+            <div className="pain-list-diagnostico">
+              <div className="pain-item-diag">Postam conteúdo.</div>
+              <div className="pain-item-diag">Testam campanhas.</div>
+              <div className="pain-item-diag">Seguem tendências.</div>
+            </div>
+            <p className="highlight-text-navy my-4">Mas sem clareza estratégica.</p>
+            <div className="result-box-diagnostico">
+              <span className="result-label">Resultado:</span>
+              <ul className="strategic-list-minimal center-list">
+                <li>esforço alto</li>
+                <li>retorno baixo</li>
+                <li>crescimento inconsistente</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 3 — WHAT HAPPENS DURING THE DIAGNOSIS */}
+      <section className="strategic-section">
+        <div className="container-strategic">
+          <div className="two-col-grid">
+            <div className="grid-text-side">
+              <h2 className="strategic-title">O que acontece durante o diagnóstico estratégico</h2>
+              <p className="strategic-subtitle mb-4">Durante a conversa analisamos os principais pontos do seu cenário digital.</p>
+              <ul className="strategic-check-list">
+                <li>Seu posicionamento atual</li>
+                <li>Como seu negócio está sendo percebido</li>
+                <li>Sua comunicação digital</li>
+                <li>Possíveis gargalos estratégicos</li>
+                <li>Oportunidades de crescimento</li>
+              </ul>
+            </div>
+            <div className="grid-visual-side bg-navy-accent">
+              <div className="visual-content-placeholder">
+                <Target size={80} className="text-green opacity-40" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 4 — WHAT YOU GET FROM THE CALL */}
+      <section className="strategic-section bg-soft">
+        <div className="container-strategic">
+          <h2 className="strategic-title text-center">O que você leva dessa conversa</h2>
+          <div className="transformation-grid">
+            {[
+              { title: 'Clareza sobre seu posicionamento', icon: <Eye size={24} /> },
+              { title: 'Identificação de gargalos estratégicos', icon: <TrendingUp size={24} /> },
+              { title: 'Direcionamento de crescimento', icon: <Target size={24} /> },
+              { title: 'Recomendações práticas', icon: <Settings size={24} /> }
+            ].map((item, idx) => (
+              <div key={idx} className="transformation-item diag-benefit-card">
+                <div className="icon-circle-bg">{item.icon}</div>
+                <span>{item.title}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 5 & 6 — WHO THIS IS FOR / NOT FOR */}
+      <section className="strategic-section">
+        <div className="container-strategic">
+          <div className="qualification-grid-premium">
+            <div className="qual-box-premium for-box">
+              <h2 className="strategic-title">Essa conversa é para você se</h2>
+              <ul className="strategic-check-list">
+                <li>Quer crescer com estratégia</li>
+                <li>Sente que está executando sem clareza</li>
+                <li>Quer melhorar posicionamento digital</li>
+                <li>Busca crescimento previsível</li>
+              </ul>
+            </div>
+            <div className="qual-box-premium not-for-box">
+              <h2 className="strategic-title">Essa conversa pode não ser para você se</h2>
+              <ul className="strategic-list-minimal qual-x-list">
+                <li className="x-item">Procura apenas alguém para fazer posts</li>
+                <li className="x-item">Busca soluções rápidas sem estratégia</li>
+                <li className="x-item">Não está disposto a analisar o negócio</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 7 — ABOUT VINÍCIUS MATOBA */}
+      <section className="strategic-section bg-soft about-conduct-section">
+        <div className="container-strategic flex-center-diag">
+          <div className="about-diag-card">
+            <div className="about-diag-photo">
+              <img src={profileImg} alt="Vinícius Matoba" />
+            </div>
+            <div className="about-diag-text">
+              <h2 className="strategic-title mb-2">Quem conduz o diagnóstico</h2>
+              <div className="strategic-text-content">
+                <p>Sou Vinícius Matoba, estrategista digital.</p>
+                <p>Ajudo empresas e profissionais a transformarem presença digital em crescimento estruturado através do Método VM — Ciclo de Crescimento Digital.</p>
+                <p className="emphasis-text text-green">Meu trabalho começa com estratégia antes da execução.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 8 — FINAL CALL TO ACTION */}
+      <section className="strategic-section final-cta-diagnostico bg-navy text-white">
+        <div className="container-narrow text-center">
+          <h2 className="strategic-title text-white">Vamos analisar o seu cenário?</h2>
+          <p className="strategic-subtitle text-white opacity-80 mb-5">Escolha um horário disponível para o diagnóstico estratégico.</p>
+
+          <div className="cta-final-box-diag">
+            <a
+              href="https://wa.me/5519984522494?text=Olá!+Quero+agendar+meu+diagnóstico+estratégico"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-vm-strategic scale-large"
+            >
+              Agendar Diagnóstico Estratégico
+            </a>
+            <div className="info-text-mini text-white opacity-70 mt-3">
+              <span>Duração: 45 minutos</span>
+              <span className="separator text-green">•</span>
+              <span>Formato: Online</span>
+              <span className="separator text-green">•</span>
+              <span>Custo: Gratuito</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer className="section-padding" style={{ backgroundColor: '#05161D', color: 'white', textAlign: 'center' }}>
+        <img src={logo} alt="Logo" style={{ width: '180px', marginBottom: '1.5rem', filter: 'brightness(0) invert(1)' }} />
+        <p style={{ opacity: 0.5 }}>© 2026 VM Estratégia Digital. Todos os direitos reservados.</p>
+      </footer>
+    </div>
+  );
+}
+
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
 
@@ -796,6 +979,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/linknabio" element={<BioLink />} />
         <Route path="/reuniao-estrategica" element={<ReuniaoEstrategicaPage />} />
+        <Route path="/diagnostico" element={<DiagnosticoPage />} />
         <Route path="/metodo-vm" element={<MetodoVMPage />} />
         <Route path="/site" element={<FullSitePage />} />
         <Route path="/login" element={<VMLogin />} />
