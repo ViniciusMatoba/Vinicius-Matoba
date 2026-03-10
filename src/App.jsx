@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
 import './App.css'
 import logo from './assets/logo.png'
-import profileImg from './assets/profile.jpeg'
 import heroHomeNewImg from './assets/hero-home-new.png'
 import bioLinkBg from './assets/bio-link-bg.png'
 import metodoCicloImg from './assets/metodo-ciclo.jpeg.png'
@@ -198,9 +197,9 @@ function LandingPage() {
       {/* SECTION 4 — MÉTODO VM INTRO */}
       <section id="metodo" className="premium-section bg-metodo-hero" style={{ backgroundImage: `url(${metodoHeroBg})` }}>
         <div className="container-premium text-center">
-          <h2 className="premium-section-title max-width-800 margin-auto">Método VM — Ciclo de Crescimento Digital</h2>
+          <h2 className="premium-section-title max-width-800 margin-auto">A Engenharia do Crescimento</h2>
           <p className="premium-section-text max-width-800 margin-auto mt-3 mb-5">
-            O Método VM não é uma promessa mágica, <br className="desktop-only-br" /> é um processo de engenharia aplicado ao marketing digital.
+            O Método VM não é uma promessa mágica, <br className="desktop-only-br" /> é um processo estruturado aplicado ao marketing digital.
           </p>
 
           {/* SECTION 5 — INTERACTIVE METHOD DIAGRAM */}
@@ -238,9 +237,9 @@ function LandingPage() {
       {/* SECTION 7 — DIAGNÓSTICO ESTRATÉGICO */}
       <section id="diagnostico" className="premium-section bg-soft-gray">
         <div className="container-premium text-center">
-          <h2 className="premium-section-title mb-3">Diagnóstico Estratégico de Crescimento Digital</h2>
+          <h2 className="premium-section-title mb-3">Ponto de Partida: Diagnóstico de Maturidade</h2>
           <p className="premium-section-text max-width-800 margin-auto mb-5">
-            Uma análise profunda para identificar o que trava o crescimento da sua empresa hoje, <br className="desktop-only-br" /> mapear gargalos na aquisição e traçar o plano de ação ideal.
+            Uma análise profunda para identificar o que trava seu crescimento hoje, <br className="desktop-only-br" /> mapear gargalos na aquisição e traçar o plano de ação ideal.
           </p>
 
           {/* EMBEDDED DIAGNOSIS TOOL */}
@@ -330,12 +329,12 @@ function BioLink() {
       <header className="bio-header">
         <div className="bio-profile-card">
           <div className="bio-profile-wrapper">
-            <img src={profileImg} alt="Vinícius Matoba" className="bio-profile-img" />
+            <img src={heroHomeNewImg} alt="Vinícius Matoba" className="bio-profile-img" />
           </div>
           <div className="bio-profile-text">
             <h1 className="bio-name">Vinícius Matoba</h1>
             <p className="bio-description">
-              Estrategista digital para negócios locais. <br/> Estruturo crescimento previsível através do Método VM — posicionamento, conteúdo e reunião estratégica orientada por dados.
+              Estrategista digital para negócios locais. <br/> Ajudo empresas a escalarem com previsibilidade através de processos validados e decisões orientadas por dados.
             </p>
           </div>
         </div>
