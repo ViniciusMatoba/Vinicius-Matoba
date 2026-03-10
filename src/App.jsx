@@ -226,7 +226,6 @@ function LandingPage() {
             {VM_STEPS.map((step, index) => (
               <div key={index} className="benefit-premium-card border-navy hover-glow">
                 <div className="icon-wrapper-navy mb-3">{step.icon}</div>
-                <h3 className="text-navy font-bold">{step.title}</h3>
                 <p className="mt-2 text-gray">{step.description}</p>
               </div>
             ))}
@@ -399,6 +398,7 @@ function App() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/metodo-vm" element={<LandingPage />} />
         <Route path="/linknabio" element={<BioLink />} />
         <Route path="/login" element={<VMLogin />} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
