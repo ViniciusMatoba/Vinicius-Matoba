@@ -20,6 +20,19 @@
   overflow-wrap: break-word;
 }
 
+.hero-image-frame {
+  max-width: 450px; /* Limit size on desktop */
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-img-consultant {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
 .hero-subtitle-premium {
   max-width: 100%;
   overflow-wrap: break-word;
@@ -34,7 +47,7 @@
   }
   
   .hero-image-frame {
-    max-width: 300px;
+    max-width: 360px;
     margin: 0 auto;
   }
 }
@@ -71,7 +84,7 @@
   }
 
   .hero-image-frame {
-    max-width: 260px;
+    max-width: 250px;
   }
 
   .nav-logo {
