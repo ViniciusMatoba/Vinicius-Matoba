@@ -119,15 +119,8 @@ function AboutSection() {
             <p>Trago essa visão analítica para o digital: meu objetivo é construir sistemas de aquisição de clientes <br className="desktop-only-br" /> que dependam menos de achismos e mais de estratégia validada.</p>
           </div>
         </div>
-        <div className="authority-stats bg-navy text-white">
-          <div className="stat-item">
-            <span className="stat-icon"><Target size={32} /></span>
-            <p>Estratégia</p>
-          </div>
-          <div className="stat-item">
-            <span className="stat-icon"><TrendingUp size={32} /></span>
-            <p>Crescimento</p>
-          </div>
+        <div className="authority-photo" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <img src={perfilImg} alt="Vinícius Matoba" style={{ width: '100%', maxWidth: '350px', borderRadius: '16px', boxShadow: 'var(--shadow-lg)', objectFit: 'cover' }} />
         </div>
       </div>
     </section>
