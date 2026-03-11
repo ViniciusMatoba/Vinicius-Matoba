@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { ChevronRight, ArrowLeft, Send, CheckCircle2, Target, BarChart3, Users, Rocket, Brain } from 'lucide-react';
+import diagnosticoImg from './assets/Diagnostico.png';
 
 // --- CONSTANTS ---
 const RADAR_CATEGORIES = [
@@ -242,6 +243,9 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                             </div>
                             <h2 className="text-navy font-bold mb-3">Diagnóstico Estratégico Online</h2>
                             <p className="text-gray mb-5">Responda algumas perguntas rápidas para avaliarmos o cenário atual do seu negócio e sua maturidade digital.</p>
+                            <div className="diagnosis-photo-container mb-5 mt-4">
+                                <img src={diagnosticoImg} alt="Diagnóstico Estratégico Online" className="margin-auto" style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'cover', borderRadius: '16px', boxShadow: 'var(--shadow-custom)' }} />
+                            </div>
                             <button onClick={handleNext} className="btn-vm-green-large w-full">
                                 Iniciar Diagnóstico <ChevronRight size={18} />
                             </button>

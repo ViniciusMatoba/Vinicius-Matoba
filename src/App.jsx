@@ -10,6 +10,7 @@ import metodoCicloImg from './assets/metodo-ciclo.jpeg.png'
 import metodoHeroBg from './assets/metodo-hero-bg.jfif'
 import metodoFooterBg from './assets/metodo-footer-bg.png'
 import perfilImg from './assets/perfil.jpg'
+import reuniaoImg from './assets/Reuniao.png'
 import InteractiveDiagnosis from './InteractiveDiagnosis';
 
 import {
@@ -309,6 +310,11 @@ function MeetingSection() {
         <p className="premium-section-text text-white opacity-70 max-width-800 margin-auto mb-5" style={{ fontSize: '1rem' }}>
           Este é o primeiro passo para construirmos a base necessária para o seu diagnóstico de crescimento.
         </p>
+
+        <div className="meeting-photo-container mb-5">
+           <img src={reuniaoImg} alt="Reunião Estratégica" className="margin-auto" style={{ maxWidth: '100%', maxHeight: '450px', objectFit: 'cover', borderRadius: '16px', boxShadow: 'var(--shadow-lg)' }} />
+        </div>
+
         <a href="https://wa.me/5519984522494?text=Olá+Vinícius,+completei+o+diagnóstico+e+quero+agendar+minha+conversa+estratégica" target="_blank" rel="noopener noreferrer" className="btn-vm-green-large">
           Agendar Reunião Estratégica
         </a>
