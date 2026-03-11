@@ -27,7 +27,7 @@ import {
 
 function PremiumNav() {
   const location = useLocation();
-  const backToLinksPaths = ['/metodo-vm', '/reuniao-estrategica'];
+  const backToLinksPaths = ['/metodo-vm', '/reuniao-estrategica', '/diagnostico'];
 
   return (
     <nav className="premium-nav-bar">
@@ -368,6 +368,7 @@ function MeetingPage() {
 function BioLink() {
   const cards = [
     { title: "Eu quero uma Reunião Estratégica", subtitle: "Descubra os gargalos que impedem seu lucro.", image: "https://images.unsplash.com/photo-1554224155-1696413565d3?q=80&w=800", link: "/reuniao-estrategica", isInternal: true },
+    { title: "Diagnóstico Estratégico Online", subtitle: "Obtenha uma análise gratuita em poucos minutos.", image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800", link: "/diagnostico", isInternal: true },
     { title: "Crescimento Estruturado — Método VM", subtitle: "Posicionamento, conteúdo e tráfego por dados.", image: metodoCicloImg, link: "/metodo-vm", isInternal: true },
     { title: "Visitar Site Oficial", subtitle: "Conheça meu trabalho, metodologia e história.", image: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=800", link: "/", isInternal: true },
     { title: "Conversar no WhatsApp", subtitle: "Fale diretamente com Vinícius Matoba.", image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=800", link: "https://wa.me/5519984522494" }
@@ -442,6 +443,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/metodo-vm" element={<MetodoPage />} />
         <Route path="/reuniao-estrategica" element={<MeetingPage />} />
+        <Route path="/diagnostico" element={<div className="landing-wrapper"><PremiumNav /><div style={{paddingTop: '80px'}}><InteractiveDiagnosis /></div><Footer /></div>} />
         <Route path="/linknabio" element={<BioLink />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
