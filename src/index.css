@@ -3967,3 +3967,31 @@ a {
   color: white;
   box-shadow: 0 10px 20px rgba(0, 75, 94, 0.2);
 }
+/* Methodology Section Styles */
+.relative-step-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.step-number-bg {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-size: 5.5rem;
+  font-weight: 800;
+  color: rgba(29, 185, 84, 0.08);
+  line-height: 0.8;
+  pointer-events: none;
+  font-family: 'Montserrat', sans-serif;
+  z-index: 0;
+}
+
+.benefit-title-caps {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--primary-navy);
+  margin-bottom: 1.2rem;
+  position: relative;
+  z-index: 2;
+}

@@ -22,10 +22,14 @@ import {
 // --- GLOBAL COMPONENTS ---
 
 function PremiumNav() {
+  const location = useLocation();
+  const backToLinksPaths = ['/metodo-vm', '/reuniao-estrategica'];
+  const logoLink = backToLinksPaths.includes(location.pathname) ? '/linknabio' : '/';
+
   return (
     <nav className="premium-nav-bar">
       <div className="nav-container">
-        <Link to="/" className="nav-brand">
+        <Link to={logoLink} className="nav-brand">
           <img src={logo} alt="Vinícius Matoba" className="nav-logo" />
         </Link>
         <div className="nav-links">
@@ -129,12 +133,12 @@ function AboutSection() {
 }
 
 const VM_STEPS = [
-  { title: 'Diagnosticar', description: 'Entender o cenário atual e identificar gargalos estratégicos.', icon: <Search className="mb-1 cycle-icon-base" /> },
-  { title: 'Posicionar', description: 'Definir como o mercado deve perceber o seu negócio.', icon: <Target className="mb-1 cycle-icon-base" /> },
-  { title: 'Planejar', description: 'Estruturar a estratégia de comunicação e crescimento.', icon: <Briefcase className="mb-1 cycle-icon-base" /> },
-  { title: 'Executar', description: 'Colocar o plano em prática com consistência.', icon: <Check className="mb-1 cycle-icon-base" /> },
-  { title: 'Analisar', description: 'Avaliar dados para entender o que realmente funciona.', icon: <LineChart className="mb-1 cycle-icon-base" /> },
-  { title: 'Otimizar', description: 'Ajustar continuamente a estratégia para evoluir.', icon: <TrendingUp className="mb-1 cycle-icon-base" /> }
+  { title: 'DIAGNOSTICAR', number: '1', description: 'Entender o cenário atual e identificar gargalos.' },
+  { title: 'POSICIONAR', number: '2', description: 'Definir como o negócio deve ser percebido pelo mercado.' },
+  { title: 'PLANEJAR', number: '3', description: 'Construir um plano estratégico de comunicação e crescimento.' },
+  { title: 'EXECUTAR', number: '4', description: 'Colocar o plano em prática com consistência.' },
+  { title: 'ANALISAR', number: '5', description: 'Avaliar dados para entender o que realmente funciona.' },
+  { title: 'OTIMIZAR', number: '6', description: 'Ajustar continuamente a estratégia para evoluir.' }
 ];
 
 function MethodSection() {
@@ -142,16 +146,13 @@ function MethodSection() {
     <>
       <section id="metodo" className="premium-section bg-metodo-hero" style={{ backgroundImage: `url(${metodoHeroBg})` }}>
         <div className="container-premium text-center">
-          <h2 className="premium-section-title max-width-800 margin-auto">A Engenharia do Crescimento</h2>
-          <p className="premium-section-text max-width-800 margin-auto mt-3 mb-5">
-            O Método VM não é uma promessa mágica, <br className="desktop-only-br" /> é um processo estruturado aplicado ao marketing digital.
+          <h2 className="premium-section-title max-width-1000 margin-auto">Método VM &mdash; Ciclo de Crescimento Digital</h2>
+          <p className="premium-section-text max-width-800 margin-auto mt-4 mb-5">
+            Um processo estratégico contínuo que organiza o crescimento digital em seis etapas.
           </p>
           <div className="metodo-ciclo-photo-container mb-5">
             <img src={metodoCicloImg} alt="Método VM" className="margin-auto" style={{ maxWidth: '100%', borderRadius: '16px', boxShadow: 'var(--shadow-lg)', backgroundColor: 'white', padding: '1rem' }} />
           </div>
-          <p className="orbital-subtext text-navy opacity-70 mb-5">
-            <span className="text-accent-green font-bold">O ciclo de crescimento que transforma presença em lucro.</span>
-          </p>
         </div>
       </section>
       <section className="premium-section bg-base-white">
@@ -159,8 +160,9 @@ function MethodSection() {
           <h2 className="premium-section-title text-center mb-5">Como funciona cada etapa do ciclo</h2>
           <div className="benefits-premium-grid">
             {VM_STEPS.map((step, index) => (
-              <div key={index} className="benefit-premium-card border-navy hover-glow">
-                <div className="icon-wrapper-navy mb-3">{step.icon}</div>
+              <div key={index} className="benefit-premium-card border-navy hover-glow relative-step-card">
+                <div className="step-number-bg">{step.number}</div>
+                <h3 className="benefit-title-caps">{step.title}</h3>
                 <p className="mt-2 text-gray">{step.description}</p>
               </div>
             ))}
@@ -324,7 +326,7 @@ function ScrollToTop() {
 
 function App() {
   return (
-    <Router>
+    <>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -333,7 +335,7 @@ function App() {
         <Route path="/linknabio" element={<BioLink />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-    </Router>
+    </>
   );
 }
 
