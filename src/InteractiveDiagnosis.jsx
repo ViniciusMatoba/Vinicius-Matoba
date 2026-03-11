@@ -5,11 +5,11 @@ import logoImg from './assets/logo.png';
 
 // --- CONSTANTS ---
 const RADAR_CATEGORIES = [
-    { key: 'estrategia', label: 'Estratégia' },
+    { key: 'posicionamento', label: 'Posicionamento' },
     { key: 'conteudo', label: 'Conteúdo' },
-    { key: 'aquisicao', label: 'Aquisição' },
-    { key: 'analise', label: 'Análise' },
-    { key: 'crescimento', label: 'Crescimento' }
+    { key: 'captacao', label: 'Captação' },
+    { key: 'estrutura', label: 'Estrutura' },
+    { key: 'estrategia', label: 'Estratégia' }
 ];
 
 // --- CUSTOM SVG RADAR CHART COMPONENT ---
@@ -108,32 +108,39 @@ const DigitalMaturityRadar = ({ scores }) => {
 };
 
 export default function InteractiveDiagnosis({ isEmbedded = false }) {
-    const [step, setStep] = useState(0); // 0: Intro, 1: Basic Info, 2-7: Questions, 8: Result
+    const [step, setStep] = useState(0); // 0: Intro, 1: Identificacao, 2: Presenca, 3: Captacao, 4: Conteudo, 5: Estrategia, 6: Investimento, 7: Momento+Desafios, 8: Result
     const [formData, setFormData] = useState({
         nome: '',
-        email: '',
-        instagram: '',
         empresa: '',
+        cidade: '',
+        instagram: '',
+        email: '',
         redesSociais: [],
         redesSociaisOutro: '',
-        segmento: '',
-        segmentoOutro: '',
+        site: '',
         aquisicao: [],
         aquisicaoOutro: '',
+        previsibilidade: '',
         frequencia: '',
+        producaoConteudo: '',
         estrategia: '',
+        elementosPerfil: [],
+        investimento: '',
+        experienciaAnuncios: '',
+        faseNegocio: '',
         desafio: '',
-        objetivo: ''
+        objetivo: '',
+        urgencia: '',
+        analisePerfil: ''
     });
 
     const [finalScore, setFinalScore] = useState(0);
     const [radarScores, setRadarScores] = useState({
         posicionamento: 2,
-        estrategia: 2,
         conteudo: 2,
-        aquisicao: 2,
-        analise: 2,
-        crescimento: 2
+        captacao: 2,
+        estrutura: 2,
+        estrategia: 2
     });
 
     const handleNext = () => setStep(s => s + 1);
@@ -155,59 +162,94 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
     };
 
     const processResults = () => {
-        // RADAR SCORING (0-5)
-        let rPos = 2;
-        if (formData.segmento === 'Negócio local' || formData.segmento === 'Prestação de serviços') rPos = 5;
-        else if (formData.segmento === 'E-commerce') rPos = 4;
-        else if (formData.segmento === 'Outros') rPos = 3;
+        // RADAR SCORING (0-10 por pilar, total 50)
+        
+        // 1. Estrutura Digital (Redes Sociais + Site)
+        let rEstrutura = 0;
+        if (formData.redesSociais.includes('Instagram')) rEstrutura += 2;
+        if (formData.redesSociais.length > 1 && !formData.redesSociais.includes('Nenhuma')) rEstrutura += 1;
+        if (formData.site === 'Apenas Instagram') rEstrutura += 1;
+        else if (formData.site === 'Tenho um site institucional') rEstrutura += 3;
+        else if (formData.site === 'Tenho página de vendas ou funil estruturado') rEstrutura += 5;
+        rEstrutura = Math.min(10, rEstrutura); // max 8 na simulação real, boost se + redes.
 
-        let rAcq = 1;
-        const acqArray = formData.aquisicao;
-        if (acqArray.includes('Anúncios') || acqArray.includes('Google') || acqArray.includes('Mistura de canais')) rAcq = 5;
-        else if (acqArray.includes('Redes sociais')) rAcq = 3;
+        // 2. Captação de Clientes (Aquisição + Previsibilidade)
+        let rCaptacao = 0;
+        if (formData.aquisicao.includes('Tráfego pago') || formData.aquisicao.includes('Google')) rCaptacao += 3;
+        else if (formData.aquisicao.includes('Instagram') || formData.aquisicao.includes('Indicação')) rCaptacao += 1;
+        
+        if (formData.previsibilidade === 'Tenho fluxo constante de clientes') rCaptacao += 5;
+        else if (formData.previsibilidade === 'Tenho algum nível de previsibilidade') rCaptacao += 3;
+        else if (formData.previsibilidade === 'Às vezes tenho movimento, às vezes não') rCaptacao += 1;
+        rCaptacao = Math.min(10, rCaptacao * 1.5);
 
-        let rCont = 1;
-        if (formData.frequencia === 'Regularmente') rCont = 5;
-        else if (formData.frequencia === 'Às vezes') rCont = 3;
+        // 3. Conteúdo (Frequência + Produção)
+        let rConteudo = 0;
+        if (formData.frequencia === 'Quase todos os dias') rConteudo += 5;
+        else if (formData.frequencia === '2 a 3 vezes por semana') rConteudo += 3;
+        else if (formData.frequencia === '1 vez por semana') rConteudo += 1;
 
-        let rStr = 1;
-        if (formData.estrategia === 'Sim') rStr = 5;
-        else if (formData.estrategia === 'Parcialmente') rStr = 3;
+        if (formData.producaoConteudo === 'Alguém da equipe' || formData.producaoConteudo === 'Agência') rConteudo += 4;
+        else if (formData.producaoConteudo === 'Freelancer' || formData.producaoConteudo === 'Eu mesmo') rConteudo += 2;
+        rConteudo = Math.min(10, rConteudo);
 
-        const rAnl = (rAcq >= 4) ? 5 : 2;
-        const rCre = (formData.objetivo.length > 10) ? 5 : 2;
+        // 4. Estratégia (Estratégia Definida + Elementos Perfil)
+        let rEstrategia = 0;
+        if (formData.estrategia === 'Tenho estratégia clara e estruturada') rEstrategia += 5;
+        else if (formData.estrategia === 'Tenho planejamento básico') rEstrategia += 3;
+        else if (formData.estrategia === 'Tenho algumas ideias, mas nada estruturado') rEstrategia += 1;
+
+        if (!formData.elementosPerfil.includes('Não sei dizer')) {
+            rEstrategia += formData.elementosPerfil.length; // max 5
+        }
+        rEstrategia = Math.min(10, rEstrategia);
+
+        // 5. Posicionamento (Investimentos/Anúncios + Fase do Negócio)
+        let rPosicionamento = 0;
+        if (formData.investimento === 'Mais de R$3.000 por mês') rPosicionamento += 3;
+        else if (formData.investimento === 'Entre R$1.500 e R$3.000 por mês') rPosicionamento += 2;
+        else if (formData.investimento === 'Entre R$500 e R$1.500 por mês') rPosicionamento += 1;
+
+        if (formData.experienciaAnuncios === 'Invisto regularmente em anúncios') rPosicionamento += 3;
+        else if (formData.experienciaAnuncios === 'Já fiz campanhas estruturadas') rPosicionamento += 2;
+        else if (formData.experienciaAnuncios === 'Já impulsionei posts') rPosicionamento += 1;
+
+        if (formData.faseNegocio === 'Quero escalar e fortalecer minha marca') rPosicionamento += 4;
+        else if (formData.faseNegocio === 'Tenho clientes constantes, mas quero previsibilidade') rPosicionamento += 3;
+        else if (formData.faseNegocio === 'Já tenho clientes, mas quero crescer') rPosicionamento += 2;
+        rPosicionamento = Math.min(10, rPosicionamento);
 
         const radar = {
-            posicionamento: rPos,
-            estrategia: rStr,
-            conteudo: rCont,
-            aquisicao: rAcq,
-            analise: rAnl,
-            crescimento: rCre
+            posicionamento: Math.max(1, (rPosicionamento / 10) * 5),
+            conteudo: Math.max(1, (rConteudo / 10) * 5),
+            captacao: Math.max(1, (rCaptacao / 10) * 5),
+            estrutura: Math.max(1, (rEstrutura / 10) * 5),
+            estrategia: Math.max(1, (rEstrategia / 10) * 5)
         };
 
         setRadarScores(radar);
 
-        // OVERALL SCORE (0-100)
-        // Weighting: Estrategia (40%), Aquisicao (30%), Conteudo (20%), Other (10%)
-        const sStr = (rStr / 5) * 40;
-        const sAcq = (rAcq / 5) * 30;
-        const sCont = (rCont / 5) * 20;
-        const sOther = 10;
-        setFinalScore(Math.round(sStr + sAcq + sCont + sOther));
+        // OVERALL SCORE (0-50)
+        const totalScore = Math.round(rPosicionamento + rConteudo + rCaptacao + rEstrutura + rEstrategia);
+        setFinalScore(totalScore);
 
         handleNext();
     };
 
     const getInterpretation = (score) => {
-        if (score <= 30) return "Seu negócio provavelmente ainda não possui uma estrutura estratégica digital definida.";
-        if (score <= 60) return "Seu negócio possui presença digital, mas ainda existem gargalos estratégicos importantes.";
-        if (score <= 80) return "Seu negócio já apresenta uma estrutura digital organizada com boas oportunidades de escala.";
-        return "Seu negócio apresenta um nível avançado de maturidade digital e potencial de liderança de mercado.";
+        if (score <= 5) return "Seu negócio ainda não possui presença digital estruturada.\nNeste estágio, o foco principal deve ser criar uma base mínima: perfil profissional bem configurado, clareza no serviço oferecido e início da produção de conteúdo.\n\nSugestão: comece estruturando seu perfil e definindo seu público.";
+        if (score <= 10) return "Seu negócio está dando os primeiros passos no digital, mas ainda depende muito de ações isoladas.\nProvavelmente faltam estratégia, constância e posicionamento claro.\n\nSugestão: trabalhar organização do perfil e frequência de conteúdo.";
+        if (score <= 15) return "Você já iniciou sua presença digital, mas ainda não existe uma estratégia clara guiando suas ações.\nO risco aqui é investir tempo e esforço sem gerar crescimento consistente.\n\nSugestão: definir posicionamento e objetivos de crescimento.";
+        if (score <= 20) return "Seu negócio já possui presença online, porém existem gargalos importantes que limitam os resultados.\nPode faltar organização no perfil, clareza de comunicação ou estratégia de captação.\n\nSugestão: melhorar posicionamento e estrutura do perfil.";
+        if (score <= 25) return "Você já está utilizando o digital para divulgar seu negócio, mas ainda há bastante espaço para evolução estratégica.\nCom alguns ajustes de comunicação, conteúdo e captação de clientes, o crescimento pode acelerar.\n\nSugestão: estruturar planejamento de conteúdo e funil de captação.";
+        if (score <= 30) return "Seu negócio possui uma presença digital razoável, mas ainda não aproveita todo o potencial das redes.\nNormalmente nesse estágio faltam análise de dados e otimização das estratégias.\n\nSugestão: começar a acompanhar métricas e ajustar comunicação.";
+        if (score <= 35) return "Seu negócio já possui uma boa base digital.\nAgora o desafio é transformar presença online em geração constante de oportunidades e clientes.\n\nSugestão: fortalecer estratégia de conteúdo e captação.";
+        if (score <= 40) return "Você já construiu uma presença digital consistente.\nCom estratégia mais refinada e análise contínua, é possível aumentar a previsibilidade de clientes.\n\nSugestão: otimizar funis e melhorar conversão.";
+        if (score <= 45) return "Seu negócio possui maturidade digital e já entende a importância de estratégia e posicionamento.\nAgora o foco deve ser otimizar processos e escalar resultados.\n\nSugestão: investir em campanhas estruturadas e posicionamento de autoridade.";
+        return "Excelente nível de maturidade digital.\nSeu negócio já possui base sólida para crescimento estruturado.\nAgora o próximo passo é escala estratégica, fortalecimento de marca e expansão da captação.\n\nSugestão: otimização avançada e construção de autoridade.";
     };
 
     const sendWhatsApp = () => {
-        const segFinal = formData.segmento === 'Outros' ? formData.segmentoOutro : formData.segmento;
         let acqFinal = formData.aquisicao.join(', ');
         if (formData.aquisicao.includes('Outros')) {
             acqFinal = acqFinal.replace('Outros', `Outros (${formData.aquisicaoOutro})`);
@@ -216,31 +258,41 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
         if (formData.redesSociais.includes('Outros')) {
             redesFinal = redesFinal.replace('Outros', `Outros (${formData.redesSociaisOutro})`);
         }
+        const elementosStr = formData.elementosPerfil.join(', ');
 
         const message = `Olá Vinícius, realizei o Diagnóstico Estratégico Online.
 
 *Briefing do Negócio:*
 👤 Nome: ${formData.nome}
-✉️ E-mail: ${formData.email}
-📱 Instagram: ${formData.instagram || 'Não informado'}
 🏢 Empresa: ${formData.empresa}
-🌐 Redes Sociais ativas: ${redesFinal || 'Nenhuma informada'}
-🎯 Segmento: ${segFinal || 'Não informado'}
-📢 Aquisição atual: ${acqFinal || 'Nenhum selecionado'}
-📱 Frequência Conteúdo: ${formData.frequencia}
-🛠️ Estratégia atual: ${formData.estrategia}
-⚠️ Maior desafio: ${formData.desafio}
-🚀 Objetivo 12 meses: ${formData.objetivo}
+🏙️ Cidade: ${formData.cidade}
+✉️ E-mail: ${formData.email}
+📱 Instagram: ${formData.instagram}
 
-*📊 Maturidade Digital (0-5):*
-- Posicionamento: ${radarScores.posicionamento}
-- Estratégia: ${radarScores.estrategia}
-- Conteúdo: ${radarScores.conteudo}
-- Aquisição: ${radarScores.aquisicao}
-- Análise de Dados: ${radarScores.analise}
-- Crescimento: ${radarScores.crescimento}
+*Presença Digital:*
+🌐 Redes Sociais: ${redesFinal || 'Nenhuma informada'}
+💻 Site/Página: ${formData.site}
+🎯 Elementos do Perfil: ${elementosStr || 'Nenhum'}
 
-*🔥 Pontuação Final: ${finalScore}/100*`;
+*Conteúdo & Estratégia:*
+📝 Frequência: ${formData.frequencia}
+🧑‍💻 Quem produz: ${formData.producaoConteudo}
+🛠️ Estratégia definida: ${formData.estrategia}
+
+*Métricas e Investimentos:*
+📢 Como chegam as vendas: ${acqFinal || 'Nenhum selecionado'}
+🧲 Previsibilidade: ${formData.previsibilidade}
+💵 Investimento Mensal: ${formData.investimento}
+📊 Exp. Anúncios: ${formData.experienciaAnuncios}
+
+*Momento do Negócio:*
+🚀 Fase do Negócio: ${formData.faseNegocio}
+⚠️ Maior Desafio: ${formData.desafio}
+🎯 Objetivo 12 meses: ${formData.objetivo}
+🔥 Urgência (1-5): ${formData.urgencia}
+💡 Deseja Análise: ${formData.analisePerfil}
+
+*📊 Score de Maturidade Digital:* ${finalScore}/50`;
 
         const encoded = encodeURIComponent(message);
         window.open(`https://wa.me/5519984522494?text=${encoded}`, '_blank');
@@ -266,16 +318,16 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                 </div>
             )}
             
-            <div className="diagnosis-card-container" style={{ maxWidth: '700px', margin: '0 auto', background: 'white', borderRadius: '24px', boxShadow: 'var(--shadow-custom)', overflow: 'hidden', position: 'relative', zIndex: 1 }}>
+            <div className="diagnosis-card-container" style={{ maxWidth: '750px', margin: '0 auto', background: 'white', borderRadius: '24px', boxShadow: 'var(--shadow-custom)', overflow: 'hidden', position: 'relative', zIndex: 1 }}>
                 
                 {/* PROGRESS BAR */}
-                {step > 0 && step < 9 && (
+                {step > 0 && step < 8 && (
                     <div className="diagnosis-progress-bar" style={{ height: '6px', background: '#f1f5f9', position: 'relative' }}>
                         <div 
                             style={{ 
                                 height: '100%', 
                                 background: 'var(--accent-green)', 
-                                width: `${(step / 8) * 100}%`,
+                                width: `${(step / 7) * 100}%`,
                                 transition: 'width 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
                             }} 
                         />
@@ -300,9 +352,10 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
 
                     {step === 1 && (
                         <div className="step-info">
-                            <h3 className="text-navy mb-4 font-bold">Informações Básicas</h3>
+                            <span className="step-counter">Etapa 1 de 7</span>
+                            <h3 className="text-navy mb-4 font-bold">Identificação</h3>
                             <div className="form-group mb-4">
-                                <label className="block text-sm font-semibold mb-2">Seu Nome</label>
+                                <label className="block text-sm font-semibold mb-2">Qual é o seu nome?</label>
                                 <input 
                                     type="text" 
                                     className="diagnosis-input" 
@@ -312,17 +365,27 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                                 />
                             </div>
                             <div className="form-group mb-4">
-                                <label className="block text-sm font-semibold mb-2">Seu E-mail</label>
+                                <label className="block text-sm font-semibold mb-2">Nome da sua empresa ou marca?</label>
                                 <input 
-                                    type="email" 
+                                    type="text" 
                                     className="diagnosis-input" 
-                                    placeholder="Ex: joao@email.com"
-                                    value={formData.email}
-                                    onChange={(e) => updateField('email', e.target.value)}
+                                    placeholder="Ex: Consultoria ABC"
+                                    value={formData.empresa}
+                                    onChange={(e) => updateField('empresa', e.target.value)}
                                 />
                             </div>
                             <div className="form-group mb-4">
-                                <label className="block text-sm font-semibold mb-2">Seu Instagram</label>
+                                <label className="block text-sm font-semibold mb-2">Qual cidade você atua?</label>
+                                <input 
+                                    type="text" 
+                                    className="diagnosis-input" 
+                                    placeholder="Ex: São Paulo, SP"
+                                    value={formData.cidade}
+                                    onChange={(e) => updateField('cidade', e.target.value)}
+                                />
+                            </div>
+                            <div className="form-group mb-4">
+                                <label className="block text-sm font-semibold mb-2">Qual é o @ do seu Instagram profissional?</label>
                                 <input 
                                     type="text" 
                                     className="diagnosis-input" 
@@ -332,19 +395,19 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                                 />
                             </div>
                             <div className="form-group mb-5">
-                                <label className="block text-sm font-semibold mb-2">Sua Empresa</label>
+                                <label className="block text-sm font-semibold mb-2">Qual é o seu e-mail para receber o resultado do diagnóstico?</label>
                                 <input 
-                                    type="text" 
+                                    type="email" 
                                     className="diagnosis-input" 
-                                    placeholder="Ex: Consultoria ABC"
-                                    value={formData.empresa}
-                                    onChange={(e) => updateField('empresa', e.target.value)}
+                                    placeholder="Ex: joao@email.com"
+                                    value={formData.email}
+                                    onChange={(e) => updateField('email', e.target.value)}
                                 />
                             </div>
                             <button 
                                 onClick={handleNext} 
                                 className="btn-vm-green-large w-full"
-                                disabled={!formData.nome || !formData.empresa || !formData.email || !formData.instagram}
+                                disabled={!formData.nome || !formData.empresa || !formData.email || !formData.instagram || !formData.cidade}
                             >
                                 Continuar
                             </button>
@@ -353,11 +416,13 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
 
                     {step === 2 && (
                         <div className="step-question">
-                            <span className="step-counter">Pergunta 1 de 7</span>
-                            <h3 className="text-navy mb-2 font-bold">Quais redes sociais você utiliza hoje?</h3>
-                            <p className="text-sm text-gray mb-4">Você pode selecionar mais de uma opção.</p>
-                            <div className="options-grid">
-                                {['Instagram', 'LinkedIn', 'YouTube', 'TikTok', 'Nenhuma', 'Outros'].map(opt => (
+                            <span className="step-counter">Etapa 2 de 7</span>
+                            <h3 className="text-navy mb-4 font-bold">Presença Digital</h3>
+                            
+                            <label className="block text-sm font-semibold mb-2">Quais redes sociais você utiliza hoje para o seu negócio?</label>
+                            <p className="text-sm text-gray mb-3">Você pode selecionar mais de uma opção.</p>
+                            <div className="options-grid mb-5">
+                                {['Instagram', 'Facebook', 'TikTok', 'YouTube', 'LinkedIn', 'Nenhuma', 'Outros'].map(opt => (
                                     <button 
                                         key={opt}
                                         onClick={() => toggleArrayField('redesSociais', opt)}
@@ -368,21 +433,34 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                                 ))}
                             </div>
                             {formData.redesSociais.includes('Outros') && (
-                                <div className="mt-4 form-group animate-fade-in">
+                                <div className="mb-5 form-group animate-fade-in">
                                     <input 
                                         type="text" 
                                         className="diagnosis-input" 
                                         placeholder="Quais outras redes?"
                                         value={formData.redesSociaisOutro}
                                         onChange={(e) => updateField('redesSociaisOutro', e.target.value)}
-                                        autoFocus
                                     />
                                 </div>
                             )}
+
+                            <label className="block text-sm font-semibold mb-2 mt-2">Você possui algum site ou página de vendas?</label>
+                            <div className="options-grid">
+                                {['Não possuo', 'Apenas Instagram', 'Tenho um site institucional', 'Tenho página de vendas ou funil estruturado'].map(opt => (
+                                    <button 
+                                        key={opt}
+                                        onClick={() => updateField('site', opt)}
+                                        className={`option-btn ${formData.site === opt ? 'active' : ''}`}
+                                    >
+                                        {opt}
+                                    </button>
+                                ))}
+                            </div>
+
                             <button 
                                 onClick={handleNext} 
                                 className="btn-vm-green-large w-full mt-4"
-                                disabled={formData.redesSociais.length === 0 || (formData.redesSociais.includes('Outros') && !formData.redesSociaisOutro)}
+                                disabled={formData.redesSociais.length === 0 || (formData.redesSociais.includes('Outros') && !formData.redesSociaisOutro) || !formData.site}
                             >
                                 Continuar
                             </button>
@@ -392,49 +470,13 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
 
                     {step === 3 && (
                         <div className="step-question">
-                            <span className="step-counter">Pergunta 2 de 7</span>
-                            <h3 className="text-navy mb-4 font-bold">Qual o segmento do seu negócio?</h3>
-                            <div className="options-grid">
-                                {['Negócio local', 'Prestação de serviços', 'E-commerce', 'Outros'].map(opt => (
-                                    <button 
-                                        key={opt}
-                                        onClick={() => updateField('segmento', opt)}
-                                        className={`option-btn ${formData.segmento === opt ? 'active' : ''}`}
-                                    >
-                                        {opt}
-                                    </button>
-                                ))}
-                            </div>
-                            {formData.segmento === 'Outros' && (
-                                <div className="mt-4 form-group animate-fade-in">
-                                    <input 
-                                        type="text" 
-                                        className="diagnosis-input" 
-                                        placeholder="Digite seu segmento..."
-                                        value={formData.segmentoOutro}
-                                        onChange={(e) => updateField('segmentoOutro', e.target.value)}
-                                        autoFocus
-                                    />
-                                </div>
-                            )}
-                            <button 
-                                onClick={handleNext} 
-                                className="btn-vm-green-large w-full mt-4"
-                                disabled={!formData.segmento || (formData.segmento === 'Outros' && !formData.segmentoOutro)}
-                            >
-                                Continuar
-                            </button>
-                            <button onClick={handlePrev} className="back-btn mt-4"><ArrowLeft size={14} /> Voltar</button>
-                        </div>
-                    )}
-
-                    {step === 4 && (
-                        <div className="step-question">
-                            <span className="step-counter">Pergunta 3 de 7</span>
-                            <h3 className="text-navy mb-2 font-bold">Como seus clientes chegam até você hoje?</h3>
-                            <p className="text-sm text-gray mb-4">Você pode selecionar mais de uma opção.</p>
-                            <div className="options-grid">
-                                {['Indicação', 'Redes sociais', 'Anúncios', 'Google', 'Mistura de canais', 'Outros'].map(opt => (
+                            <span className="step-counter">Etapa 3 de 7</span>
+                            <h3 className="text-navy mb-4 font-bold">Captação de Clientes</h3>
+                            
+                            <label className="block text-sm font-semibold mb-2">Hoje, como a maioria dos seus clientes chega até você?</label>
+                            <p className="text-sm text-gray mb-3">Você pode selecionar mais de uma opção.</p>
+                            <div className="options-grid mb-5">
+                                {['Indicação', 'Instagram', 'Google', 'Tráfego pago', 'Parcerias', 'Outros'].map(opt => (
                                     <button 
                                         key={opt}
                                         onClick={() => toggleArrayField('aquisicao', opt)}
@@ -445,21 +487,34 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                                 ))}
                             </div>
                             {formData.aquisicao.includes('Outros') && (
-                                <div className="mt-4 form-group animate-fade-in">
+                                <div className="mb-5 form-group animate-fade-in">
                                     <input 
                                         type="text" 
                                         className="diagnosis-input" 
                                         placeholder="Qual outro canal?"
                                         value={formData.aquisicaoOutro}
                                         onChange={(e) => updateField('aquisicaoOutro', e.target.value)}
-                                        autoFocus
                                     />
                                 </div>
                             )}
+
+                            <label className="block text-sm font-semibold mb-2 mt-2">Hoje você possui previsibilidade na entrada de clientes?</label>
+                            <div className="options-grid">
+                                {['Não, cada mês é diferente', 'Às vezes tenho movimento, às vezes não', 'Tenho algum nível de previsibilidade', 'Tenho fluxo constante de clientes'].map(opt => (
+                                    <button 
+                                        key={opt}
+                                        onClick={() => updateField('previsibilidade', opt)}
+                                        className={`option-btn ${formData.previsibilidade === opt ? 'active' : ''}`}
+                                    >
+                                        {opt}
+                                    </button>
+                                ))}
+                            </div>
+
                             <button 
                                 onClick={handleNext} 
                                 className="btn-vm-green-large w-full mt-4"
-                                disabled={formData.aquisicao.length === 0 || (formData.aquisicao.includes('Outros') && !formData.aquisicaoOutro)}
+                                disabled={formData.aquisicao.length === 0 || (formData.aquisicao.includes('Outros') && !formData.aquisicaoOutro) || !formData.previsibilidade}
                             >
                                 Continuar
                             </button>
@@ -467,12 +522,14 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                         </div>
                     )}
 
-                    {step === 5 && (
+                    {step === 4 && (
                         <div className="step-question">
-                            <span className="step-counter">Pergunta 4 de 7</span>
-                            <h3 className="text-navy mb-4 font-bold">Você publica conteúdo nas redes sociais com frequência?</h3>
-                            <div className="options-grid">
-                                {['Regularmente', 'Às vezes', 'Raramente'].map(opt => (
+                            <span className="step-counter">Etapa 4 de 7</span>
+                            <h3 className="text-navy mb-4 font-bold">Conteúdo</h3>
+                            
+                            <label className="block text-sm font-semibold mb-2">Qual a frequência de publicação de conteúdo nas suas redes sociais?</label>
+                            <div className="options-grid mb-5">
+                                {['Não publico', '1 vez por semana', '2 a 3 vezes por semana', 'Quase todos os dias'].map(opt => (
                                     <button 
                                         key={opt}
                                         onClick={() => updateField('frequencia', opt)}
@@ -482,10 +539,24 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                                     </button>
                                 ))}
                             </div>
+
+                            <label className="block text-sm font-semibold mb-2 mt-2">Quem produz o conteúdo hoje?</label>
+                            <div className="options-grid">
+                                {['Eu mesmo', 'Alguém da equipe', 'Freelancer', 'Agência', 'Não produzo conteúdo'].map(opt => (
+                                    <button 
+                                        key={opt}
+                                        onClick={() => updateField('producaoConteudo', opt)}
+                                        className={`option-btn ${formData.producaoConteudo === opt ? 'active' : ''}`}
+                                    >
+                                        {opt}
+                                    </button>
+                                ))}
+                            </div>
+
                             <button 
                                 onClick={handleNext} 
                                 className="btn-vm-green-large w-full mt-4"
-                                disabled={!formData.frequencia}
+                                disabled={!formData.frequencia || !formData.producaoConteudo}
                             >
                                 Continuar
                             </button>
@@ -493,12 +564,14 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                         </div>
                     )}
 
-                    {step === 6 && (
+                    {step === 5 && (
                         <div className="step-question">
-                            <span className="step-counter">Pergunta 5 de 7</span>
-                            <h3 className="text-navy mb-4 font-bold">Você possui uma estratégia digital estruturada?</h3>
-                            <div className="options-grid">
-                                {['Sim', 'Parcialmente', 'Não'].map(opt => (
+                            <span className="step-counter">Etapa 5 de 7</span>
+                            <h3 className="text-navy mb-4 font-bold">Estratégia Digital</h3>
+                            
+                            <label className="block text-sm font-semibold mb-2">Hoje você possui uma estratégia digital definida?</label>
+                            <div className="options-grid mb-5">
+                                {['Não tenho estratégia', 'Tenho algumas ideias, mas nada estruturado', 'Tenho planejamento básico', 'Tenho estratégia clara e estruturada'].map(opt => (
                                     <button 
                                         key={opt}
                                         onClick={() => updateField('estrategia', opt)}
@@ -508,10 +581,67 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                                     </button>
                                 ))}
                             </div>
+
+                            <label className="block text-sm font-semibold mb-2 mt-2">Seu perfil possui alguns desses elementos?</label>
+                            <p className="text-sm text-gray mb-3">Você pode selecionar mais de uma opção.</p>
+                            <div className="options-grid">
+                                {['Bio clara e estratégica', 'Destaques organizados', 'Conteúdo planejado', 'Posicionamento claro do serviço', 'Estrutura para captar leads (WhatsApp / página / formulário)', 'Não sei dizer'].map(opt => (
+                                    <button 
+                                        key={opt}
+                                        onClick={() => toggleArrayField('elementosPerfil', opt)}
+                                        className={`option-btn ${formData.elementosPerfil.includes(opt) ? 'active' : ''}`}
+                                    >
+                                        {opt}
+                                    </button>
+                                ))}
+                            </div>
+
                             <button 
                                 onClick={handleNext} 
                                 className="btn-vm-green-large w-full mt-4"
-                                disabled={!formData.estrategia}
+                                disabled={!formData.estrategia || formData.elementosPerfil.length === 0}
+                            >
+                                Continuar
+                            </button>
+                            <button onClick={handlePrev} className="back-btn mt-4"><ArrowLeft size={14} /> Voltar</button>
+                        </div>
+                    )}
+
+                    {step === 6 && (
+                        <div className="step-question">
+                            <span className="step-counter">Etapa 6 de 7</span>
+                            <h3 className="text-navy mb-4 font-bold">Investimento em Marketing</h3>
+                            
+                            <label className="block text-sm font-semibold mb-2">Hoje você investe em marketing digital?</label>
+                            <div className="options-grid mb-5">
+                                {['Não invisto', 'Menos de R$500 por mês', 'Entre R$500 e R$1.500 por mês', 'Entre R$1.500 e R$3.000 por mês', 'Mais de R$3.000 por mês'].map(opt => (
+                                    <button 
+                                        key={opt}
+                                        onClick={() => updateField('investimento', opt)}
+                                        className={`option-btn ${formData.investimento === opt ? 'active' : ''}`}
+                                    >
+                                        {opt}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <label className="block text-sm font-semibold mb-2 mt-2">Você já investiu em anúncios online?</label>
+                            <div className="options-grid">
+                                {['Nunca investi', 'Já impulsionei posts', 'Já fiz campanhas estruturadas', 'Invisto regularmente em anúncios'].map(opt => (
+                                    <button 
+                                        key={opt}
+                                        onClick={() => updateField('experienciaAnuncios', opt)}
+                                        className={`option-btn ${formData.experienciaAnuncios === opt ? 'active' : ''}`}
+                                    >
+                                        {opt}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <button 
+                                onClick={handleNext} 
+                                className="btn-vm-green-large w-full mt-4"
+                                disabled={!formData.investimento || !formData.experienciaAnuncios}
                             >
                                 Continuar
                             </button>
@@ -521,63 +651,94 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
 
                     {step === 7 && (
                         <div className="step-question">
-                            <span className="step-counter">Pergunta 6 de 7</span>
-                            <h3 className="text-navy mb-4 font-bold">Qual é hoje seu maior desafio de crescimento?</h3>
+                            <span className="step-counter">Etapa 7 de 7</span>
+                            <h3 className="text-navy mb-4 font-bold">Momento do Negócio</h3>
+                            
+                            <label className="block text-sm font-semibold mb-2">Em qual fase você considera que seu negócio está hoje?</label>
+                            <div className="options-grid mb-5">
+                                {['Estou começando', 'Já tenho clientes, mas quero crescer', 'Tenho clientes constantes, mas quero previsibilidade', 'Quero escalar e fortalecer minha marca'].map(opt => (
+                                    <button 
+                                        key={opt}
+                                        onClick={() => updateField('faseNegocio', opt)}
+                                        className={`option-btn ${formData.faseNegocio === opt ? 'active' : ''}`}
+                                    >
+                                        {opt}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <label className="block text-sm font-semibold mb-2 mt-2">Qual é o seu maior desafio hoje no digital?</label>
                             <textarea 
-                                className="diagnosis-textarea" 
-                                placeholder="Dificuldade em atrair clientes, falta de tempo para conteúdo, processos desorganizados..."
+                                className="diagnosis-textarea mb-5" 
+                                placeholder="Falta de tempo, dificuldade em criar conteúdo estruturado..."
                                 value={formData.desafio}
                                 onChange={(e) => updateField('desafio', e.target.value)}
                             />
+
+                            <label className="block text-sm font-semibold mb-2 mt-2">Qual é o principal objetivo que você gostaria de alcançar nos próximos 12 meses?</label>
+                            <textarea 
+                                className="diagnosis-textarea mb-5" 
+                                placeholder="Conseguir o dobro de clientes online, virar referência..."
+                                value={formData.objetivo}
+                                onChange={(e) => updateField('objetivo', e.target.value)}
+                            />
+
+                            <label className="block text-sm font-semibold mb-2 mt-2">O quanto melhorar sua presença digital é prioridade para você neste momento?</label>
+                            <p className="text-sm text-gray mb-3">1 = Não é prioridade agora / 5 = É uma prioridade alta</p>
+                            <div className="options-grid mb-5" style={{ gridTemplateColumns: 'repeat(5, 1fr)' }}>
+                                {['1', '2', '3', '4', '5'].map(opt => (
+                                    <button 
+                                        key={opt}
+                                        onClick={() => updateField('urgencia', opt)}
+                                        className={`option-btn text-center ${formData.urgencia === opt ? 'active' : ''}`}
+                                        style={{ padding: '0.8rem' }}
+                                    >
+                                        {opt}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <label className="block text-sm font-semibold mb-2 mt-2">Você gostaria de receber uma análise estratégica do seu perfil com base neste diagnóstico?</label>
+                            <div className="options-grid">
+                                {['Sim, gostaria', 'Talvez', 'Apenas queria ver o resultado'].map(opt => (
+                                    <button 
+                                        key={opt}
+                                        onClick={() => updateField('analisePerfil', opt)}
+                                        className={`option-btn ${formData.analisePerfil === opt ? 'active' : ''}`}
+                                    >
+                                        {opt}
+                                    </button>
+                                ))}
+                            </div>
+
                             <button 
-                                onClick={handleNext} 
+                                onClick={processResults} 
                                 className="btn-vm-green-large w-full mt-4"
-                                disabled={!formData.desafio}
+                                disabled={!formData.faseNegocio || !formData.desafio || !formData.objetivo || !formData.urgencia || !formData.analisePerfil}
                             >
-                                Próxima Pergunta
+                                🎉 Finalizar Diagnóstico
                             </button>
                             <button onClick={handlePrev} className="back-btn mt-4"><ArrowLeft size={14} /> Voltar</button>
                         </div>
                     )}
 
                     {step === 8 && (
-                        <div className="step-question">
-                            <span className="step-counter">Pergunta 7 de 7</span>
-                            <h3 className="text-navy mb-4 font-bold">Onde você gostaria que seu negócio estivesse em 12 meses?</h3>
-                            <textarea 
-                                className="diagnosis-textarea" 
-                                placeholder="Dobrar o faturamento, abrir nova unidade, consolidar marca no digital..."
-                                value={formData.objetivo}
-                                onChange={(e) => updateField('objetivo', e.target.value)}
-                            />
-                            <button 
-                                onClick={processResults} 
-                                className="btn-vm-green-large w-full mt-4"
-                                disabled={!formData.objetivo}
-                            >
-                                Finalizar Diagnóstico
-                            </button>
-                            <button onClick={handlePrev} className="back-btn mt-4"><ArrowLeft size={14} /> Voltar</button>
-                        </div>
-                    )}
-
-                    {step === 9 && (
                         <div className="step-result text-center">
                             <h2 className="text-navy font-bold mb-2">Resultado do Diagnóstico Estratégico</h2>
                             <div className="score-badge mb-4">
                                 <span className="score-label">Pontuação geral</span>
-                                <span className="score-value">{finalScore}<small>/100</small></span>
+                                <span className="score-value">{finalScore}<small>/50</small></span>
                             </div>
 
                             <DigitalMaturityRadar scores={radarScores} />
 
                             <div className="interpretation-box mb-5">
-                                <p className="text-navy font-semibold">{getInterpretation(finalScore)}</p>
-                                <p className="text-sm mt-3 text-gray">Seu diagnóstico indica que existem oportunidades estratégicas imediatas para fortalecer seu posicionamento e estrutura digital.</p>
+                                <p className="text-navy font-semibold" style={{ whiteSpace: 'pre-line' }}>{getInterpretation(finalScore)}</p>
+                                <p className="text-sm mt-3 text-gray">Se quiser, posso analisar seu perfil e explicar com mais detalhes quais ajustes poderiam acelerar seus resultados.</p>
                             </div>
 
                             <button onClick={sendWhatsApp} className="btn-vm-green-large w-full">
-                                <Send size={18} /> Solicitar Diagnóstico com Vinícius Matoba
+                                <Send size={18} /> Receber análise estratégica gratuita
                             </button>
                             
                             <p className="mt-4 text-xs text-gray opacity-60">
