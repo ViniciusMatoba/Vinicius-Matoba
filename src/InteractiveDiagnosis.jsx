@@ -23,7 +23,7 @@ const DigitalMaturityRadar = ({ scores }) => {
     const points = useMemo(() => {
         return RADAR_CATEGORIES.map((cat, i) => {
             const val = scores[cat.key] || 0;
-            const r = (val / 5) * radius;
+            const r = (val / 10) * radius;
             const angle = i * angleStep - Math.PI / 2;
             return {
                 x: center + r * Math.cos(angle),
@@ -162,91 +162,108 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
     };
 
     const processResults = () => {
-        // RADAR SCORING (0-10 por pilar, total 50)
-        
-        // 1. Estrutura Digital (Redes Sociais + Site)
+        // 1. Estrutura Digital (0-10)
         let rEstrutura = 0;
-        if (formData.redesSociais.includes('Instagram')) rEstrutura += 2;
-        if (formData.redesSociais.length > 1 && !formData.redesSociais.includes('Nenhuma')) rEstrutura += 1;
+        const validRedes = formData.redesSociais.filter(r => r !== 'Nenhuma' && r !== 'Outros' || (r === 'Outros' && formData.redesSociaisOutro.trim() !== ''));
+        if (validRedes.length === 1) rEstrutura += 2;
+        else if (validRedes.length === 2) rEstrutura += 3;
+        else if (validRedes.length >= 3) rEstrutura += 5;
+
         if (formData.site === 'Apenas Instagram') rEstrutura += 1;
         else if (formData.site === 'Tenho um site institucional') rEstrutura += 3;
         else if (formData.site === 'Tenho página de vendas ou funil estruturado') rEstrutura += 5;
-        rEstrutura = Math.min(10, rEstrutura); // max 8 na simulação real, boost se + redes.
 
-        // 2. Captação de Clientes (Aquisição + Previsibilidade)
+        // 2. Captação de Clientes (0-10)
         let rCaptacao = 0;
-        if (formData.aquisicao.includes('Tráfego pago') || formData.aquisicao.includes('Google')) rCaptacao += 3;
-        else if (formData.aquisicao.includes('Instagram') || formData.aquisicao.includes('Indicação')) rCaptacao += 1;
-        
-        if (formData.previsibilidade === 'Tenho fluxo constante de clientes') rCaptacao += 5;
-        else if (formData.previsibilidade === 'Tenho algum nível de previsibilidade') rCaptacao += 3;
-        else if (formData.previsibilidade === 'Às vezes tenho movimento, às vezes não') rCaptacao += 1;
-        rCaptacao = Math.min(10, rCaptacao * 1.5);
+        if (formData.aquisicao.includes('Google') || formData.aquisicao.includes('Tráfego pago')) rCaptacao += 5;
+        else if (formData.aquisicao.includes('Instagram') && formData.aquisicao.includes('Indicação')) rCaptacao += 3;
+        else if (formData.aquisicao.includes('Instagram')) rCaptacao += 4;
+        else if (formData.aquisicao.includes('Indicação')) rCaptacao += 1;
+        else if (formData.aquisicao.length > 0) rCaptacao += 2; // Mistura ou outros
 
-        // 3. Conteúdo (Frequência + Produção)
+        if (formData.previsibilidade === 'Às vezes tenho movimento, às vezes não') rCaptacao += 2;
+        else if (formData.previsibilidade === 'Tenho algum nível de previsibilidade') rCaptacao += 4;
+        else if (formData.previsibilidade === 'Tenho fluxo constante de clientes') rCaptacao += 5;
+
+        // 3. Conteúdo (0-10)
         let rConteudo = 0;
-        if (formData.frequencia === 'Quase todos os dias') rConteudo += 5;
-        else if (formData.frequencia === '2 a 3 vezes por semana') rConteudo += 3;
-        else if (formData.frequencia === '1 vez por semana') rConteudo += 1;
+        if (formData.frequencia === '1 vez por semana') rConteudo += 2;
+        else if (formData.frequencia === '2 a 3 vezes por semana') rConteudo += 4;
+        else if (formData.frequencia === 'Quase todos os dias') rConteudo += 5;
 
-        if (formData.producaoConteudo === 'Alguém da equipe' || formData.producaoConteudo === 'Agência') rConteudo += 4;
-        else if (formData.producaoConteudo === 'Freelancer' || formData.producaoConteudo === 'Eu mesmo') rConteudo += 2;
-        rConteudo = Math.min(10, rConteudo);
+        if (formData.producaoConteudo === 'Eu mesmo') rConteudo += 2;
+        else if (formData.producaoConteudo === 'Alguém da equipe') rConteudo += 3;
+        else if (formData.producaoConteudo === 'Freelancer') rConteudo += 4;
+        else if (formData.producaoConteudo === 'Agência') rConteudo += 5;
 
-        // 4. Estratégia (Estratégia Definida + Elementos Perfil)
+        // 4. Estratégia (0-10)
         let rEstrategia = 0;
-        if (formData.estrategia === 'Tenho estratégia clara e estruturada') rEstrategia += 5;
-        else if (formData.estrategia === 'Tenho planejamento básico') rEstrategia += 3;
-        else if (formData.estrategia === 'Tenho algumas ideias, mas nada estruturado') rEstrategia += 1;
+        if (formData.estrategia === 'Tenho algumas ideias, mas nada estruturado') rEstrategia += 2;
+        else if (formData.estrategia === 'Tenho planejamento básico') rEstrategia += 4;
+        else if (formData.estrategia === 'Tenho estratégia clara e estruturada') rEstrategia += 5;
 
-        if (!formData.elementosPerfil.includes('Não sei dizer')) {
-            rEstrategia += formData.elementosPerfil.length; // max 5
-        }
-        rEstrategia = Math.min(10, rEstrategia);
+        const validElementos = formData.elementosPerfil.filter(e => e !== 'Não sei dizer').length;
+        if (validElementos >= 5) rEstrategia += 5;
+        else if (validElementos >= 3) rEstrategia += 3;
+        else rEstrategia += validElementos;
 
-        // 5. Posicionamento (Investimentos/Anúncios + Fase do Negócio)
+        // 5. Posicionamento (0-10)
         let rPosicionamento = 0;
-        if (formData.investimento === 'Mais de R$3.000 por mês') rPosicionamento += 3;
-        else if (formData.investimento === 'Entre R$1.500 e R$3.000 por mês') rPosicionamento += 2;
-        else if (formData.investimento === 'Entre R$500 e R$1.500 por mês') rPosicionamento += 1;
+        if (formData.investimento === 'Menos de R$500 por mês') rPosicionamento += 2;
+        else if (formData.investimento === 'Entre R$500 e R$1.500 por mês') rPosicionamento += 3;
+        else if (formData.investimento === 'Entre R$1.500 e R$3.000 por mês') rPosicionamento += 4;
+        else if (formData.investimento === 'Mais de R$3.000 por mês') rPosicionamento += 5;
 
-        if (formData.experienciaAnuncios === 'Invisto regularmente em anúncios') rPosicionamento += 3;
-        else if (formData.experienciaAnuncios === 'Já fiz campanhas estruturadas') rPosicionamento += 2;
-        else if (formData.experienciaAnuncios === 'Já impulsionei posts') rPosicionamento += 1;
-
-        if (formData.faseNegocio === 'Quero escalar e fortalecer minha marca') rPosicionamento += 4;
-        else if (formData.faseNegocio === 'Tenho clientes constantes, mas quero previsibilidade') rPosicionamento += 3;
+        if (formData.faseNegocio === 'Estou começando') rPosicionamento += 1;
         else if (formData.faseNegocio === 'Já tenho clientes, mas quero crescer') rPosicionamento += 2;
-        rPosicionamento = Math.min(10, rPosicionamento);
+        else if (formData.faseNegocio === 'Tenho clientes constantes, mas quero previsibilidade') rPosicionamento += 4;
+        else if (formData.faseNegocio === 'Quero escalar e fortalecer minha marca') rPosicionamento += 5;
 
         const radar = {
-            posicionamento: Math.max(1, (rPosicionamento / 10) * 5),
-            conteudo: Math.max(1, (rConteudo / 10) * 5),
-            captacao: Math.max(1, (rCaptacao / 10) * 5),
-            estrutura: Math.max(1, (rEstrutura / 10) * 5),
-            estrategia: Math.max(1, (rEstrategia / 10) * 5)
+            posicionamento: rPosicionamento,
+            conteudo: rConteudo,
+            captacao: rCaptacao,
+            estrutura: rEstrutura,
+            estrategia: rEstrategia
         };
 
         setRadarScores(radar);
 
         // OVERALL SCORE (0-50)
-        const totalScore = Math.round(rPosicionamento + rConteudo + rCaptacao + rEstrutura + rEstrategia);
+        const totalScore = rPosicionamento + rConteudo + rCaptacao + rEstrutura + rEstrategia;
         setFinalScore(totalScore);
 
         handleNext();
     };
 
-    const getInterpretation = (score) => {
-        if (score <= 5) return "Seu negócio ainda não possui presença digital estruturada.\nNeste estágio, o foco principal deve ser criar uma base mínima: perfil profissional bem configurado, clareza no serviço oferecido e início da produção de conteúdo.\n\nSugestão: comece estruturando seu perfil e definindo seu público.";
-        if (score <= 10) return "Seu negócio está dando os primeiros passos no digital, mas ainda depende muito de ações isoladas.\nProvavelmente faltam estratégia, constância e posicionamento claro.\n\nSugestão: trabalhar organização do perfil e frequência de conteúdo.";
-        if (score <= 15) return "Você já iniciou sua presença digital, mas ainda não existe uma estratégia clara guiando suas ações.\nO risco aqui é investir tempo e esforço sem gerar crescimento consistente.\n\nSugestão: definir posicionamento e objetivos de crescimento.";
-        if (score <= 20) return "Seu negócio já possui presença online, porém existem gargalos importantes que limitam os resultados.\nPode faltar organização no perfil, clareza de comunicação ou estratégia de captação.\n\nSugestão: melhorar posicionamento e estrutura do perfil.";
-        if (score <= 25) return "Você já está utilizando o digital para divulgar seu negócio, mas ainda há bastante espaço para evolução estratégica.\nCom alguns ajustes de comunicação, conteúdo e captação de clientes, o crescimento pode acelerar.\n\nSugestão: estruturar planejamento de conteúdo e funil de captação.";
-        if (score <= 30) return "Seu negócio possui uma presença digital razoável, mas ainda não aproveita todo o potencial das redes.\nNormalmente nesse estágio faltam análise de dados e otimização das estratégias.\n\nSugestão: começar a acompanhar métricas e ajustar comunicação.";
-        if (score <= 35) return "Seu negócio já possui uma boa base digital.\nAgora o desafio é transformar presença online em geração constante de oportunidades e clientes.\n\nSugestão: fortalecer estratégia de conteúdo e captação.";
-        if (score <= 40) return "Você já construiu uma presença digital consistente.\nCom estratégia mais refinada e análise contínua, é possível aumentar a previsibilidade de clientes.\n\nSugestão: otimizar funis e melhorar conversão.";
-        if (score <= 45) return "Seu negócio possui maturidade digital e já entende a importância de estratégia e posicionamento.\nAgora o foco deve ser otimizar processos e escalar resultados.\n\nSugestão: investir em campanhas estruturadas e posicionamento de autoridade.";
-        return "Excelente nível de maturidade digital.\nSeu negócio já possui base sólida para crescimento estruturado.\nAgora o próximo passo é escala estratégica, fortalecimento de marca e expansão da captação.\n\nSugestão: otimização avançada e construção de autoridade.";
+    const getMaturityLevel = (score) => {
+        if (score <= 15) return "Presença inicial";
+        if (score <= 25) return "Estrutura básica";
+        if (score <= 35) return "Crescimento em desenvolvimento";
+        if (score <= 45) return "Estratégia ativa";
+        return "Alta maturidade digital";
+    };
+
+    const getGargalo = () => {
+        let lowestScore = 10;
+        let lowestKey = '';
+        Object.entries(radarScores).forEach(([key, val]) => {
+            if (val < lowestScore) {
+                lowestScore = val;
+                lowestKey = key;
+            }
+        });
+
+        if (lowestScore >= 5) return null; // Sem gargalo severo
+
+        switch(lowestKey) {
+            case 'captacao': return "Seu principal gargalo hoje está na geração previsível de clientes.";
+            case 'estrategia': return "Seu negócio ainda não possui uma estratégia digital clara e intencional.";
+            case 'conteudo': return "A falta de consistência ou estrutura de conteúdo está limitando o seu alcance.";
+            case 'estrutura': return "Sua base digital ainda não está totalmente preparada para suportar ou atrair grande escala.";
+            case 'posicionamento': return "A ausência de clareza ou investimento na marca está travando seu próximo nível de escala.";
+            default: return null;
+        }
     };
 
     const sendWhatsApp = () => {
@@ -259,6 +276,9 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
             redesFinal = redesFinal.replace('Outros', `Outros (${formData.redesSociaisOutro})`);
         }
         const elementosStr = formData.elementosPerfil.join(', ');
+        
+        const maturidade = getMaturityLevel(finalScore);
+        const gargalo = getGargalo();
 
         const message = `Olá Vinícius, realizei o Diagnóstico Estratégico Online.
 
@@ -292,7 +312,9 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
 🔥 Urgência (1-5): ${formData.urgencia}
 💡 Deseja Análise: ${formData.analisePerfil}
 
-*📊 Score de Maturidade Digital:* ${finalScore}/50`;
+*📊 Score Final:* ${finalScore}/50
+*🏆 Nível de Maturidade:* ${maturidade}
+${gargalo ? `*🚨 Gargalo Principal:* ${gargalo}` : ''}`;
 
         const encoded = encodeURIComponent(message);
         window.open(`https://wa.me/5519984522494?text=${encoded}`, '_blank');
@@ -733,8 +755,17 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                             <DigitalMaturityRadar scores={radarScores} />
 
                             <div className="interpretation-box mb-5">
-                                <p className="text-navy font-semibold" style={{ whiteSpace: 'pre-line' }}>{getInterpretation(finalScore)}</p>
-                                <p className="text-sm mt-3 text-gray">Se quiser, posso analisar seu perfil e explicar com mais detalhes quais ajustes poderiam acelerar seus resultados.</p>
+                                <h4 className="text-navy font-bold mb-1" style={{ fontSize: '1.2rem' }}>{getMaturityLevel(finalScore)}</h4>
+                                <p className="text-navy font-medium mb-3">Sua maturidade digital está mapeada acima segundo nossa inteligência VM.</p>
+                                
+                                {getGargalo() && (
+                                    <div style={{ background: '#fef2f2', borderLeft: '4px solid #ef4444', padding: '1rem', borderRadius: '8px', color: '#b91c1c' }}>
+                                        <p className="font-bold text-sm mb-1">🚨 Atenção Especial</p>
+                                        <p className="text-sm font-medium">{getGargalo()}</p>
+                                    </div>
+                                )}
+                                
+                                <p className="text-sm mt-4 text-gray">Se quiser, posso analisar seu perfil e explicar com mais detalhes como reverter as falhas encontradas acelerando seus resultados reais.</p>
                             </div>
 
                             <button onClick={sendWhatsApp} className="btn-vm-green-large w-full">
