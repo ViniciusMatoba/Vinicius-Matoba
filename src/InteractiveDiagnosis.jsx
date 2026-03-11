@@ -1,10 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { ChevronRight, ArrowLeft, Send, CheckCircle2, Target, BarChart3, Users, Rocket, Brain } from 'lucide-react';
 import diagnosticoImg from './assets/Diagnostico.png';
+import logoImg from './assets/logo.png';
 
 // --- CONSTANTS ---
 const RADAR_CATEGORIES = [
-    { key: 'posicionamento', label: 'Posicionamento' },
     { key: 'estrategia', label: 'Estratégia' },
     { key: 'conteudo', label: 'Conteúdo' },
     { key: 'aquisicao', label: 'Aquisição' },
@@ -113,7 +113,9 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
         nome: '',
         empresa: '',
         segmento: '',
-        aquisicao: '',
+        segmentoOutro: '',
+        aquisicao: [],
+        aquisicaoOutro: '',
         frequencia: '',
         estrategia: '',
         desafio: '',
@@ -137,15 +139,28 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
         setFormData(prev => ({ ...prev, [field]: value }));
     };
 
+    const toggleArrayField = (field, value) => {
+        setFormData(prev => {
+            const currentArray = prev[field] || [];
+            if (currentArray.includes(value)) {
+                return { ...prev, [field]: currentArray.filter(i => i !== value) };
+            } else {
+                return { ...prev, [field]: [...currentArray, value] };
+            }
+        });
+    };
+
     const processResults = () => {
         // RADAR SCORING (0-5)
         let rPos = 2;
         if (formData.segmento === 'Negócio local' || formData.segmento === 'Prestação de serviços') rPos = 5;
         else if (formData.segmento === 'E-commerce') rPos = 4;
+        else if (formData.segmento === 'Outros') rPos = 3;
 
         let rAcq = 1;
-        if (['Anúncios', 'Google', 'Mistura de canais'].includes(formData.aquisicao)) rAcq = 5;
-        else if (formData.aquisicao === 'Redes sociais') rAcq = 3;
+        const acqArray = formData.aquisicao;
+        if (acqArray.includes('Anúncios') || acqArray.includes('Google') || acqArray.includes('Mistura de canais')) rAcq = 5;
+        else if (acqArray.includes('Redes sociais')) rAcq = 3;
 
         let rCont = 1;
         if (formData.frequencia === 'Regularmente') rCont = 5;
@@ -188,13 +203,19 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
     };
 
     const sendWhatsApp = () => {
+        const segFinal = formData.segmento === 'Outros' ? formData.segmentoOutro : formData.segmento;
+        let acqFinal = formData.aquisicao.join(', ');
+        if (formData.aquisicao.includes('Outros')) {
+            acqFinal = acqFinal.replace('Outros', `Outros (${formData.aquisicaoOutro})`);
+        }
+
         const message = `Olá Vinícius, realizei o Diagnóstico Estratégico Online.
 
 *Bbriefing do Negócio:*
 👤 Nome: ${formData.nome}
 🏢 Empresa: ${formData.empresa}
-🎯 Segmento: ${formData.segmento}
-📢 Aquisição atual: ${formData.aquisicao}
+🎯 Segmento: ${segFinal || 'Não informado'}
+📢 Aquisição atual: ${acqFinal || 'Nenhum selecionado'}
 📱 Frequência Conteúdo: ${formData.frequencia}
 🛠️ Estratégia atual: ${formData.estrategia}
 ⚠️ Maior desafio: ${formData.desafio}
@@ -216,10 +237,25 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
 
     // --- STEP RENDERING ---
 
-
     return (
-        <div className={`diagnosis-tool-wrapper ${isEmbedded ? 'embedded' : 'full-page'}`} style={{ padding: isEmbedded ? '0' : '4rem 1rem' }}>
-            <div className="diagnosis-card-container" style={{ maxWidth: '700px', margin: '0 auto', background: 'white', borderRadius: '24px', boxShadow: 'var(--shadow-custom)', overflow: 'hidden' }}>
+        <div className={`diagnosis-tool-wrapper ${isEmbedded ? 'embedded' : 'full-page'}`} style={{ padding: isEmbedded ? '0' : '4rem 1rem', position: 'relative' }}>
+            {step > 0 && step < 8 && (
+                <div style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    opacity: 0.03,
+                    pointerEvents: 'none',
+                    zIndex: 0,
+                    width: '60vw',
+                    maxWidth: '500px'
+                }}>
+                    <img src={logoImg} alt="VM Logo Watermark" style={{ width: '100%' }} />
+                </div>
+            )}
+            
+            <div className="diagnosis-card-container" style={{ maxWidth: '700px', margin: '0 auto', background: 'white', borderRadius: '24px', boxShadow: 'var(--shadow-custom)', overflow: 'hidden', position: 'relative', zIndex: 1 }}>
                 
                 {/* PROGRESS BAR */}
                 {step > 0 && step < 8 && (
@@ -289,16 +325,35 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                             <span className="step-counter">Pergunta 1 de 6</span>
                             <h3 className="text-navy mb-4 font-bold">Qual o segmento do seu negócio?</h3>
                             <div className="options-grid">
-                                {['Negócio local', 'Prestação de serviços', 'E-commerce', 'Outro'].map(opt => (
+                                {['Negócio local', 'Prestação de serviços', 'E-commerce', 'Outros'].map(opt => (
                                     <button 
                                         key={opt}
-                                        onClick={() => { updateField('segmento', opt); handleNext(); }}
+                                        onClick={() => updateField('segmento', opt)}
                                         className={`option-btn ${formData.segmento === opt ? 'active' : ''}`}
                                     >
                                         {opt}
                                     </button>
                                 ))}
                             </div>
+                            {formData.segmento === 'Outros' && (
+                                <div className="mt-4 form-group animate-fade-in">
+                                    <input 
+                                        type="text" 
+                                        className="diagnosis-input" 
+                                        placeholder="Digite seu segmento..."
+                                        value={formData.segmentoOutro}
+                                        onChange={(e) => updateField('segmentoOutro', e.target.value)}
+                                        autoFocus
+                                    />
+                                </div>
+                            )}
+                            <button 
+                                onClick={handleNext} 
+                                className="btn-vm-green-large w-full mt-4"
+                                disabled={!formData.segmento || (formData.segmento === 'Outros' && !formData.segmentoOutro)}
+                            >
+                                Continuar
+                            </button>
                             <button onClick={handlePrev} className="back-btn mt-4"><ArrowLeft size={14} /> Voltar</button>
                         </div>
                     )}
@@ -306,18 +361,38 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                     {step === 3 && (
                         <div className="step-question">
                             <span className="step-counter">Pergunta 2 de 6</span>
-                            <h3 className="text-navy mb-4 font-bold">Como seus clientes chegam até você hoje?</h3>
+                            <h3 className="text-navy mb-2 font-bold">Como seus clientes chegam até você hoje?</h3>
+                            <p className="text-sm text-gray mb-4">Você pode selecionar mais de uma opção.</p>
                             <div className="options-grid">
-                                {['Indicação', 'Redes sociais', 'Anúncios', 'Google', 'Mistura de canais'].map(opt => (
+                                {['Indicação', 'Redes sociais', 'Anúncios', 'Google', 'Mistura de canais', 'Outros'].map(opt => (
                                     <button 
                                         key={opt}
-                                        onClick={() => { updateField('aquisicao', opt); handleNext(); }}
-                                        className={`option-btn ${formData.aquisicao === opt ? 'active' : ''}`}
+                                        onClick={() => toggleArrayField('aquisicao', opt)}
+                                        className={`option-btn ${formData.aquisicao.includes(opt) ? 'active' : ''}`}
                                     >
                                         {opt}
                                     </button>
                                 ))}
                             </div>
+                            {formData.aquisicao.includes('Outros') && (
+                                <div className="mt-4 form-group animate-fade-in">
+                                    <input 
+                                        type="text" 
+                                        className="diagnosis-input" 
+                                        placeholder="Qual outro canal?"
+                                        value={formData.aquisicaoOutro}
+                                        onChange={(e) => updateField('aquisicaoOutro', e.target.value)}
+                                        autoFocus
+                                    />
+                                </div>
+                            )}
+                            <button 
+                                onClick={handleNext} 
+                                className="btn-vm-green-large w-full mt-4"
+                                disabled={formData.aquisicao.length === 0 || (formData.aquisicao.includes('Outros') && !formData.aquisicaoOutro)}
+                            >
+                                Continuar
+                            </button>
                             <button onClick={handlePrev} className="back-btn mt-4"><ArrowLeft size={14} /> Voltar</button>
                         </div>
                     )}
@@ -330,13 +405,20 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                                 {['Regularmente', 'Às vezes', 'Raramente'].map(opt => (
                                     <button 
                                         key={opt}
-                                        onClick={() => { updateField('frequencia', opt); handleNext(); }}
+                                        onClick={() => updateField('frequencia', opt)}
                                         className={`option-btn ${formData.frequencia === opt ? 'active' : ''}`}
                                     >
                                         {opt}
                                     </button>
                                 ))}
                             </div>
+                            <button 
+                                onClick={handleNext} 
+                                className="btn-vm-green-large w-full mt-4"
+                                disabled={!formData.frequencia}
+                            >
+                                Continuar
+                            </button>
                             <button onClick={handlePrev} className="back-btn mt-4"><ArrowLeft size={14} /> Voltar</button>
                         </div>
                     )}
@@ -349,13 +431,20 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                                 {['Sim', 'Parcialmente', 'Não'].map(opt => (
                                     <button 
                                         key={opt}
-                                        onClick={() => { updateField('estrategia', opt); handleNext(); }}
+                                        onClick={() => updateField('estrategia', opt)}
                                         className={`option-btn ${formData.estrategia === opt ? 'active' : ''}`}
                                     >
                                         {opt}
                                     </button>
                                 ))}
                             </div>
+                            <button 
+                                onClick={handleNext} 
+                                className="btn-vm-green-large w-full mt-4"
+                                disabled={!formData.estrategia}
+                            >
+                                Continuar
+                            </button>
                             <button onClick={handlePrev} className="back-btn mt-4"><ArrowLeft size={14} /> Voltar</button>
                         </div>
                     )}
