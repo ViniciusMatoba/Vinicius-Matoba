@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
 import './App.css'
 import './Navigation.css'
+import './Method.css'
 import logo from './assets/logo.png'
 import heroHomeNewImg from './assets/hero-home-new.png'
 import bioLinkBg from './assets/bio-link-bg.png'
@@ -18,7 +19,8 @@ import {
   Target,
   Search,
   Briefcase,
-  Check
+  Check,
+  X
 } from 'lucide-react'
 
 // --- GLOBAL COMPONENTS ---
@@ -132,22 +134,71 @@ function AboutSection() {
 }
 
 const VM_STEPS = [
-  { title: 'DIAGNOSTICAR', number: '1', description: 'Entender o cenário atual e identificar gargalos.' },
-  { title: 'POSICIONAR', number: '2', description: 'Definir como o negócio deve ser percebido pelo mercado.' },
-  { title: 'PLANEJAR', number: '3', description: 'Construir um plano estratégico de comunicação e crescimento.' },
-  { title: 'EXECUTAR', number: '4', description: 'Colocar o plano em prática com consistência.' },
-  { title: 'ANALISAR', number: '5', description: 'Avaliar dados para entender o que realmente funciona.' },
-  { title: 'OTIMIZAR', number: '6', description: 'Ajustar continuamente a estratégia para evoluir.' }
+  { 
+    title: 'DIAGNOSTICAR', 
+    number: '1', 
+    description: 'Entender o cenário atual e identificar gargalos.',
+    subtitle: 'Primeiro entendemos o cenário real',
+    details: ["Perfil do Instagram", "Bio, nome e clareza da oferta", "Conteúdo atual", "Engajamento", "Concorrentes", "Funil de vendas", "Processo comercial", "Gargalos de conversão"],
+    objective: "Identificar exatamente onde você perde oportunidades hoje.",
+    highlight: "Sem diagnóstico, qualquer ação vira aposta."
+  },
+  { 
+    title: 'POSICIONAR', 
+    number: '2', 
+    description: 'Definir como o negócio deve ser percebido pelo mercado.',
+    subtitle: 'Definimos como o mercado deve enxergar você',
+    details: ["Público-alvo e persona", "Proposta de valor", "Diferenciais", "Autoridade", "Tom de voz", "Promessa principal", "Estrutura de bio", "Oferta clara"],
+    result: ["Você deixa de ser 'mais um'", "Vira referência no seu nicho"],
+    highlight: "Posicionamento certo reduz objeção de preço."
+  },
+  { 
+    title: 'PLANEJAR', 
+    number: '3', 
+    description: 'Construir um plano estratégico de comunicação e crescimento.',
+    subtitle: 'Transformamos estratégia em plano prático',
+    details: ["Linha editorial", "Pilares de conteúdo", "Funil (atração → relacionamento → venda)", "Calendário mensal", "Ideias de posts", "Roteiros", "Copies", "CTAs", "Frequência ideal"],
+    highlight: "Você não posta por inspiração. Você posta com intenção."
+  },
+  { 
+    title: 'EXECUTAR', 
+    number: '4', 
+    description: 'Colocar o plano em prática com consistência.',
+    subtitle: 'Colocamos o plano em prática. Aqui começa a operação.',
+    details: ["Direção estratégica do conteúdo", "Criação de pautas e roteiros", "Orientação de gravação", "Organização do feed", "Stories diários", "Acompanhamento semanal", "Suporte criativo", "Gestão estratégica de campanhas"],
+    objective: "Garantir consistência, profissionalismo e autoridade.",
+    highlight: "Sem execução, estratégia vira intenção."
+  },
+  { 
+    title: 'ANALISAR', 
+    number: '5', 
+    description: 'Avaliar dados para entender o que realmente funciona.',
+    subtitle: 'Nada é baseado em achismo. Só dados.',
+    details: ["Alcance", "Engajamento", "Visitas ao perfil", "Crescimento de seguidores", "Leads / directs", "Cliques no link", "Custo por lead (tráfego)", "Conversões", "Conteúdos campeões"],
+    question: "O que realmente está gerando oportunidades de venda?",
+    highlight: "Marketing é decisão baseada em dados."
+  },
+  { 
+    title: 'OTIMIZAR', 
+    number: '6', 
+    description: 'Ajustar continuamente a estratégia para evoluir.',
+    subtitle: 'Ajuste e melhoria contínua. Com base nos dados:',
+    details: ["Ajustamos conteúdos", "Repetimos formatos que funcionam", "Melhoramos roteiros", "Testamos novas abordagens", "Refinamos posicionamento", "Cortamos o que não gera resultado"],
+    objective: "Reduzir desperdício e aumentar performance a cada ciclo.",
+    highlight: "O crescimento vem da otimização constante."
+  }
 ];
 
 function MethodSection() {
+  const [selectedStep, setSelectedStep] = React.useState(null);
+
   return (
     <>
       <section id="metodo" className="premium-section bg-metodo-hero" style={{ backgroundImage: `url(${metodoHeroBg})` }}>
         <div className="container-premium text-center">
           <h2 className="premium-section-title max-width-1000 margin-auto">Método VM &mdash; Ciclo de Crescimento Digital</h2>
           <p className="premium-section-text max-width-800 margin-auto mt-4 mb-5">
-            Um processo estratégico contínuo que organiza o crescimento digital em seis etapas.
+            Um processo estratégico contínuo que organiza o crescimento digital em seis etapas. <strong>Clique em cada etapa para ver os detalhes.</strong>
           </p>
           <div className="metodo-ciclo-photo-container mb-5">
             <img src={metodoCicloImg} alt="Método VM" className="margin-auto" style={{ maxWidth: '100%', borderRadius: '16px', boxShadow: 'var(--shadow-lg)', backgroundColor: 'white', padding: '1rem' }} />
@@ -159,15 +210,74 @@ function MethodSection() {
           <h2 className="premium-section-title text-center mb-5">Como funciona cada etapa do ciclo</h2>
           <div className="benefits-premium-grid">
             {VM_STEPS.map((step, index) => (
-              <div key={index} className="benefit-premium-card border-navy hover-glow relative-step-card">
+              <div 
+                key={index} 
+                className="benefit-premium-card border-navy hover-glow relative-step-card clickable-step-card"
+                onClick={() => setSelectedStep(step)}
+              >
                 <div className="step-number-bg">{step.number}</div>
                 <h3 className="benefit-title-caps">{step.title}</h3>
                 <p className="mt-2 text-gray">{step.description}</p>
+                <span className="card-click-hint">Clique para saber mais</span>
               </div>
             ))}
           </div>
         </div>
       </section>
+
+      {selectedStep && (
+        <div className="method-modal-overlay" onClick={() => setSelectedStep(null)}>
+          <div className="method-modal-content" onClick={e => e.stopPropagation()}>
+            <button className="modal-close-btn" onClick={() => setSelectedStep(null)}>
+              <X size={24} />
+            </button>
+            <div className="modal-header">
+              <span className="modal-step-tag">Etapa {selectedStep.number}</span>
+              <h2 className="modal-title">{selectedStep.title}</h2>
+              <p className="modal-subtitle">{selectedStep.subtitle}</p>
+            </div>
+            <div className="modal-body">
+              <div className="modal-body-grid">
+                <div>
+                  <span className="modal-info-title">Atividades e Foco:</span>
+                  <ul className="modal-details-list">
+                    {selectedStep.details.map((item, i) => (
+                      <li key={i}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  {selectedStep.objective && (
+                    <div className="modal-info-box mb-4">
+                      <span className="modal-info-title">Objetivo:</span>
+                      <p>{selectedStep.objective}</p>
+                    </div>
+                  )}
+                  {selectedStep.result && (
+                    <div className="modal-info-box mb-4">
+                      <span className="modal-info-title">Resultado:</span>
+                      <ul className="modal-details-list">
+                        {selectedStep.result.map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {selectedStep.question && (
+                    <div className="modal-info-box mb-4">
+                      <span className="modal-info-title">Pergunta Principal:</span>
+                      <p>{selectedStep.question}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="modal-highlight-text">
+                {selectedStep.highlight}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
