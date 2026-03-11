@@ -311,13 +311,13 @@ function MeetingSection() {
           Este é o primeiro passo para construirmos a base necessária para o seu diagnóstico de crescimento.
         </p>
 
+        <a href="https://wa.me/5519984522494?text=Olá+Vinícius,+completei+o+diagnóstico+e+quero+agendar+minha+conversa+estratégica" target="_blank" rel="noopener noreferrer" className="btn-vm-green-large mb-5">
+          Agendar Reunião Estratégica
+        </a>
+
         <div className="meeting-photo-container mb-5">
            <img src={reuniaoImg} alt="Reunião Estratégica" className="margin-auto" style={{ maxWidth: '100%', maxHeight: '450px', objectFit: 'cover', borderRadius: '16px', boxShadow: 'var(--shadow-lg)' }} />
         </div>
-
-        <a href="https://wa.me/5519984522494?text=Olá+Vinícius,+completei+o+diagnóstico+e+quero+agendar+minha+conversa+estratégica" target="_blank" rel="noopener noreferrer" className="btn-vm-green-large">
-          Agendar Reunião Estratégica
-        </a>
         <div className="info-text-mini text-white opacity-90 mt-5" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           <span>Duração: 45 minutos</span>
           <span>Formato: Online</span>

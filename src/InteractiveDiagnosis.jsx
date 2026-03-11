@@ -238,14 +238,13 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                 <div className="diagnosis-step-content" style={{ padding: '3rem 2rem' }}>
                     {step === 0 && (
                         <div className="step-intro text-center">
-                            <div className="icon-intro-glow mb-4">
-                                <Target size={48} className="text-accent-green" />
-                            </div>
                             <h2 className="text-navy font-bold mb-3">Diagnóstico Estratégico Online</h2>
-                            <p className="text-gray mb-5">Responda algumas perguntas rápidas para avaliarmos o cenário atual do seu negócio e sua maturidade digital.</p>
-                            <div className="diagnosis-photo-container mb-5 mt-4">
-                                <img src={diagnosticoImg} alt="Diagnóstico Estratégico Online" className="margin-auto" style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'cover', borderRadius: '16px', boxShadow: 'var(--shadow-custom)' }} />
+                            
+                            <div className="diagnosis-photo-container mb-4 mt-2">
+                                <img src={diagnosticoImg} alt="Diagnóstico Estratégico Online" className="margin-auto" style={{ maxWidth: '100%', maxHeight: '350px', objectFit: 'cover', borderRadius: '16px', boxShadow: 'var(--shadow-custom)' }} />
                             </div>
+
+                            <p className="text-gray mb-5">Responda algumas perguntas rápidas para avaliarmos o cenário atual do seu negócio e sua maturidade digital.</p>
                             <button onClick={handleNext} className="btn-vm-green-large w-full">
                                 Iniciar Diagnóstico <ChevronRight size={18} />
                             </button>
