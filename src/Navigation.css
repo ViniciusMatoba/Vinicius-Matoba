@@ -1,0 +1,21 @@
+.nav-back-link {
+  text-decoration: none;
+  color: #0F2D3A;
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  padding: 0.5rem 0;
+}
+
+.nav-back-link:hover {
+  color: #1DB954;
+  transform: translateX(-3px);
+}
+
+.nav-back-link::before {
+  content: '←';
+  font-size: 1.2rem;
+}

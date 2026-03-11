@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
 import './App.css'
+import './Navigation.css'
 import logo from './assets/logo.png'
 import heroHomeNewImg from './assets/hero-home-new.png'
 import bioLinkBg from './assets/bio-link-bg.png'
@@ -25,14 +26,19 @@ import {
 function PremiumNav() {
   const location = useLocation();
   const backToLinksPaths = ['/metodo-vm', '/reuniao-estrategica'];
-  const logoLink = backToLinksPaths.includes(location.pathname) ? '/linknabio' : '/';
 
   return (
     <nav className="premium-nav-bar">
       <div className="nav-container">
-        <Link to={logoLink} className="nav-brand">
-          <img src={logo} alt="Vinícius Matoba" className="nav-logo" style={{ opacity: 1, visibility: 'visible', filter: 'brightness(0)' }} />
-        </Link>
+        {backToLinksPaths.includes(location.pathname) ? (
+          <Link to="/linknabio" className="nav-back-link">
+            Retornar para Links
+          </Link>
+        ) : (
+          <Link to="/" className="nav-brand">
+            <img src={logo} alt="Vinícius Matoba" className="nav-logo" style={{ opacity: 1, visibility: 'visible', filter: 'brightness(0)' }} />
+          </Link>
+        )}
       </div>
     </nav>
   );
@@ -187,8 +193,11 @@ function MeetingSection() {
     <section id="agendar" className="premium-section bg-navy text-white text-center">
       <div className="container-premium">
         <h2 className="premium-section-title text-white">Diagnóstico Estratégico</h2>
-        <p className="premium-section-text text-white opacity-80 max-width-800 margin-auto mt-3 mb-5">
-          A reunião estratégica é o primeiro passo para construirmos a base necessária para o seu diagnóstico de crescimento.
+        <p className="premium-section-text text-white opacity-90 max-width-800 margin-auto mt-3 mb-4">
+          A reunião estratégica é o início do processo para eu entender a sua situação atual, mapear as dores do seu negócio e os desejos dos seus clientes, construindo a base sólida para escalarmos com estratégia.
+        </p>
+        <p className="premium-section-text text-white opacity-70 max-width-800 margin-auto mb-5" style={{ fontSize: '1rem' }}>
+          Este é o primeiro passo para construirmos a base necessária para o seu diagnóstico de crescimento.
         </p>
         <a href="https://wa.me/5519984522494?text=Olá+Vinícius,+completei+o+diagnóstico+e+quero+agendar+minha+conversa+estratégica" target="_blank" rel="noopener noreferrer" className="btn-vm-green-large">
           Agendar Reunião Estratégica
