@@ -7,6 +7,7 @@ import bioLinkBg from './assets/bio-link-bg.png'
 import metodoCicloImg from './assets/metodo-ciclo.jpeg.png'
 import metodoHeroBg from './assets/metodo-hero-bg.jfif'
 import metodoFooterBg from './assets/metodo-footer-bg.png'
+import perfilImg from './assets/perfil.jpg'
 import InteractiveDiagnosis from './InteractiveDiagnosis';
 
 import {
@@ -269,7 +270,7 @@ function BioLink() {
       <header className="bio-header">
         <div className="bio-profile-card">
           <div className="bio-profile-wrapper">
-            <img src={heroHomeNewImg} alt="Vinícius Matoba" className="bio-profile-img" />
+            <img src={perfilImg} alt="Vinícius Matoba" className="bio-profile-img" />
           </div>
           <div className="bio-profile-text">
             <h1 className="bio-name">Vinícius Matoba</h1>
