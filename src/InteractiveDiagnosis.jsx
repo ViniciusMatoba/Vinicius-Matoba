@@ -324,21 +324,19 @@ ${gargalo ? `*🚨 Gargalo Principal:* ${gargalo}` : ''}`;
 
     return (
         <div className={`diagnosis-tool-wrapper ${isEmbedded ? 'embedded' : 'full-page'}`} style={{ padding: isEmbedded ? '0' : '4rem 1rem', position: 'relative' }}>
-            {step > 0 && step < 8 && (
-                <div style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    opacity: 0.03,
-                    pointerEvents: 'none',
-                    zIndex: 0,
-                    width: '60vw',
-                    maxWidth: '500px'
-                }}>
-                    <img src={logoImg} alt="VM Logo Watermark" style={{ width: '100%' }} />
-                </div>
-            )}
+            <div style={{
+                position: 'fixed',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                opacity: 0.03,
+                pointerEvents: 'none',
+                zIndex: 0,
+                width: '60vw',
+                maxWidth: '500px'
+            }}>
+                <img src={logoImg} alt="VM Logo Watermark" style={{ width: '100%' }} />
+            </div>
             
             <div className="diagnosis-card-container" style={{ maxWidth: '750px', margin: '0 auto', background: 'white', borderRadius: '24px', boxShadow: 'var(--shadow-custom)', overflow: 'hidden', position: 'relative', zIndex: 1 }}>
                 
