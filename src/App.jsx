@@ -303,6 +303,10 @@ function MeetingSection() {
   return (
     <section id="agendar" className="premium-section bg-navy text-white text-center">
       <div className="container-premium">
+        <div className="meeting-photo-container mb-4 mt-2">
+           <img src={reuniaoImg} alt="Reunião Estratégica" className="margin-auto" style={{ maxWidth: '100%', maxHeight: '450px', objectFit: 'cover', borderRadius: '16px', boxShadow: 'var(--shadow-lg)' }} />
+        </div>
+
         <h2 className="premium-section-title text-white">Início do Diagnóstico</h2>
         <p className="premium-section-text text-white opacity-90 max-width-800 margin-auto mt-3 mb-4">
           A reunião estratégica é o início do processo para eu entender a sua situação atual, mapear as dores do seu negócio e os desejos dos seus clientes, construindo a base sólida para escalarmos com estratégia.
@@ -314,10 +318,6 @@ function MeetingSection() {
         <a href="https://wa.me/5519984522494?text=Olá+Vinícius,+completei+o+diagnóstico+e+quero+agendar+minha+conversa+estratégica" target="_blank" rel="noopener noreferrer" className="btn-vm-green-large mb-5">
           Agendar Reunião Estratégica
         </a>
-
-        <div className="meeting-photo-container mb-5">
-           <img src={reuniaoImg} alt="Reunião Estratégica" className="margin-auto" style={{ maxWidth: '100%', maxHeight: '450px', objectFit: 'cover', borderRadius: '16px', boxShadow: 'var(--shadow-lg)' }} />
-        </div>
         <div className="info-text-mini text-white opacity-90 mt-5" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           <span>Duração: 45 minutos</span>
           <span>Formato: Online</span>
