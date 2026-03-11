@@ -111,7 +111,11 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
     const [step, setStep] = useState(0); // 0: Intro, 1: Basic Info, 2-7: Questions, 8: Result
     const [formData, setFormData] = useState({
         nome: '',
+        email: '',
+        instagram: '',
         empresa: '',
+        redesSociais: [],
+        redesSociaisOutro: '',
         segmento: '',
         segmentoOutro: '',
         aquisicao: [],
@@ -208,12 +212,19 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
         if (formData.aquisicao.includes('Outros')) {
             acqFinal = acqFinal.replace('Outros', `Outros (${formData.aquisicaoOutro})`);
         }
+        let redesFinal = formData.redesSociais.join(', ');
+        if (formData.redesSociais.includes('Outros')) {
+            redesFinal = redesFinal.replace('Outros', `Outros (${formData.redesSociaisOutro})`);
+        }
 
         const message = `Olá Vinícius, realizei o Diagnóstico Estratégico Online.
 
-*Bbriefing do Negócio:*
+*Briefing do Negócio:*
 👤 Nome: ${formData.nome}
+✉️ E-mail: ${formData.email}
+📱 Instagram: ${formData.instagram || 'Não informado'}
 🏢 Empresa: ${formData.empresa}
+🌐 Redes Sociais ativas: ${redesFinal || 'Nenhuma informada'}
 🎯 Segmento: ${segFinal || 'Não informado'}
 📢 Aquisição atual: ${acqFinal || 'Nenhum selecionado'}
 📱 Frequência Conteúdo: ${formData.frequencia}
@@ -258,13 +269,13 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
             <div className="diagnosis-card-container" style={{ maxWidth: '700px', margin: '0 auto', background: 'white', borderRadius: '24px', boxShadow: 'var(--shadow-custom)', overflow: 'hidden', position: 'relative', zIndex: 1 }}>
                 
                 {/* PROGRESS BAR */}
-                {step > 0 && step < 8 && (
+                {step > 0 && step < 9 && (
                     <div className="diagnosis-progress-bar" style={{ height: '6px', background: '#f1f5f9', position: 'relative' }}>
                         <div 
                             style={{ 
                                 height: '100%', 
                                 background: 'var(--accent-green)', 
-                                width: `${(step / 7) * 100}%`,
+                                width: `${(step / 8) * 100}%`,
                                 transition: 'width 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
                             }} 
                         />
@@ -300,6 +311,26 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                                     onChange={(e) => updateField('nome', e.target.value)}
                                 />
                             </div>
+                            <div className="form-group mb-4">
+                                <label className="block text-sm font-semibold mb-2">Seu E-mail</label>
+                                <input 
+                                    type="email" 
+                                    className="diagnosis-input" 
+                                    placeholder="Ex: joao@email.com"
+                                    value={formData.email}
+                                    onChange={(e) => updateField('email', e.target.value)}
+                                />
+                            </div>
+                            <div className="form-group mb-4">
+                                <label className="block text-sm font-semibold mb-2">Seu Instagram</label>
+                                <input 
+                                    type="text" 
+                                    className="diagnosis-input" 
+                                    placeholder="Ex: @joaosilva"
+                                    value={formData.instagram}
+                                    onChange={(e) => updateField('instagram', e.target.value)}
+                                />
+                            </div>
                             <div className="form-group mb-5">
                                 <label className="block text-sm font-semibold mb-2">Sua Empresa</label>
                                 <input 
@@ -313,7 +344,7 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                             <button 
                                 onClick={handleNext} 
                                 className="btn-vm-green-large w-full"
-                                disabled={!formData.nome || !formData.empresa}
+                                disabled={!formData.nome || !formData.empresa || !formData.email || !formData.instagram}
                             >
                                 Continuar
                             </button>
@@ -322,7 +353,46 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
 
                     {step === 2 && (
                         <div className="step-question">
-                            <span className="step-counter">Pergunta 1 de 6</span>
+                            <span className="step-counter">Pergunta 1 de 7</span>
+                            <h3 className="text-navy mb-2 font-bold">Quais redes sociais você utiliza hoje?</h3>
+                            <p className="text-sm text-gray mb-4">Você pode selecionar mais de uma opção.</p>
+                            <div className="options-grid">
+                                {['Instagram', 'LinkedIn', 'YouTube', 'TikTok', 'Nenhuma', 'Outros'].map(opt => (
+                                    <button 
+                                        key={opt}
+                                        onClick={() => toggleArrayField('redesSociais', opt)}
+                                        className={`option-btn ${formData.redesSociais.includes(opt) ? 'active' : ''}`}
+                                    >
+                                        {opt}
+                                    </button>
+                                ))}
+                            </div>
+                            {formData.redesSociais.includes('Outros') && (
+                                <div className="mt-4 form-group animate-fade-in">
+                                    <input 
+                                        type="text" 
+                                        className="diagnosis-input" 
+                                        placeholder="Quais outras redes?"
+                                        value={formData.redesSociaisOutro}
+                                        onChange={(e) => updateField('redesSociaisOutro', e.target.value)}
+                                        autoFocus
+                                    />
+                                </div>
+                            )}
+                            <button 
+                                onClick={handleNext} 
+                                className="btn-vm-green-large w-full mt-4"
+                                disabled={formData.redesSociais.length === 0 || (formData.redesSociais.includes('Outros') && !formData.redesSociaisOutro)}
+                            >
+                                Continuar
+                            </button>
+                            <button onClick={handlePrev} className="back-btn mt-4"><ArrowLeft size={14} /> Voltar</button>
+                        </div>
+                    )}
+
+                    {step === 3 && (
+                        <div className="step-question">
+                            <span className="step-counter">Pergunta 2 de 7</span>
                             <h3 className="text-navy mb-4 font-bold">Qual o segmento do seu negócio?</h3>
                             <div className="options-grid">
                                 {['Negócio local', 'Prestação de serviços', 'E-commerce', 'Outros'].map(opt => (
@@ -358,9 +428,9 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                         </div>
                     )}
 
-                    {step === 3 && (
+                    {step === 4 && (
                         <div className="step-question">
-                            <span className="step-counter">Pergunta 2 de 6</span>
+                            <span className="step-counter">Pergunta 3 de 7</span>
                             <h3 className="text-navy mb-2 font-bold">Como seus clientes chegam até você hoje?</h3>
                             <p className="text-sm text-gray mb-4">Você pode selecionar mais de uma opção.</p>
                             <div className="options-grid">
@@ -397,9 +467,9 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                         </div>
                     )}
 
-                    {step === 4 && (
+                    {step === 5 && (
                         <div className="step-question">
-                            <span className="step-counter">Pergunta 3 de 6</span>
+                            <span className="step-counter">Pergunta 4 de 7</span>
                             <h3 className="text-navy mb-4 font-bold">Você publica conteúdo nas redes sociais com frequência?</h3>
                             <div className="options-grid">
                                 {['Regularmente', 'Às vezes', 'Raramente'].map(opt => (
@@ -423,9 +493,9 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                         </div>
                     )}
 
-                    {step === 5 && (
+                    {step === 6 && (
                         <div className="step-question">
-                            <span className="step-counter">Pergunta 4 de 6</span>
+                            <span className="step-counter">Pergunta 5 de 7</span>
                             <h3 className="text-navy mb-4 font-bold">Você possui uma estratégia digital estruturada?</h3>
                             <div className="options-grid">
                                 {['Sim', 'Parcialmente', 'Não'].map(opt => (
@@ -449,9 +519,9 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                         </div>
                     )}
 
-                    {step === 6 && (
+                    {step === 7 && (
                         <div className="step-question">
-                            <span className="step-counter">Pergunta 5 de 6</span>
+                            <span className="step-counter">Pergunta 6 de 7</span>
                             <h3 className="text-navy mb-4 font-bold">Qual é hoje seu maior desafio de crescimento?</h3>
                             <textarea 
                                 className="diagnosis-textarea" 
@@ -470,9 +540,9 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                         </div>
                     )}
 
-                    {step === 7 && (
+                    {step === 8 && (
                         <div className="step-question">
-                            <span className="step-counter">Pergunta 6 de 6</span>
+                            <span className="step-counter">Pergunta 7 de 7</span>
                             <h3 className="text-navy mb-4 font-bold">Onde você gostaria que seu negócio estivesse em 12 meses?</h3>
                             <textarea 
                                 className="diagnosis-textarea" 
@@ -491,7 +561,7 @@ export default function InteractiveDiagnosis({ isEmbedded = false }) {
                         </div>
                     )}
 
-                    {step === 8 && (
+                    {step === 9 && (
                         <div className="step-result text-center">
                             <h2 className="text-navy font-bold mb-2">Resultado do Diagnóstico Estratégico</h2>
                             <div className="score-badge mb-4">
