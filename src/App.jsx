@@ -302,7 +302,7 @@ function MeetingSection() {
   return (
     <section id="agendar" className="premium-section bg-navy text-white text-center">
       <div className="container-premium">
-        <h2 className="premium-section-title text-white">Diagnóstico Estratégico</h2>
+        <h2 className="premium-section-title text-white">Início do Diagnóstico</h2>
         <p className="premium-section-text text-white opacity-90 max-width-800 margin-auto mt-3 mb-4">
           A reunião estratégica é o início do processo para eu entender a sua situação atual, mapear as dores do seu negócio e os desejos dos seus clientes, construindo a base sólida para escalarmos com estratégia.
         </p>
