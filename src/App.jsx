@@ -31,16 +31,8 @@ function PremiumNav() {
     <nav className="premium-nav-bar">
       <div className="nav-container">
         <Link to={logoLink} className="nav-brand">
-          <img src={logo} alt="Vinícius Matoba" className="nav-logo" />
+          <img src={logo} alt="Vinícius Matoba" className="nav-logo" style={{ opacity: 1, visibility: 'visible', filter: 'brightness(0)' }} />
         </Link>
-        <div className="nav-links">
-          <Link to="/reuniao-estrategica" className="nav-link">Reunião</Link>
-        </div>
-        <div className="nav-cta">
-          <Link to="/reuniao-estrategica" className="btn-vm-green-small">
-            Agendar Reunião
-          </Link>
-        </div>
       </div>
     </nav>
   );
@@ -194,18 +186,16 @@ function MeetingSection() {
   return (
     <section id="agendar" className="premium-section bg-navy text-white text-center">
       <div className="container-premium">
-        <h2 className="premium-section-title text-white">O primeiro passo é entender o seu cenário.</h2>
+        <h2 className="premium-section-title text-white">Diagnóstico Estratégico</h2>
         <p className="premium-section-text text-white opacity-80 max-width-800 margin-auto mt-3 mb-5">
-          Escolha um horário para conversarmos sobre a implementação estratégica no seu negócio.
+          A reunião estratégica é o primeiro passo para construirmos a base necessária para o seu diagnóstico de crescimento.
         </p>
         <a href="https://wa.me/5519984522494?text=Olá+Vinícius,+completei+o+diagnóstico+e+quero+agendar+minha+conversa+estratégica" target="_blank" rel="noopener noreferrer" className="btn-vm-green-large">
-          Solicitar Reunião Estratégica
+          Agendar Reunião Estratégica
         </a>
-        <div className="info-text-mini text-white opacity-70 mt-4">
+        <div className="info-text-mini text-white opacity-90 mt-5" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           <span>Duração: 45 minutos</span>
-          <span className="separator text-green">•</span>
           <span>Formato: Online</span>
-          <span className="separator text-green">•</span>
           <span>Custo: Gratuito</span>
         </div>
       </div>
