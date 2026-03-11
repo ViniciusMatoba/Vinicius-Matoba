@@ -27,7 +27,7 @@ import {
 
 function PremiumNav() {
   const location = useLocation();
-  const backToLinksPaths = ['/metodo-vm', '/reuniao-estrategica', '/diagnostico'];
+  const backToLinksPaths = ['/', '/metodo-vm', '/reuniao-estrategica', '/diagnostico'];
 
   return (
     <nav className="premium-nav-bar">

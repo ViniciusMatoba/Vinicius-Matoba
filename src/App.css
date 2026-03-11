@@ -4,3 +4,92 @@
   margin: 0;
   padding: 0;
 }
+
+/* Home Page Responsiveness Fixes */
+
+.hero-grid-premium {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr; /* Text gets slightly more space on desktop */
+  align-items: center;
+  gap: 4rem;
+  width: 100%;
+}
+
+.hero-title-premium {
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.hero-subtitle-premium {
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 992px) {
+  .hero-grid-premium {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 3rem;
+  }
+  
+  .hero-image-frame {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .premium-hero-section {
+    padding: 7rem 1.5rem 4rem !important;
+    min-height: auto !important;
+  }
+
+  .premium-section {
+    padding: 4rem 1.5rem !important;
+  }
+
+  .hero-title-premium {
+    font-size: 2.2rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .hero-subtitle-premium {
+    font-size: 1.1rem !important;
+  }
+
+  .premium-section-title {
+    font-size: 1.8rem !important;
+    line-height: 1.3 !important;
+    overflow-wrap: break-word;
+  }
+
+  .premium-section-text {
+    font-size: 1rem !important;
+    padding: 0 10px;
+  }
+
+  .hero-image-frame {
+    max-width: 260px;
+  }
+
+  .nav-logo {
+    height: 28px !important;
+  }
+  
+  /* Fix nav to ensure it doesn't overflow */
+  .nav-container {
+    padding: 1rem 1.5rem !important;
+  }
+  
+  /* Adjust float CTA */
+  .floating-cta-expanded {
+    padding: 14px !important;
+    border-radius: 50% !important;
+  }
+  
+  .floating-cta-expanded span {
+    display: none !important; /* Hide text, icon only */
+  }
+}
