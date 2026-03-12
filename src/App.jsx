@@ -12,6 +12,8 @@ import metodoFooterBg from './assets/metodo-footer-bg.png'
 import perfilImg from './assets/perfil.jpg'
 import reuniaoImg from './assets/Reuniao.png'
 import InteractiveDiagnosis from './InteractiveDiagnosis';
+import AgencyPortal from './crm/AgencyPortal';
+import { AuthProvider } from './context/AuthContext';
 
 import {
   MessageCircle,
@@ -21,7 +23,8 @@ import {
   Search,
   Briefcase,
   Check,
-  X
+  X,
+  Lock
 } from 'lucide-react'
 
 // --- GLOBAL COMPONENTS ---
@@ -52,6 +55,12 @@ function Footer() {
     <footer className="section-padding premium-footer bg-premium-footer" style={{ backgroundImage: `url(${metodoFooterBg})`, color: 'white', textAlign: 'center' }}>
       <img src={logo} alt="Logo VM" style={{ width: '180px', marginBottom: '1.5rem', filter: 'brightness(0) invert(1)' }} />
       <p style={{ opacity: 0.6, fontSize: '0.9rem' }}>© 2026 Vinícius Matoba. Estratégia Digital. Todos os direitos reservados.</p>
+      
+      <div style={{ marginTop: '2rem' }}>
+        <Link to="/agenciaVM" style={{ color: 'white', opacity: 0.5, fontSize: '0.8rem', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}>
+          <Lock size={12} /> Acesso Adm/Cliente
+        </Link>
+      </div>
     </footer>
   );
 }
@@ -436,7 +445,7 @@ function ScrollToTop() {
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -444,9 +453,10 @@ function App() {
         <Route path="/reuniao-estrategica" element={<MeetingPage />} />
         <Route path="/diagnostico" element={<div className="landing-wrapper"><PremiumNav /><div style={{paddingTop: '80px'}}><InteractiveDiagnosis /></div><Footer /></div>} />
         <Route path="/linknabio" element={<BioLink />} />
+        <Route path="/agenciaVM" element={<AgencyPortal />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-    </>
+    </AuthProvider>
   );
 }
 
