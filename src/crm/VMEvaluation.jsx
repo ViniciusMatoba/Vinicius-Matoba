@@ -188,6 +188,13 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
     })();
   }, [clientId, readOnly]);
 
+  // Garantir que a tela comece no topo ao ver o resultado
+  useEffect(() => {
+    if (showResult) {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  }, [showResult]);
+
   const pillarScores = useMemo(() =>
     PILLARS.map((p, pi) => p.criteria.reduce((sum, _, ci) => sum + (scores[pi][ci]?.score || 0), 0)),
     [scores]
