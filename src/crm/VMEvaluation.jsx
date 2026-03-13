@@ -106,7 +106,7 @@ const PROBLEM_SUGGESTIONS = {
 
 // ─── Gráfico de Radar SVG ────────────────────────────────────────────────────
 function RadarChart({ scores }) {
-  const cx = 200, cy = 200, r = 160;
+  const cx = 200, cy = 200, r = 140; // Reduzido de 160 para 140
   const n = PILLARS.length;
   const angles = PILLARS.map((_, i) => (Math.PI * 2 * i) / n - Math.PI / 2);
 
@@ -484,7 +484,7 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
 
               <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                 <p style={{ margin: '0 0 8px 0', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#94a3b8', fontWeight: 800 }}>Pontuação do Perfil</p>
-                <div style={{ fontSize: '6rem', fontWeight: 950, lineHeight: 1, color: '#0F2D3A', margin: '0.5rem 0' }}>{totalScore}</div>
+                <div style={{ fontSize: '4.5rem', fontWeight: 950, lineHeight: 1, color: '#0F2D3A', margin: '0.5rem 0' }}>{totalScore}</div>
                 <div style={{ fontSize: '1.2rem', color: '#64748b', marginBottom: '2rem', fontWeight: 600 }}>de 50 pontos possíveis</div>
                 
                 <div style={{ maxWidth: '650px', margin: '0 auto', background: interpretation.bg, border: `2px solid ${interpretation.border}`, borderRadius: '20px', padding: '2rem', boxShadow: '0 15px 40px rgba(0,0,0,0.04)' }}>
