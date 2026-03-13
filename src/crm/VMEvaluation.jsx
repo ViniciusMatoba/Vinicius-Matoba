@@ -414,21 +414,7 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
               </div>
 
               <h3 style={{ fontWeight: 800, marginBottom: '1rem', color: '#1e293b' }}>3 Pontos de Atenção Identificados</h3>
-              <div style={{ display: 'grid', gap: '0.75rem', marginBottom: '2rem' }}>
-                {problems.map((prob) => (
-                  <div key={prob.key} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', background: prob.bg, border: `1px solid ${prob.border}`, borderRadius: '14px', padding: '1rem 1.25rem' }}>
-                    <span style={{ fontSize: '1.4rem', flexShrink: 0 }}>{prob.icon}</span>
-                    <div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '4px' }}>
-                        <span style={{ fontWeight: 800, color: prob.color, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{prob.label}</span>
-                        <span style={{ background: prob.color, color: '#fff', borderRadius: '6px', padding: '1px 8px', fontSize: '0.7rem', fontWeight: 700 }}>{prob.pillar?.name} — {prob.pillar?.score}/10</span>
-                      </div>
-                      <p style={{ margin: 0, color: '#475569', fontSize: '0.85rem', lineHeight: 1.5 }}>{prob.suggestion}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
+              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
                 <button onClick={() => setShowResult(false)} style={{ background: '#f1f5f9', border: 'none', borderRadius: '10px', padding: '0.75rem 1.5rem', fontWeight: 700, cursor: 'pointer', color: '#475569', fontSize: '0.9rem' }}>✏️ Editar Notas</button>
                 <button onClick={() => window.print()} style={{ background: '#0F2D3A', border: 'none', borderRadius: '10px', padding: '0.75rem 1.5rem', fontWeight: 700, cursor: 'pointer', color: '#fff', fontSize: '0.9rem' }}>🖨️ Imprimir PDF</button>
                 {!readOnly && <button onClick={onClose} style={{ background: 'transparent', color: '#475569', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '0.75rem 1.5rem', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}>Finalizar</button>}
