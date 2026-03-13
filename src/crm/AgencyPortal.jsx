@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import AdminDashboard from './AdminDashboard';
 import ClientView from './ClientView';
@@ -100,7 +101,7 @@ export default function AgencyPortal() {
                   }}
                   title={showPassword ? 'Esconder senha' : 'Ver senha'}
                 >
-                  {showPassword ? '🙈' : '👁️'}
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
             </div>
