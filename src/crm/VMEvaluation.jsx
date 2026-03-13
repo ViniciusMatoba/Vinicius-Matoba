@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
+import logoVM from '../assets/logo.png';
 
 // ─── Dados dos Pilares ───────────────────────────────────────────────────────
 const PILLARS = [
@@ -264,31 +265,33 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
       <div style={{ background: '#ffffff', borderRadius: '20px', width: '100%', maxWidth: '860px', overflow: 'hidden', boxShadow: '0 25px 60px rgba(0,0,0,0.3)' }}>
 
         {/* Header */}
-        <div style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)', padding: '2rem 2.5rem', color: '#fff' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <div>
-              <p style={{ margin: 0, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.12em', opacity: 0.6 }}>
-                {readOnly ? 'Seu Diagnóstico' : 'Avaliação'}
-              </p>
-              <h2 style={{ margin: '4px 0', fontSize: '1.8rem', fontWeight: 800 }}>
-                Diagnóstico VM <span style={{ fontSize: '1rem', fontWeight: 400, opacity: 0.8 }}>do Instagram</span>
-              </h2>
-              <p style={{ margin: 0, opacity: 0.7, fontSize: '0.9rem' }}>
-                Cliente: <strong style={{ color: '#a5b4fc' }}>{clientName}</strong>
-                {savedAt && <span style={{ marginLeft: '1rem', fontSize: '0.75rem', opacity: 0.6 }}>Salvo em {new Date(savedAt).toLocaleDateString('pt-BR')}</span>}
-              </p>
+        <div style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)', padding: '2.5rem', color: '#fff' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '2rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+              <img src={logoVM} alt="Logo VM" style={{ height: '60px', width: 'auto', filter: 'brightness(0) invert(1)' }} />
+              <div style={{ borderLeft: '1px solid rgba(255,255,255,0.2)', paddingLeft: '1.5rem' }}>
+                <p style={{ margin: 0, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.12em', opacity: 0.6 }}>
+                  {readOnly ? 'Seu Diagnóstico' : 'Avaliação Técnica'}
+                </p>
+                <h2 style={{ margin: '4px 0', fontSize: '1.8rem', fontWeight: 800 }}>
+                  Diagnóstico VM <span style={{ fontSize: '1rem', fontWeight: 400, opacity: 0.8 }}>do Instagram</span>
+                </h2>
+                <p style={{ margin: 0, opacity: 0.7, fontSize: '0.9rem' }}>
+                  Cliente: <strong style={{ color: '#1DB954' }}>{clientName}</strong>
+                </p>
+              </div>
             </div>
-            <button onClick={onClose} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', borderRadius: '50%', width: 36, height: 36, cursor: 'pointer', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>×</button>
+            <button onClick={onClose} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', borderRadius: '50%', width: 40, height: 40, cursor: 'pointer', fontSize: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', alignSelf: 'flex-start' }}>×</button>
           </div>
         </div>
 
-        <div style={{ padding: '2rem 2.5rem' }}>
+        <div style={{ padding: '3rem 2.5rem' }}>
           {!showResult ? (
             /* ── FORMULÁRIO ── */
-            <div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '1.5rem', marginBottom: '2.5rem' }}>
+            <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                 {PILLARS.map((pilar, pi) => (
-                  <div key={pilar.id} style={{ border: `2px solid ${pilar.color}22`, borderRadius: '14px', padding: '1.25rem', background: `${pilar.color}05` }}>
+                  <div key={pilar.id} style={{ border: `1px solid ${pilar.color}15`, borderRadius: '18px', padding: '2rem', background: `${pilar.color}05`, boxShadow: '0 4px 15px rgba(0,0,0,0.02)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                       <div>
                         <p style={{ margin: 0, fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: pilar.color, fontWeight: 700 }}>Pilar {pilar.id}</p>
@@ -414,7 +417,22 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
               </div>
 
               <h3 style={{ fontWeight: 800, marginBottom: '1rem', color: '#1e293b' }}>3 Pontos de Atenção Identificados</h3>
-              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+              <div style={{ display: 'grid', gap: '0.75rem', marginBottom: '2rem' }}>
+                {problems.map((prob) => (
+                  <div key={prob.key} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', background: prob.bg, border: `1px solid ${prob.border}`, borderRadius: '14px', padding: '1rem 1.25rem' }}>
+                    <span style={{ fontSize: '1.4rem', flexShrink: 0 }}>{prob.icon}</span>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '4px' }}>
+                        <span style={{ fontWeight: 800, color: prob.color, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{prob.label}</span>
+                        <span style={{ background: prob.color, color: '#fff', borderRadius: '6px', padding: '1px 8px', fontSize: '0.7rem', fontWeight: 700 }}>{prob.pillar?.name} — {prob.pillar?.score}/10</span>
+                      </div>
+                      <p style={{ margin: 0, color: '#475569', fontSize: '0.85rem', lineHeight: 1.5 }}>{prob.suggestion}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginBottom: '2rem' }}>
                 <button onClick={() => setShowResult(false)} style={{ background: '#f1f5f9', border: 'none', borderRadius: '10px', padding: '0.75rem 1.5rem', fontWeight: 700, cursor: 'pointer', color: '#475569', fontSize: '0.9rem' }}>✏️ Editar Notas</button>
                 <button onClick={() => window.print()} style={{ background: '#0F2D3A', border: 'none', borderRadius: '10px', padding: '0.75rem 1.5rem', fontWeight: 700, cursor: 'pointer', color: '#fff', fontSize: '0.9rem' }}>🖨️ Imprimir PDF</button>
                 {!readOnly && <button onClick={onClose} style={{ background: 'transparent', color: '#475569', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '0.75rem 1.5rem', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}>Finalizar</button>}
