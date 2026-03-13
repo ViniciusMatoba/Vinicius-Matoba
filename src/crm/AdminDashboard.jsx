@@ -103,9 +103,8 @@ export default function AdminDashboard() {
     setLoadingStep('Iniciando...');
 
     try {
-      console.log("[DEBUG] 1. Iniciando processo de cadastro (v1.0.9)...");
+      console.log("[DEBUG] 1. Iniciando processo (v1.1.0)...");
       
-      // Configurar persistência em memória para o app secundário
       setLoadingStep('Segurança...');
       try {
         await setPersistence(secondaryAuth, inMemoryPersistence);
@@ -113,7 +112,7 @@ export default function AdminDashboard() {
         console.warn("[DEBUG] Erro de persistência:", pErr);
       }
 
-      // 1. Criar conta real no Firebase Auth usando o app secundário
+      // 1. Criar conta no Firebase Auth
       setLoadingStep('Criando Auth...');
       const userCredential = await createUserWithEmailAndPassword(
         secondaryAuth,
@@ -121,28 +120,28 @@ export default function AdminDashboard() {
         newClient.password
       );
       const newUser = userCredential.user;
-      console.log("[DEBUG] 4. Criado com sucesso. UID: " + newUser.uid);
+      console.log("[DEBUG] 4. Auth criado: " + newUser.uid);
 
-      // 3. Salvar dados do cliente no Firestore USANDO O DB SECUNDÁRIO
+      // 3. Salvar no Firestore USANDO O DB SECUNDÁRIO
       setLoadingStep('Salvando no Banco...');
-      console.log("[DEBUG] 6. Escrita via User Session: " + newUser.uid);
+      console.log("[DEBUG] 6. Tentando escrita v1.1.0...");
       
       const userRef = doc(secondaryDb, 'users', newUser.uid);
       
-      // Timeout de 6 segundos
+      // Timeout de 7 segundos
       const savePromise = setDoc(userRef, {
         name: newClient.name,
         email: newClient.email,
         displayName: newClient.name,
         role: 'client',
-        stage: newClient.initialStage,
+        stage: parseInt(newClient.initialStage),
         requirePasswordChange: true,
         requireNameEntry: true,
         createdAt: new Date().toISOString()
       }, { merge: true });
 
       const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error("O Banco de Dados não respondeu via sessão do usuário (6s).")), 6000)
+        setTimeout(() => reject(new Error("O Banco de Dados não respondeu (7s). Pode ser que as 'Security Rules' estejam bloqueando a escrita.")), 7000)
       );
 
       await Promise.race([savePromise, timeoutPromise]);

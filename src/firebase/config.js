@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { initializeFirestore, getFirestore } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 
 // ... real config ...
@@ -18,6 +18,8 @@ const firebaseConfig = {
 const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
-// Initialize Firestore
-export const db = getFirestore(app);
+// Initialize Firestore with Force Long Polling for stability
+export const db = initializeFirestore(app, {
+  experimentalForceLongPolling: true
+});
 export const analytics = getAnalytics(app);
