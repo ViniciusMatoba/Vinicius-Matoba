@@ -7,7 +7,7 @@ const PILLARS = [
   {
     id: 1,
     name: 'Posicionamento',
-    color: '#6366f1',
+    color: '#0F2D3A', // Brand Navy
     criteria: [
       { label: 'Bio explica o que a pessoa faz', max: 2 },
       { label: 'Fica claro para quem é o serviço', max: 2 },
@@ -19,7 +19,7 @@ const PILLARS = [
   {
     id: 2,
     name: 'Clareza de Público',
-    color: '#8b5cf6',
+    color: '#1DB954', // Brand Green
     criteria: [
       { label: 'Conteúdo fala com público específico', max: 3 },
       { label: 'Perfil tem nicho claro', max: 3 },
@@ -30,7 +30,7 @@ const PILLARS = [
   {
     id: 3,
     name: 'Conteúdo Estratégico',
-    color: '#a855f7',
+    color: '#2d3436', // Neutral Navy
     criteria: [
       { label: 'Conteúdo educa o público', max: 3 },
       { label: 'Conteúdo mostra autoridade', max: 3 },
@@ -41,7 +41,7 @@ const PILLARS = [
   {
     id: 4,
     name: 'Estrutura de Conversão',
-    color: '#ec4899',
+    color: '#1DB954', // Brand Green
     criteria: [
       { label: 'Link na bio claro', max: 3 },
       { label: 'Facilidade de contato', max: 3 },
@@ -52,7 +52,7 @@ const PILLARS = [
   {
     id: 5,
     name: 'Destaques e Estrutura',
-    color: '#f59e0b',
+    color: '#0F2D3A', // Brand Navy
     criteria: [
       { label: 'Destaques organizados', max: 3 },
       { label: 'Destaque de serviços', max: 3 },
@@ -132,13 +132,13 @@ function RadarChart({ scores }) {
       {angles.map((a, i) => (
         <line key={i} x1={cx} y1={cy} x2={cx + r * Math.cos(a)} y2={cy + r * Math.sin(a)} stroke="#e2e8f0" strokeWidth="1" />
       ))}
-      <path d={dataPath} fill="rgba(99,102,241,0.2)" stroke="#6366f1" strokeWidth="2.5" strokeLinejoin="round" />
+      <path d={dataPath} fill="rgba(29,185,84,0.15)" stroke="#1DB954" strokeWidth="2.5" strokeLinejoin="round" />
       {dataPoints.map((p, i) => (
         <circle key={i} cx={p.x} cy={p.y} r={5} fill={PILLARS[i].color} stroke="#fff" strokeWidth="2" />
       ))}
       {dataPoints.map((p, i) => (
         <text key={i} x={p.x} y={p.y - 10} textAnchor="middle" fontSize="10" fontWeight="700" fill={PILLARS[i].color}>
-          {scores[i] || 0}
+          {scores[i]?.score || 0}
         </text>
       ))}
       {axisLabels.map((l, i) => {
@@ -158,7 +158,7 @@ function RadarChart({ scores }) {
 
 // ─── Componente Principal ────────────────────────────────────────────────────
 export default function VMEvaluation({ clientName, clientId, readOnly = false, onClose }) {
-  const initialScores = PILLARS.map(p => p.criteria.map(() => 0));
+  const initialScores = PILLARS.map(p => p.criteria.map(() => ({ score: 0, comment: '', hasComment: false })));
   const [scores, setScores] = useState(initialScores);
   const [showResult, setShowResult] = useState(readOnly);
   const [saving, setSaving] = useState(false);
@@ -186,7 +186,7 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
   }, [clientId, readOnly]);
 
   const pillarScores = useMemo(() =>
-    PILLARS.map((p, pi) => p.criteria.reduce((sum, _, ci) => sum + scores[pi][ci], 0)),
+    PILLARS.map((p, pi) => p.criteria.reduce((sum, _, ci) => sum + (scores[pi][ci]?.score || 0), 0)),
     [scores]
   );
 
@@ -204,10 +204,31 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
     { ...PROBLEM_LABELS[2], pillar: sortedPillars[2], suggestion: PROBLEM_SUGGESTIONS[sortedPillars[2]?.name]?.[2] },
   ];
 
-  const setScore = (pi, ci, val, max) => {
+  const setScore = (pi, ci, val) => {
     if (readOnly) return;
-    const clamped = Math.min(max, Math.max(0, Number(val)));
-    setScores(prev => { const next = prev.map(r => [...r]); next[pi][ci] = clamped; return next; });
+    setScores(prev => {
+      const next = prev.map(r => [...r]);
+      next[pi][ci] = { ...next[pi][ci], score: Number(val) };
+      return next;
+    });
+  };
+
+  const toggleComment = (pi, ci) => {
+    if (readOnly) return;
+    setScores(prev => {
+      const next = prev.map(r => [...r]);
+      next[pi][ci] = { ...next[pi][ci], hasComment: !next[pi][ci].hasComment };
+      return next;
+    });
+  };
+
+  const setCommentText = (pi, ci, text) => {
+    if (readOnly) return;
+    setScores(prev => {
+      const next = prev.map(r => [...r]);
+      next[pi][ci] = { ...next[pi][ci], comment: text };
+      return next;
+    });
   };
 
   const handleSave = async () => {
@@ -259,45 +280,104 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
             </div>
             <button onClick={onClose} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', borderRadius: '50%', width: 36, height: 36, cursor: 'pointer', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>×</button>
           </div>
-
-          {!readOnly && (
-            <div style={{ marginTop: '1.5rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-              {!showResult
-                ? <button onClick={handleSave} disabled={saving} style={{ background: '#6366f1', color: '#fff', border: 'none', borderRadius: '10px', padding: '0.7rem 1.5rem', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}>
-                    {saving ? '⏳ Salvando...' : '💾 Salvar e Ver Resultado'}
-                  </button>
-                : <button onClick={() => setShowResult(false)} style={{ background: 'rgba(255,255,255,0.15)', color: '#fff', border: 'none', borderRadius: '10px', padding: '0.7rem 1.5rem', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}>← Editar Notas</button>
-              }
-            </div>
-          )}
         </div>
 
         <div style={{ padding: '2rem 2.5rem' }}>
           {!showResult ? (
             /* ── FORMULÁRIO ── */
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
-              {PILLARS.map((pilar, pi) => (
-                <div key={pilar.id} style={{ border: `2px solid ${pilar.color}22`, borderRadius: '14px', padding: '1.25rem', background: `${pilar.color}08` }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                    <div>
-                      <p style={{ margin: 0, fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: pilar.color, fontWeight: 700 }}>Pilar {pilar.id}</p>
-                      <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: '#1e293b' }}>{pilar.name}</h3>
-                    </div>
-                    <div style={{ background: pilar.color, color: '#fff', borderRadius: '10px', padding: '4px 12px', fontWeight: 800, fontSize: '1rem' }}>
-                      {pillarScores[pi]}<span style={{ fontSize: '0.65rem', fontWeight: 400, opacity: 0.8 }}>/10</span>
-                    </div>
-                  </div>
-                  {pilar.criteria.map((c, ci) => (
-                    <div key={ci} style={{ marginBottom: '0.9rem' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                        <label style={{ fontSize: '0.8rem', color: '#475569', flex: 1, paddingRight: '0.5rem' }}>{c.label}</label>
-                        <span style={{ fontSize: '0.8rem', fontWeight: 700, color: pilar.color, minWidth: 28, textAlign: 'right' }}>{scores[pi][ci]}/{c.max}</span>
+            <div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '1.5rem', marginBottom: '2.5rem' }}>
+                {PILLARS.map((pilar, pi) => (
+                  <div key={pilar.id} style={{ border: `2px solid ${pilar.color}22`, borderRadius: '14px', padding: '1.25rem', background: `${pilar.color}05` }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                      <div>
+                        <p style={{ margin: 0, fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: pilar.color, fontWeight: 700 }}>Pilar {pilar.id}</p>
+                        <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: '#1e293b' }}>{pilar.name}</h3>
                       </div>
-                      <input type="range" min={0} max={c.max} step={1} value={scores[pi][ci]} onChange={(e) => setScore(pi, ci, e.target.value, c.max)} style={{ width: '100%', accentColor: pilar.color, cursor: readOnly ? 'default' : 'pointer' }} disabled={readOnly} />
+                      <div style={{ background: pilar.color, color: '#fff', borderRadius: '10px', padding: '4px 12px', fontWeight: 800, fontSize: '1rem' }}>
+                        {pillarScores[pi]}<span style={{ fontSize: '0.65rem', fontWeight: 400, opacity: 0.8 }}>/10</span>
+                      </div>
                     </div>
-                  ))}
+                    {pilar.criteria.map((c, ci) => (
+                      <div key={ci} style={{ marginBottom: '1.5rem', borderBottom: ci < pilar.criteria.length - 1 ? '1px solid #f1f5f9' : 'none', paddingBottom: '1rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                          <label style={{ fontSize: '0.85rem', color: '#1e293b', flex: 1, fontWeight: 600 }}>{c.label}</label>
+                        </div>
+                        
+                        {/* Botões de Múltipla Escolha */}
+                        <div className="eval-pills-grid">
+                          {[...Array(c.max + 1).keys()].map(val => (
+                            <button
+                              key={val}
+                              type="button"
+                              className={`eval-pill-btn ${scores[pi][ci]?.score === val ? 'selected' : ''}`}
+                              onClick={() => setScore(pi, ci, val)}
+                              disabled={readOnly}
+                            >
+                              {val}
+                            </button>
+                          ))}
+                        </div>
+
+                        {/* Toggle de Comentário */}
+                        <div className="eval-comment-toggle">
+                          <span>Escrever comentário?</span>
+                          <button 
+                            type="button" 
+                            className={`eval-comment-btn ${scores[pi][ci]?.hasComment ? 'active' : ''}`}
+                            onClick={() => toggleComment(pi, ci)}
+                            disabled={readOnly}
+                          >
+                            Sim
+                          </button>
+                          <button 
+                            type="button" 
+                            className={`eval-comment-btn ${!scores[pi][ci]?.hasComment ? 'active' : ''}`}
+                            onClick={() => !readOnly && scores[pi][ci]?.hasComment && toggleComment(pi, ci)}
+                            disabled={readOnly}
+                          >
+                            Não
+                          </button>
+                        </div>
+
+                        {scores[pi][ci]?.hasComment && (
+                          <textarea
+                            className="eval-textarea"
+                            placeholder="Descreva observações ou orientações..."
+                            value={scores[pi][ci]?.comment || ''}
+                            onChange={(e) => setCommentText(pi, ci, e.target.value)}
+                            disabled={readOnly}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+
+              {/* Botão de Salvar no Final */}
+              {!readOnly && (
+                <div style={{ display: 'flex', justifyContent: 'center', padding: '1rem 0', borderTop: '2px dashed #e2e8f0', marginTop: '2rem' }}>
+                  <button 
+                    onClick={handleSave} 
+                    disabled={saving} 
+                    style={{ 
+                      background: '#1DB954', 
+                      color: '#fff', 
+                      border: 'none', 
+                      borderRadius: '50px', 
+                      padding: '1.2rem 3rem', 
+                      fontWeight: 800, 
+                      cursor: 'pointer', 
+                      fontSize: '1.1rem',
+                      boxShadow: '0 10px 20px rgba(29, 185, 84, 0.2)',
+                      transition: 'all 0.3s'
+                    }}
+                  >
+                    {saving ? '⏳ Salvando...' : '💾 Salvar e Ver Resultado Final'}
+                  </button>
                 </div>
-              ))}
+              )}
             </div>
           ) : (
             /* ── RESULTADO ── */
@@ -349,9 +429,41 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
                 ))}
               </div>
 
-              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-                <button onClick={() => window.print()} style={{ background: '#f1f5f9', border: 'none', borderRadius: '10px', padding: '0.75rem 1.5rem', fontWeight: 700, cursor: 'pointer', color: '#475569', fontSize: '0.9rem' }}>🖨️ Imprimir</button>
-                <button onClick={onClose} style={{ background: '#1a1a2e', color: '#fff', border: 'none', borderRadius: '10px', padding: '0.75rem 1.5rem', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}>Fechar</button>
+                <button onClick={() => setShowResult(false)} style={{ background: '#f1f5f9', border: 'none', borderRadius: '10px', padding: '0.75rem 1.5rem', fontWeight: 700, cursor: 'pointer', color: '#475569', fontSize: '0.9rem' }}>✏️ Editar Notas</button>
+                <button onClick={() => window.print()} style={{ background: '#0F2D3A', border: 'none', borderRadius: '10px', padding: '0.75rem 1.5rem', fontWeight: 700, cursor: 'pointer', color: '#fff', fontSize: '0.9rem' }}>🖨️ Imprimir PDF</button>
+                {!readOnly && <button onClick={onClose} style={{ background: 'transparent', color: '#475569', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '0.75rem 1.5rem', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}>Finalizar</button>}
+              </div>
+
+              {/* Seção de Comentários Detalhados no Resultado */}
+              <div style={{ marginTop: '3rem', borderTop: '1px solid #e2e8f0', paddingTop: '2rem' }}>
+                <h3 style={{ fontWeight: 800, color: '#1a1a2e', marginBottom: '1.5rem' }}>📋 Observações Detalhadas</h3>
+                <div style={{ display: 'grid', gap: '1rem' }}>
+                  {PILLARS.map((p, pi) => {
+                    const pillarComments = scores[pi].filter(s => s.hasComment && s.comment.trim());
+                    if (pillarComments.length === 0) return null;
+                    return (
+                      <div key={p.id} style={{ border: `1px solid ${p.color}33`, borderRadius: '12px', padding: '1.25rem', background: `${p.color}03` }}>
+                        <h4 style={{ color: p.color, margin: '0 0 1rem 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{ width: 8, height: 8, borderRadius: '50%', background: p.color }} />
+                          {p.name}
+                        </h4>
+                        {p.criteria.map((c, ci) => {
+                          const s = scores[pi][ci];
+                          if (!s.hasComment || !s.comment.trim()) return null;
+                          return (
+                            <div key={ci} style={{ marginBottom: '1rem', paddingLeft: '1rem', borderLeft: `2px solid #e2e8f0` }}>
+                              <p style={{ margin: '0 0 4px 0', fontSize: '0.8rem', fontWeight: 700, color: '#475569' }}>{c.label}</p>
+                              <p style={{ margin: 0, fontSize: '0.9rem', color: '#1e293b', fontStyle: 'italic' }}>"{s.comment}"</p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })}
+                  {PILLARS.every((_, pi) => !scores[pi].some(s => s.hasComment && s.comment.trim())) && (
+                    <p style={{ color: '#94a3b8', fontSize: '0.9rem', textAlign: 'center' }}>Nenhuma observação adicional registrada.</p>
+                  )}
+                </div>
               </div>
             </div>
           )}

@@ -151,3 +151,68 @@
   font-weight: 600;
   cursor: pointer;
 }
+/* Evaluation Styles */
+.eval-pills-grid {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.eval-pill-btn {
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid var(--crm-border);
+  background: white;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+
+.eval-pill-btn:hover {
+  border-color: var(--accent-green);
+  background: rgba(29, 185, 84, 0.05);
+}
+
+.eval-pill-btn.selected {
+  background: var(--accent-green);
+  color: white;
+  border-color: var(--accent-green);
+}
+
+.eval-comment-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--crm-text-light);
+}
+
+.eval-comment-btn {
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--crm-border);
+  background: #f1f5f9;
+  cursor: pointer;
+}
+
+.eval-comment-btn.active {
+  background: var(--primary-navy);
+  color: white;
+  border-color: var(--primary-navy);
+}
+
+.eval-textarea {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.8rem;
+  border-radius: 10px;
+  border: 1px solid var(--crm-border);
+  font-family: inherit;
+  font-size: 0.85rem;
+  resize: vertical;
+  min-height: 80px;
+}
