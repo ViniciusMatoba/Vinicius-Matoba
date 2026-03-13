@@ -439,48 +439,37 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
                 </div>
               </div>
 
-              {/* Pilares em Grid 2x2 + 1 Centralizado */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem', marginBottom: '1.5rem' }}>
-                {PILLARS.slice(0, 4).map((p, i) => (
+              {/* Todos os 5 Pilares em uma única Grid Consolidada */}
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(2, 1fr)', 
+                gap: '1.5rem', 
+                marginBottom: '3.5rem' 
+              }}>
+                {PILLARS.map((p, i) => (
                   <div key={p.id} style={{ 
+                    gridColumn: i === 4 ? '1 / span 2' : 'auto',
+                    justifySelf: i === 4 ? 'center' : 'stretch',
+                    width: i === 4 ? 'calc(50% - 0.75rem)' : '100%',
                     textAlign: 'center', 
                     background: `${p.color}05`, 
                     border: `1px solid ${p.color}15`, 
-                    borderRadius: '16px', 
+                    borderRadius: '20px', 
                     padding: '1.5rem', 
-                    height: '160px', // Altura fixa
+                    height: '160px', 
                     display: 'flex', 
                     flexDirection: 'column', 
                     justifyContent: 'center', 
                     alignItems: 'center',
-                    boxSizing: 'border-box'
+                    boxSizing: 'border-box',
+                    minWidth: 0,
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.02)'
                   }}>
                     <div style={{ fontSize: '2.5rem', fontWeight: 950, color: p.color, lineHeight: 1 }}>{pillarScores[i]}</div>
-                    <div style={{ fontSize: '0.7rem', color: '#94a3b8', margin: '6px 0 8px' }}>de 10 pontos</div>
-                    <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#1e293b' }}>{p.name}</div>
+                    <div style={{ fontSize: '0.7rem', color: '#94a3b8', margin: '6px 0 8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>de 10 pontos</div>
+                    <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#1e293b', lineHeight: 1.2 }}>{p.name}</div>
                   </div>
                 ))}
-              </div>
-              
-              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '3rem' }}>
-                <div style={{ 
-                  textAlign: 'center', 
-                  background: `${PILLARS[4].color}05`, 
-                  border: `1px solid ${PILLARS[4].color}15`, 
-                  borderRadius: '16px', 
-                  padding: '1.5rem', 
-                  width: 'calc(50% - 0.75rem)', // Exatamente metade da grid menos metade do gap
-                  height: '160px', // Altura idêntica
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  justifyContent: 'center', 
-                  alignItems: 'center',
-                  boxSizing: 'border-box'
-                }}>
-                  <div style={{ fontSize: '2.5rem', fontWeight: 950, color: PILLARS[4].color, lineHeight: 1 }}>{pillarScores[4]}</div>
-                  <div style={{ fontSize: '0.7rem', color: '#94a3b8', margin: '4px 0 8px' }}>de 10 pontos</div>
-                  <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#1e293b' }}>{PILLARS[4].name}</div>
-                </div>
               </div>
 
               <h3 style={{ fontWeight: 900, fontSize: '1.4rem', marginBottom: '1.5rem', color: '#0F2D3A', textAlign: 'center' }}>Pontos de Atenção & Orientações</h3>
