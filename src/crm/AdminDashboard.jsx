@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, getDocs, doc, setDoc, getDoc, initializeFirestore, getFirestore } from 'firebase/firestore';
+import { collection, query, getDocs, doc, setDoc, getDoc, initializeFirestore } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, setPersistence, inMemoryPersistence } from 'firebase/auth';
@@ -19,7 +19,7 @@ const firebaseConfig = {
 const secondaryApp = getApps().find(app => app.name === 'clientCreator') || initializeApp(firebaseConfig, 'clientCreator');
 const secondaryAuth = getAuth(secondaryApp);
 // Forçar Long Polling também na conexão secundária para evitar travamentos de rede
-const secondaryDb = initializeFirestore(secondaryApp, {
+initializeFirestore(secondaryApp, {
   experimentalForceLongPolling: true
 });
 
