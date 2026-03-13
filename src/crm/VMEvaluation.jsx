@@ -480,12 +480,6 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
                 <button onClick={handleWhatsAppShare} style={{ background: '#25D366', border: 'none', borderRadius: '14px', padding: '1.2rem 2.5rem', fontWeight: 800, cursor: 'pointer', color: '#fff', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <span>📲 WhatsApp</span>
                 </button>
-                          <span style={{ width: 8, height: 8, borderRadius: '50%', background: p.color }} />
-                          {p.name}
-                        </h4>
-                        {p.criteria.map((c, ci) => {
-                          const s = scores[pi][ci];
-                          if (!s.hasComment || !s.comment.trim()) return null;
                           return (
                             <div key={ci} style={{ marginBottom: '1rem', paddingLeft: '1rem', borderLeft: `2px solid #e2e8f0` }}>
                               <p style={{ margin: '0 0 4px 0', fontSize: '0.8rem', fontWeight: 700, color: '#475569' }}>{c.label}</p>
