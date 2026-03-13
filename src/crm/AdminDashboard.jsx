@@ -38,7 +38,7 @@ const STAGES = [
 export default function AdminDashboard() {
   const [clients, setClients] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [newClient, setNewClient] = useState({ name: '', email: '', password: '', initialStage: 1 });
+  const [newClient, setNewClient] = useState({ name: '', email: '', password: '', initialStage: 4 });
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState('');
   const [error, setError] = useState(null);
@@ -141,18 +141,20 @@ export default function AdminDashboard() {
         displayName: newClient.name,
         role: 'client',
         stage: parseInt(newClient.initialStage),
+        etapaAtual: STAGES.find(s => s.id === parseInt(newClient.initialStage))?.title || 'Diagnosticar',
         requirePasswordChange: true,
         requireNameEntry: true,
         createdAt: new Date().toISOString(),
-        perfilAvaliado: false
+        perfilAvaliado: false,
+        perfilCompleto: false
       }, { merge: true });
 
       const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error("O Banco de Dados não respondeu (8s). Verifique as 'Security Rules' no Console do Firebase.")), 8000)
+        setTimeout(() => reject(new Error("Timeout (8s). Isso significa que as 'Rules' do seu Firebase estão bloqueando seu acesso de Admin. No console do Firebase, em Firestore > Rules, verifique se existe: allow write: if request.auth != null;")), 8000)
       );
 
       await Promise.race([savePromise, timeoutPromise]);
-      console.log("[DEBUG] 7. Dados salvos com sucesso.");
+      console.log("[DEBUG] 7. Sucesso no Firestore.");
 
       // 3. Enviar e-mail para o cliente criar a própria senha
       setLoadingStep('Enviando Convite...');
@@ -238,7 +240,7 @@ export default function AdminDashboard() {
       {showAddModal && (
         <div className="method-modal-overlay" onClick={() => { setShowAddModal(false); setError(null); }}>
           <div className="method-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '480px' }}>
-            <h2 style={{ marginBottom: '0.5rem' }}>Cadastrar Novo Cliente <span style={{ fontSize: '0.6rem', opacity: 0.3 }}>v1.1.2</span></h2>
+            <h2 style={{ marginBottom: '0.5rem' }}>Cadastrar Novo Cliente <span style={{ fontSize: '0.6rem', opacity: 0.3 }}>v1.1.3</span></h2>
             <p style={{ opacity: 0.6, marginBottom: '1.5rem', fontSize: '0.9rem' }}>
               No primeiro login, o cliente precisará trocar a senha e confirmar seu nome.
             </p>
