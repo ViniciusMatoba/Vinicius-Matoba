@@ -37,6 +37,7 @@ export default function AdminDashboard() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [newClient, setNewClient] = useState({ name: '', email: '', password: '', initialStage: 1 });
   const [loading, setLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState('');
   const [error, setError] = useState(null);
   const [evaluationClient, setEvaluationClient] = useState(null); // { id, name } do cliente a ser avaliado
 
@@ -64,32 +65,43 @@ export default function AdminDashboard() {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setLoadingStep('Iniciando...');
 
     try {
-      console.log("Iniciando processo de cadastro...");
+      console.log("[DEBUG] Iniciando processo de cadastro...");
       
       // Configurar persistência em memória para o app secundário
-      // Isso evita conflitos com o login do admin no localStorage
-      await setPersistence(secondaryAuth, inMemoryPersistence);
-      console.log("Persistência em memória configurada.");
+      setLoadingStep('Configurando segurança...');
+      try {
+        await setPersistence(secondaryAuth, inMemoryPersistence);
+        console.log("[DEBUG] Persistência em memória configurada.");
+      } catch (pErr) {
+        console.warn("[DEBUG] Erro ao definir persistência (pode ser ignorado se já estiver definido):", pErr);
+      }
 
       // 1. Criar conta real no Firebase Auth usando o app secundário
-      console.log("Criando usuário no Firebase Auth (e-mail: " + newClient.email + ")...");
+      setLoadingStep('Criando usuário no Firebase Auth...');
+      console.log("[DEBUG] Criando usuário: " + newClient.email);
+      
       const userCredential = await createUserWithEmailAndPassword(
         secondaryAuth,
         newClient.email,
         newClient.password
       );
       const newUser = userCredential.user;
-      console.log("Usuário criado com sucesso no Auth. UID:", newUser.uid);
+      console.log("[DEBUG] Usuário criado com sucesso no Auth. UID:", newUser.uid);
 
-      // 2. Deslogar o app secundário
+      // 2. Deslogar o app secundário para não interferir
+      setLoadingStep('Desconectando sessão temporária...');
       await secondaryAuth.signOut();
 
       // 3. Salvar dados do cliente no Firestore
-      console.log("Salvando dados no Firestore (UserID: " + newUser.uid + ")...");
-      await setDoc(doc(db, 'users', newUser.uid), {
-        name: newClient.name, // Ajustado para salvar o nome corretamente
+      setLoadingStep('Salvando dados no banco de dados...');
+      console.log("[DEBUG] Salvando no Firestore (UserID: " + newUser.uid + ")...");
+      
+      const userRef = doc(db, 'users', newUser.uid);
+      await setDoc(userRef, {
+        name: newClient.name,
         email: newClient.email,
         displayName: newClient.name,
         role: 'client',
@@ -98,39 +110,35 @@ export default function AdminDashboard() {
         requireNameEntry: true,
         createdAt: new Date().toISOString()
       });
-      console.log("Dados salvos com sucesso no Firestore.");
+      console.log("[DEBUG] Dados salvos com sucesso no Firestore.");
 
-      // 4. [E-MAIL DESATIVADO] Aguardando validação do DNS no Resend (~4h)
-      // Para reativar: descomente o bloco abaixo após o domínio viniciusmatoba.com.br ser validado.
-      //
-      // await fetch('http://localhost:3001/api/send-welcome', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ name: newClient.name, email: newClient.email, password: newClient.password })
-      // });
-
+      setLoadingStep('Finalizando...');
       setShowAddModal(false);
       const savedName = newClient.name;
       const savedId = newUser.uid;
+      
       setNewClient({ name: '', email: '', password: '', initialStage: 1 });
-      fetchClients();
+      await fetchClients();
 
-      // Abre a Avaliação VM automaticamente com o ID real do cliente
+      // Abre a Avaliação VM automaticamente
       setEvaluationClient({ id: savedId, name: savedName });
 
     } catch (err) {
-      console.error("Erro no cadastro:", err);
+      console.error("[DEBUG] Erro detalhado no cadastro:", err);
       if (err.code === 'auth/email-already-in-use') {
-        setError("Este e-mail já está cadastrado no sistema.");
+        setError("Este e-mail já está em uso.");
       } else if (err.code === 'auth/weak-password') {
-        setError("A senha deve ter pelo menos 6 caracteres.");
+        setError("A senha é muito fraca.");
       } else if (err.code === 'auth/invalid-email') {
-        setError("E-mail inválido. Verifique o formato.");
+        setError("E-mail inválido.");
+      } else if (err.code === 'permission-denied') {
+        setError("Erro de permissão no banco de dados (Firestore).");
       } else {
-        setError(err.message || "Erro desconhecido ao cadastrar.");
+        setError("Erro (" + (err.code || 'Desconhecido') + "): " + err.message);
       }
     } finally {
       setLoading(false);
+      setLoadingStep('');
     }
   }
 
@@ -214,8 +222,9 @@ export default function AdminDashboard() {
                 </div>
               )}
 
-              <button disabled={loading} type="submit" className="crm-btn-primary" style={{ marginTop: '0.5rem' }}>
-                {loading ? 'Criando conta...' : '✅ Criar Conta'}
+              <button disabled={loading} type="submit" className="crm-btn-primary" style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
+                {loading && <div className="spinner-small" style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }}></div>}
+                {loading ? (loadingStep || 'Criando conta...') : '✅ Criar Conta'}
               </button>
             </form>
           </div>
