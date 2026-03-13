@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, getDocs, doc, setDoc, getDoc } from 'firebase/firestore';
+import { collection, query, getDocs, doc, setDoc, getDoc, getFirestore } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, setPersistence, inMemoryPersistence } from 'firebase/auth';
@@ -229,7 +229,7 @@ export default function AdminDashboard() {
       {showAddModal && (
         <div className="method-modal-overlay" onClick={() => { setShowAddModal(false); setError(null); }}>
           <div className="method-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '480px' }}>
-            <h2 style={{ marginBottom: '0.5rem' }}>Cadastrar Novo Cliente <span style={{ fontSize: '0.6rem', opacity: 0.3 }}>v1.0.8</span></h2>
+            <h2 style={{ marginBottom: '0.5rem' }}>Cadastrar Novo Cliente <span style={{ fontSize: '0.6rem', opacity: 0.3 }}>v1.0.9</span></h2>
             <p style={{ opacity: 0.6, marginBottom: '1.5rem', fontSize: '0.9rem' }}>
               No primeiro login, o cliente precisará trocar a senha e confirmar seu nome.
             </p>
