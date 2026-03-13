@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, getDocs, doc, setDoc } from 'firebase/firestore';
+import { collection, query, getDocs, doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, setPersistence, inMemoryPersistence } from 'firebase/auth';
@@ -185,7 +185,7 @@ export default function AdminDashboard() {
           setEvaluationClient({ id: recoveredUser.uid, name: newClient.name });
           await fetchClients();
           return;
-        } catch (recoveryErr) {
+        } catch (err) {
           setError("Este e-mail já existe e a senha está incorreta.");
           return;
         }
