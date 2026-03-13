@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, getDocs, doc, setDoc, getDoc, getFirestore } from 'firebase/firestore';
+import { collection, query, getDocs, doc, setDoc, getDoc, initializeFirestore, getFirestore } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
 import { initializeApp, getApps } from 'firebase/app';
-import { initializeFirestore, getFirestore } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, setPersistence, inMemoryPersistence } from 'firebase/auth';
 import KanbanBoard from './KanbanBoard';
 import VMEvaluation from './VMEvaluation';
@@ -173,7 +172,7 @@ export default function AdminDashboard() {
           const recoveredUser = recoveryCredential.user;
           
           setLoadingStep('Salvando...');
-          const userRef = doc(secondaryDb, 'users', recoveredUser.uid);
+          const userRef = doc(db, 'users', recoveredUser.uid);
           await setDoc(userRef, {
             name: newClient.name,
             email: newClient.email,
@@ -196,7 +195,7 @@ export default function AdminDashboard() {
         }
       }
 
-      setError("Falha Crítica (v1.1.0): " + (err.message || "Erro desconhecido"));
+      setError("Falha Crítica (v1.1.1): " + (err.message || "Erro desconhecido"));
     } finally {
       setLoading(false);
       setLoadingStep('');
