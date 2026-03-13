@@ -68,20 +68,20 @@ export default function AdminDashboard() {
     setLoadingStep('Iniciando...');
 
     try {
-      console.log("[DEBUG] Iniciando processo de cadastro...");
+      console.log("[DEBUG] 1. Iniciando processo de cadastro (v1.0.5)...");
       
       // Configurar persistência em memória para o app secundário
-      setLoadingStep('Configurando segurança...');
+      setLoadingStep('Segurança...');
       try {
         await setPersistence(secondaryAuth, inMemoryPersistence);
-        console.log("[DEBUG] Persistência em memória configurada.");
+        console.log("[DEBUG] 2. Persistência em memória configurada.");
       } catch (pErr) {
-        console.warn("[DEBUG] Erro ao definir persistência (pode ser ignorado se já estiver definido):", pErr);
+        console.warn("[DEBUG] Erro de persistência:", pErr);
       }
 
       // 1. Criar conta real no Firebase Auth usando o app secundário
-      setLoadingStep('Criando usuário no Firebase Auth...');
-      console.log("[DEBUG] Criando usuário: " + newClient.email);
+      setLoadingStep('Criando Auth...');
+      console.log("[DEBUG] 3. Criando usuário no Auth: " + newClient.email);
       
       const userCredential = await createUserWithEmailAndPassword(
         secondaryAuth,
@@ -89,23 +89,22 @@ export default function AdminDashboard() {
         newClient.password
       );
       const newUser = userCredential.user;
-      console.log("[DEBUG] Usuário criado com sucesso no Auth. UID:", newUser.uid);
+      console.log("[DEBUG] 4. Usuário criado no Auth. UID:", newUser.uid);
 
       // Verificação crítica: O Admin ainda está logado?
-      console.log("[DEBUG] Validando sessão do Admin...");
       if (!auth.currentUser) {
-        console.error("[DEBUG] Erro: Sessão do Admin perdida!");
-        throw new Error("Sessão do administrador perdida. Por favor, faça login novamente.");
+        console.error("[DEBUG] Erro: Admin deslogado!");
+        throw new Error("Sua sessão expirou. Recarregue a página e entre novamente.");
       }
-      console.log("[DEBUG] Admin autenticado: " + auth.currentUser.email);
+      console.log("[DEBUG] 5. Admin autenticado: " + auth.currentUser.email);
 
       // 3. Salvar dados do cliente no Firestore
-      setLoadingStep('Salvando dados no banco de dados...');
-      console.log("[DEBUG] Salvando no Firestore (UserID: " + newUser.uid + ")...");
+      setLoadingStep('Salvando no Banco...');
+      console.log("[DEBUG] 6. Tentando setDoc no Firestore...");
       
       const userRef = doc(db, 'users', newUser.uid);
       
-      // Criar uma promessa para o setDoc com timeout de 15 segundos
+      // Timeout reduzido para 4 segundos conforme pedido
       const savePromise = setDoc(userRef, {
         name: newClient.name,
         email: newClient.email,
@@ -118,41 +117,28 @@ export default function AdminDashboard() {
       }, { merge: true });
 
       const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error("O banco de dados demorou muito para responder (Timeout 15s). Verifique sua conexão.")), 15000)
+        setTimeout(() => reject(new Error("O banco de dados não respondeu a tempo (4s). Tente novamente.")), 4000)
       );
 
       await Promise.race([savePromise, timeoutPromise]);
-      console.log("[DEBUG] Dados salvos com sucesso no Firestore.");
+      console.log("[DEBUG] 7. setDoc concluído com sucesso.");
 
-      // 2. Deslogar o app secundário só DEPOIS de salvar com sucesso
-      setLoadingStep('Limpando sessão temporária...');
-      await secondaryAuth.signOut();
-      console.log("[DEBUG] Sessão temporária encerrada.");
+      // Limpar sessão temporária sem travar o UI
+      secondaryAuth.signOut().catch(e => console.warn("Erro ao deslogar secundário:", e));
 
-      setLoadingStep('Finalizando...');
-      setShowAddModal(false);
-      const savedName = newClient.name;
-      const savedId = newUser.uid;
+      setLoadingStep('Atualizando lista...');
+      console.log("[DEBUG] 8. Atualizando lista de clientes...");
       
       setNewClient({ name: '', email: '', password: '', initialStage: 1 });
       await fetchClients();
+      console.log("[DEBUG] 9. Lista atualizada. Abrindo avaliação...");
 
-      // Abre a Avaliação VM automaticamente
-      setEvaluationClient({ id: savedId, name: savedName });
+      setShowAddModal(false);
+      setEvaluationClient({ id: newUser.uid, name: newClient.name });
 
     } catch (err) {
-      console.error("[DEBUG] Erro detalhado no cadastro:", err);
-      if (err.code === 'auth/email-already-in-use') {
-        setError("Este e-mail já está em uso.");
-      } else if (err.code === 'auth/weak-password') {
-        setError("A senha é muito fraca.");
-      } else if (err.code === 'auth/invalid-email') {
-        setError("E-mail inválido.");
-      } else if (err.code === 'permission-denied') {
-        setError("Erro de permissão no banco de dados (Firestore).");
-      } else {
-        setError("Erro (" + (err.code || 'Desconhecido') + "): " + err.message);
-      }
+      console.error("[DEBUG] FALHA NO PROCESSO:", err);
+      setError("Falha: " + (err.message || "Erro desconhecido"));
     } finally {
       setLoading(false);
       setLoadingStep('');
@@ -181,7 +167,7 @@ export default function AdminDashboard() {
       {showAddModal && (
         <div className="method-modal-overlay" onClick={() => { setShowAddModal(false); setError(null); }}>
           <div className="method-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '480px' }}>
-            <h2 style={{ marginBottom: '0.5rem' }}>Cadastrar Novo Cliente</h2>
+            <h2 style={{ marginBottom: '0.5rem' }}>Cadastrar Novo Cliente <span style={{ fontSize: '0.6rem', opacity: 0.3 }}>v1.0.5</span></h2>
             <p style={{ opacity: 0.6, marginBottom: '1.5rem', fontSize: '0.9rem' }}>
               No primeiro login, o cliente precisará trocar a senha e confirmar seu nome.
             </p>
