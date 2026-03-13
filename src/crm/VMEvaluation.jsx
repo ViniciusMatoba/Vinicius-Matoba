@@ -408,13 +408,45 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
             <div className="vm-eval-report-container">
               <style>{`
                 @media print {
-                  @page { size: A4; margin: 1cm; }
-                  body { background: white !important; }
-                  .vm-eval-report-container { width: 100% !important; margin: 0 !important; padding: 0 !important; box-shadow: none !important; }
+                  @page { 
+                    size: A4 portrait; 
+                    margin: 1.5cm; 
+                  }
+                  body { 
+                    background: white !important; 
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                  }
+                  .vm-eval-report-container { 
+                    width: 100% !important; 
+                    margin: 0 !important; 
+                    padding: 0 !important; 
+                    box-shadow: none !important; 
+                    transform: scale(0.95);
+                    transform-origin: top center;
+                  }
                   .no-print { display: none !important; }
+                  .print-only { display: block !important; }
                   button { display: none !important; }
-                  div { break-inside: avoid; }
+                  
+                  /* Evitar quebra de elementos importantes */
+                  .vm-eval-report-container > div {
+                    page-break-inside: avoid;
+                    break-inside: avoid;
+                  }
+                  
+                  /* Forçar cores de fundo no PDF */
+                  div { box-sizing: border-box !important; }
                   h2, h3 { color: #0F2D3A !important; }
+                  
+                  .print-footer {
+                    display: flex !important;
+                    justify-content: center;
+                    align-items: center;
+                    margin-top: 3rem;
+                    padding-top: 2rem;
+                    border-top: 1px solid #f1f5f9;
+                  }
                 }
               `}</style>
 
@@ -521,6 +553,15 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
                   </div>
                 </div>
               )}
+
+              {/* Rodapé do PDF com Logo Centralizado */}
+              <div className="print-footer" style={{ display: 'none' }}>
+                <img 
+                  src={logoVM} 
+                  alt="VM Logo" 
+                  style={{ width: '120px', opacity: 0.6, filter: 'grayscale(100%) brightness(0.5)' }} 
+                />
+              </div>
             </div>
           )}
         </div>
