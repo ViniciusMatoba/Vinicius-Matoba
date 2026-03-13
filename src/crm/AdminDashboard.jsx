@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, query, getDocs, doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
 import { initializeApp, getApps } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, setPersistence, inMemoryPersistence } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, setPersistence, inMemoryPersistence } from 'firebase/auth';
 import KanbanBoard from './KanbanBoard';
 import VMEvaluation from './VMEvaluation';
 
@@ -138,6 +138,43 @@ export default function AdminDashboard() {
 
     } catch (err) {
       console.error("[DEBUG] FALHA NO PROCESSO:", err);
+      
+      // RECUPERAÇÃO AUTOMÁTICA: Se o e-mail já existe, vamos tentar apenas salvar os dados no Firestore
+      if (err.code === 'auth/email-already-in-use') {
+        setLoadingStep('Recuperando dados...');
+        console.log("[DEBUG] E-mail já existe. Tentando recuperar UID via login temporário...");
+        try {
+          const recoveryCredential = await signInWithEmailAndPassword(secondaryAuth, newClient.email, newClient.password);
+          const recoveredUser = recoveryCredential.user;
+          console.log("[DEBUG] UID recuperado:", recoveredUser.uid);
+          
+          setLoadingStep('Salvando no Banco...');
+          const userRef = doc(db, 'users', recoveredUser.uid);
+          await setDoc(userRef, {
+            name: newClient.name,
+            email: newClient.email,
+            displayName: newClient.name,
+            role: 'client',
+            stage: newClient.initialStage,
+            requirePasswordChange: true,
+            requireNameEntry: true,
+            createdAt: new Date().toISOString()
+          }, { merge: true });
+          
+          console.log("[DEBUG] Recuperação concluída. Dados salvos.");
+          await secondaryAuth.signOut();
+          
+          setShowAddModal(false);
+          setEvaluationClient({ id: recoveredUser.uid, name: newClient.name });
+          await fetchClients();
+          return; // Sucesso na recuperação
+        } catch (recoveryErr) {
+          console.error("[DEBUG] Erro na recuperação:", recoveryErr);
+          setError("Este e-mail já existe, e não foi possível validar a senha informada.");
+          return;
+        }
+      }
+
       setError("Falha: " + (err.message || "Erro desconhecido"));
     } finally {
       setLoading(false);
