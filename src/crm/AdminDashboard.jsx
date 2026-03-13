@@ -189,7 +189,7 @@ export default function AdminDashboard() {
           setEvaluationClient({ id: recoveredUser.uid, name: newClient.name });
           await fetchClients();
           return;
-        } catch (err) {
+        } catch {
           setError("Este e-mail já existe e a senha está incorreta.");
           return;
         }
