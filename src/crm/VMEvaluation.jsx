@@ -442,17 +442,17 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
               {/* Pilares em Grid 2x2 + 1 Centralizado */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem', marginBottom: '1.5rem' }}>
                 {PILLARS.slice(0, 4).map((p, i) => (
-                  <div key={p.id} style={{ textAlign: 'center', background: `${p.color}05`, border: `1px solid ${p.color}15`, borderRadius: '16px', padding: '1.2rem' }}>
-                    <div style={{ fontSize: '2.2rem', fontWeight: 950, color: p.color, lineHeight: 1 }}>{pillarScores[i]}</div>
-                    <div style={{ fontSize: '0.7rem', color: '#94a3b8', margin: '4px 0 8px' }}>de 10 pontos</div>
+                  <div key={p.id} style={{ textAlign: 'center', background: `${p.color}05`, border: `1px solid ${p.color}15`, borderRadius: '16px', padding: '1.5rem', height: '140px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                    <div style={{ fontSize: '2.5rem', fontWeight: 950, color: p.color, lineHeight: 1 }}>{pillarScores[i]}</div>
+                    <div style={{ fontSize: '0.7rem', color: '#94a3b8', margin: '6px 0 8px' }}>de 10 pontos</div>
                     <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#1e293b' }}>{p.name}</div>
                   </div>
                 ))}
               </div>
               
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '3rem' }}>
-                <div style={{ textAlign: 'center', background: `${PILLARS[4].color}05`, border: `1px solid ${PILLARS[4].color}15`, borderRadius: '16px', padding: '1.2rem', width: 'calc(50% - 0.75rem)' }}>
-                  <div style={{ fontSize: '2.2rem', fontWeight: 950, color: PILLARS[4].color, lineHeight: 1 }}>{pillarScores[4]}</div>
+                <div style={{ textAlign: 'center', background: `${PILLARS[4].color}05`, border: `1px solid ${PILLARS[4].color}15`, borderRadius: '16px', padding: '1.5rem', width: 'calc(50% - 0.75rem)', height: '140px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                  <div style={{ fontSize: '2.5rem', fontWeight: 950, color: PILLARS[4].color, lineHeight: 1 }}>{pillarScores[4]}</div>
                   <div style={{ fontSize: '0.7rem', color: '#94a3b8', margin: '4px 0 8px' }}>de 10 pontos</div>
                   <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#1e293b' }}>{PILLARS[4].name}</div>
                 </div>
