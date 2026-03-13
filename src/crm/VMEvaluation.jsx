@@ -120,7 +120,7 @@ function RadarChart({ scores }) {
   const dataPath = dataPoints.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ') + ' Z';
   const axisLabels = PILLARS.map((p, i) => {
     const a = angles[i];
-    return { x: cx + (r + 26) * Math.cos(a), y: cy + (r + 26) * Math.sin(a), name: p.name, color: p.color };
+    return { x: cx + (r + 40) * Math.cos(a), y: cy + (r + 40) * Math.sin(a), name: p.name, color: p.color };
   });
 
   return (
@@ -145,8 +145,8 @@ function RadarChart({ scores }) {
       {axisLabels.map((l, i) => {
         const words = l.name.split(' ');
         return (
-          <text key={i} x={l.x} y={l.y} textAnchor="middle" fontSize="9.5" fontWeight="600" fill={l.color}>
-            {words.map((w, j) => <tspan key={j} x={l.x} dy={j === 0 ? 0 : 12}>{w}</tspan>)}
+          <text key={i} x={l.x} y={l.y} textAnchor="middle" fontSize="12" fontWeight="800" fill={l.color} style={{ textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+            {words.map((w, j) => <tspan key={j} x={l.x} dy={j === 0 ? 0 : 15}>{w}</tspan>)}
           </text>
         );
       })}
