@@ -402,26 +402,39 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
             </div>
           ) : (
             /* ── RESULTADO ── */
-            <div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'center', marginBottom: '2rem' }}>
-                <div style={{ textAlign: 'center' }}>
-                  <p style={{ margin: '0 0 8px 0', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#94a3b8', fontWeight: 600 }}>Pontuação Total</p>
-                  <div style={{ fontSize: '5rem', fontWeight: 900, lineHeight: 1, color: '#1e293b' }}>{totalScore}</div>
-                  <div style={{ fontSize: '1rem', color: '#94a3b8', marginBottom: '1rem' }}>de 50 pontos</div>
-                  <div style={{ background: '#f1f5f9', borderRadius: '100px', height: 10, marginBottom: '1rem', overflow: 'hidden' }}>
-                    <div style={{ height: '100%', width: `${(totalScore / 50) * 100}%`, background: 'linear-gradient(90deg, #6366f1, #ec4899)', borderRadius: '100px', transition: 'width 0.6s ease' }} />
-                  </div>
-                  <div style={{ background: interpretation.bg, border: `1px solid ${interpretation.border}`, borderRadius: '12px', padding: '1rem' }}>
-                    <p style={{ margin: '0 0 4px 0', fontWeight: 800, fontSize: '1rem' }}>{interpretation.emoji} {interpretation.label}</p>
-                    <p style={{ margin: 0, fontSize: '0.82rem', color: '#475569', lineHeight: 1.5 }}>{interpretation.desc}</p>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                  <RadarChart scores={pillarScores} />
+            <div className="vm-eval-report-container">
+              <style>{`
+                @media print {
+                  @page { size: A4; margin: 1cm; }
+                  body { background: white !important; }
+                  .vm-eval-report-container { width: 100% !important; margin: 0 !important; padding: 0 !important; box-shadow: none !important; }
+                  .no-print { display: none !important; }
+                  .print-only { display: block !important; }
+                  button { display: none !important; }
+                  div { break-inside: avoid; }
+                  h2, h3 { color: #0F2D3A !important; }
+                  .pillar-container { grid-template-columns: repeat(5, 1fr) !important; }
+                  .results-summary { display: block !important; }
+                }
+              `}</style>
+
+              {/* Radar Chart Grande no Topo */}
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem', background: '#fcfcfc', borderRadius: '20px', padding: '1.5rem' }}>
+                <RadarChart scores={pillarScores} />
+              </div>
+
+              <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+                <p style={{ margin: '0 0 8px 0', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#94a3b8', fontWeight: 700 }}>Pontuação Geral do Perfil</p>
+                <div style={{ fontSize: '5.5rem', fontWeight: 950, lineHeight: 1, color: '#0F2D3A', margin: '0.5rem 0' }}>{totalScore}</div>
+                <div style={{ fontSize: '1.2rem', color: '#64748b', marginBottom: '1.5rem', fontWeight: 600 }}>de 50 pontos possíveis</div>
+                
+                <div style={{ maxWidth: '600px', margin: '0 auto', background: interpretation.bg, border: `2px solid ${interpretation.border}`, borderRadius: '18px', padding: '1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.03)' }}>
+                  <p style={{ margin: '0 0 8px 0', fontWeight: 900, fontSize: '1.3rem', color: '#1e293b' }}>{interpretation.emoji} {interpretation.label}</p>
+                  <p style={{ margin: 0, fontSize: '0.95rem', color: '#475569', lineHeight: 1.6, fontWeight: 500 }}>{interpretation.desc}</p>
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '0.75rem', marginBottom: '2rem' }}>
+              <div className="pillar-container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem', marginBottom: '2.5rem' }}>
                 {PILLARS.map((p, i) => (
                   <div key={p.id} style={{ textAlign: 'center', background: `${p.color}10`, border: `2px solid ${p.color}33`, borderRadius: '12px', padding: '0.75rem 0.5rem' }}>
                     <div style={{ fontSize: '1.6rem', fontWeight: 900, color: p.color }}>{pillarScores[i]}</div>
@@ -434,8 +447,8 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
                 ))}
               </div>
 
-              <h3 style={{ fontWeight: 800, marginBottom: '1rem', color: '#1e293b' }}>3 Pontos de Atenção Identificados</h3>
-              <div style={{ display: 'grid', gap: '0.75rem', marginBottom: '2rem' }}>
+              <h3 style={{ fontWeight: 800, marginBottom: '1.2rem', color: '#1e293b', textAlign: readOnly ? 'left' : 'center' }}>Pontos de Atenção & Melhorias</h3>
+              <div style={{ display: 'grid', gap: '1rem', marginBottom: '2.5rem' }}>
                 {problems.map((prob) => (
                   <div key={prob.key} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', background: prob.bg, border: `1px solid ${prob.border}`, borderRadius: '14px', padding: '1rem 1.25rem' }}>
                     <span style={{ fontSize: '1.4rem', flexShrink: 0 }}>{prob.icon}</span>
@@ -450,13 +463,12 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
                 ))}
               </div>
 
-              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginBottom: '2rem', flexWrap: 'wrap' }}>
-                <button onClick={() => setShowResult(false)} style={{ background: '#f1f5f9', border: 'none', borderRadius: '10px', padding: '0.75rem 1.5rem', fontWeight: 700, cursor: 'pointer', color: '#475569', fontSize: '0.9rem' }}>✏️ Editar Notas</button>
-                <button onClick={handleWhatsAppShare} style={{ background: '#25D366', border: 'none', borderRadius: '10px', padding: '0.75rem 1.5rem', fontWeight: 700, cursor: 'pointer', color: '#fff', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div className="no-print" style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '3rem', flexWrap: 'wrap', borderTop: '1px solid #f1f5f9', paddingTop: '2rem' }}>
+                <button onClick={() => setShowResult(false)} style={{ background: '#f1f5f9', border: 'none', borderRadius: '12px', padding: '1rem 2rem', fontWeight: 800, cursor: 'pointer', color: '#475569', fontSize: '0.95rem', transition: 'all 0.2s' }}>✏️ Editar Diagnóstico</button>
+                <button onClick={handleWhatsAppShare} style={{ background: '#25D366', border: 'none', borderRadius: '12px', padding: '1rem 2rem', fontWeight: 800, cursor: 'pointer', color: '#fff', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 4px 15px rgba(37, 211, 102, 0.2)' }}>
                   <span>📲 WhatsApp</span>
                 </button>
-                <button onClick={() => window.print()} style={{ background: '#0F2D3A', border: 'none', borderRadius: '10px', padding: '0.75rem 1.5rem', fontWeight: 700, cursor: 'pointer', color: '#fff', fontSize: '0.9rem' }}>🖨️ Imprimir PDF</button>
-                {!readOnly && <button onClick={onClose} style={{ background: 'transparent', color: '#475569', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '0.75rem 1.5rem', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}>Finalizar</button>}
+                <button onClick={() => window.print()} style={{ background: '#0F2D3A', border: 'none', borderRadius: '12px', padding: '1rem 2rem', fontWeight: 800, cursor: 'pointer', color: '#fff', fontSize: '0.95rem', boxShadow: '0 4px 15px rgba(15, 45, 58, 0.2)' }}>🖨️ Gerar Relatório PDF</button>
               </div>
 
               {/* Seção de Comentários Detalhados no Resultado */}
