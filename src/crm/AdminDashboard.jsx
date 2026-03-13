@@ -103,7 +103,7 @@ export default function AdminDashboard() {
     setLoadingStep('Iniciando...');
 
     try {
-      console.log("[DEBUG] 1. Iniciando processo de cadastro (v1.0.6)...");
+      console.log("[DEBUG] 1. Iniciando processo de cadastro (v1.0.9)...");
       
       // Configurar persistência em memória para o app secundário
       setLoadingStep('Segurança...');
@@ -115,8 +115,6 @@ export default function AdminDashboard() {
 
       // 1. Criar conta real no Firebase Auth usando o app secundário
       setLoadingStep('Criando Auth...');
-      console.log("[DEBUG] 3. Tentando criar Auth: " + newClient.email);
-      
       const userCredential = await createUserWithEmailAndPassword(
         secondaryAuth,
         newClient.email,
@@ -125,19 +123,13 @@ export default function AdminDashboard() {
       const newUser = userCredential.user;
       console.log("[DEBUG] 4. Criado com sucesso. UID: " + newUser.uid);
 
-      // Verificação crítica: O Admin ainda está logado?
-      if (!auth.currentUser) {
-        throw new Error("Sua sessão de administrador expirou. Por favor, recarregue a página.");
-      }
-      console.log("[DEBUG] 5. Admin Logado: " + auth.currentUser.email);
-
-      // 3. Salvar dados do cliente no Firestore
+      // 3. Salvar dados do cliente no Firestore USANDO O DB SECUNDÁRIO
       setLoadingStep('Salvando no Banco...');
-      console.log("[DEBUG] 6. Escrita no Firestore: " + newUser.uid);
+      console.log("[DEBUG] 6. Escrita via User Session: " + newUser.uid);
       
-      const userRef = doc(db, 'users', newUser.uid);
+      const userRef = doc(secondaryDb, 'users', newUser.uid);
       
-      // Timeout de 5 segundos
+      // Timeout de 6 segundos
       const savePromise = setDoc(userRef, {
         name: newClient.name,
         email: newClient.email,
@@ -150,7 +142,7 @@ export default function AdminDashboard() {
       }, { merge: true });
 
       const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error("O Banco de Dados (Firestore) não respondeu em 5s. Isso pode ser erro de permissão ou conexão.")), 5000)
+        setTimeout(() => reject(new Error("O Banco de Dados não respondeu via sessão do usuário (6s).")), 6000)
       );
 
       await Promise.race([savePromise, timeoutPromise]);
@@ -177,7 +169,7 @@ export default function AdminDashboard() {
           const recoveredUser = recoveryCredential.user;
           
           setLoadingStep('Salvando...');
-          const userRef = doc(db, 'users', recoveredUser.uid);
+          const userRef = doc(secondaryDb, 'users', recoveredUser.uid);
           await setDoc(userRef, {
             name: newClient.name,
             email: newClient.email,
@@ -200,7 +192,7 @@ export default function AdminDashboard() {
         }
       }
 
-      setError("Falha: " + (err.message || "Erro desconhecido"));
+      setError("Falha Crítica (v1.0.9): " + (err.message || "Erro desconhecido"));
     } finally {
       setLoading(false);
       setLoadingStep('');
