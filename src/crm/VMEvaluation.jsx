@@ -64,9 +64,9 @@ const PILLARS = [
 ];
 
 const INTERPRETATIONS = [
-  { min: 0,  max: 20, label: 'Perfil Desestruturado',    desc: 'O perfil não comunica claramente o negócio e precisa de uma reestruturação completa para começar a gerar resultados.', emoji: '🔴', bg: '#fef2f2', border: '#fecaca' },
-  { min: 21, max: 30, label: 'Estrutura Inicial',         desc: 'Existe uma base ainda frágil. Melhorias de posicionamento e conteúdo são urgentes para avançar.', emoji: '🟠', bg: '#fff7ed', border: '#fed7aa' },
-  { min: 31, max: 40, label: 'Perfil em Desenvolvimento', desc: 'O perfil já tem direção, mas faltam elementos de conversão e consistência para transformar seguidores em clientes.', emoji: '🟡', bg: '#fefce8', border: '#fde68a' },
+  { min: 0,  max: 20, label: 'Perfil Desestruturado',    desc: 'O perfil não comunica claramente o negócio e precisa de uma reestruturação completa para começar a gerar resultados.', emoji: '🔴', bg: '#f8fafc', border: '#e2e8f0' },
+  { min: 21, max: 30, label: 'Estrutura Inicial',         desc: 'Existe uma base ainda frágil. Melhorias de posicionamento e conteúdo são urgentes para avançar.', emoji: '🟠', bg: '#f8fafc', border: '#e2e8f0' },
+  { min: 31, max: 40, label: 'Perfil em Desenvolvimento', desc: 'O perfil já tem direção, mas faltam elementos de conversão e consistência para transformar seguidores em clientes.', emoji: '🟡', bg: '#f8fafc', border: '#e2e8f0' },
   { min: 41, max: 50, label: 'Perfil Estratégico',        desc: 'O perfil está bem posicionado e tem estrutura sólida. Pequenos ajustes podem maximizar os resultados.', emoji: '🟢', bg: '#f0fdf4', border: '#bbf7d0' },
 ];
 
@@ -106,7 +106,7 @@ const PROBLEM_SUGGESTIONS = {
 
 // ─── Gráfico de Radar SVG ────────────────────────────────────────────────────
 function RadarChart({ scores }) {
-  const cx = 160, cy = 160, r = 120;
+  const cx = 200, cy = 200, r = 160;
   const n = PILLARS.length;
   const angles = PILLARS.map((_, i) => (Math.PI * 2 * i) / n - Math.PI / 2);
 
@@ -124,7 +124,7 @@ function RadarChart({ scores }) {
   });
 
   return (
-    <svg viewBox="0 0 320 320" style={{ width: '100%', maxWidth: 340 }}>
+    <svg viewBox="0 0 400 400" style={{ width: '100%', maxWidth: 450 }}>
       {gridLevels.map(level => {
         const pts = angles.map(a => point(level, 10, a));
         const path = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ') + ' Z';
@@ -281,25 +281,28 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
     <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', overflowY: 'auto', padding: '2rem 1rem' }}>
       <div style={{ background: '#ffffff', borderRadius: '20px', width: '100%', maxWidth: '860px', overflow: 'hidden', boxShadow: '0 25px 60px rgba(0,0,0,0.3)' }}>
 
-        {/* Header */}
-        <div style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)', padding: '2.5rem', color: '#fff' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '2rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-              <img src={logoVM} alt="Logo VM" style={{ height: '60px', width: 'auto', filter: 'brightness(0) invert(1)' }} />
-              <div style={{ borderLeft: '1px solid rgba(255,255,255,0.2)', paddingLeft: '1.5rem' }}>
-                <p style={{ margin: 0, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.12em', opacity: 0.6 }}>
-                  {readOnly ? 'Seu Diagnóstico' : 'Avaliação Técnica'}
-                </p>
-                <h2 style={{ margin: '4px 0', fontSize: '1.8rem', fontWeight: 800 }}>
-                  Diagnóstico VM <span style={{ fontSize: '1rem', fontWeight: 400, opacity: 0.8 }}>do Instagram</span>
-                </h2>
-                <p style={{ margin: 0, opacity: 0.7, fontSize: '0.9rem' }}>
+        {/* Header - Premium Refined */}
+        <div style={{ background: '#0F2D3A', padding: '3rem 2.5rem', color: '#fff', textAlign: 'center', position: 'relative' }}>
+          <button onClick={onClose} style={{ position: 'absolute', right: '2rem', top: '2rem', background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', borderRadius: '50%', width: 36, height: 36, cursor: 'pointer', fontSize: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>×</button>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+            <img src={logoVM} alt="Logo VM" style={{ height: '100px', width: 'auto', filter: 'brightness(0) invert(1)' }} />
+            
+            <div>
+              <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', opacity: 0.9 }}>
+                Diagnóstico VM <span style={{ fontWeight: 300, opacity: 0.6 }}>do Instagram</span>
+              </h2>
+              <div style={{ marginTop: '0.8rem', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: 400 }}>
                   Cliente: <strong style={{ color: '#1DB954' }}>{clientName}</strong>
-                  {savedAt && <span style={{ marginLeft: '1rem', fontSize: '0.75rem', opacity: 0.6 }}>Salvo em {new Date(savedAt).toLocaleDateString('pt-BR')}</span>}
                 </p>
+                {savedAt && (
+                  <p style={{ margin: 0, fontSize: '0.8rem', opacity: 0.5, fontWeight: 500 }}>
+                    Relatório gerado em {new Date(savedAt).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
+                  </p>
+                )}
               </div>
             </div>
-            <button onClick={onClose} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', borderRadius: '50%', width: 40, height: 40, cursor: 'pointer', fontSize: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', alignSelf: 'flex-start' }}>×</button>
           </div>
         </div>
 
@@ -428,18 +431,25 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
                 <div style={{ fontSize: '5.5rem', fontWeight: 950, lineHeight: 1, color: '#0F2D3A', margin: '0.5rem 0' }}>{totalScore}</div>
                 <div style={{ fontSize: '1.2rem', color: '#64748b', marginBottom: '1.5rem', fontWeight: 600 }}>de 50 pontos possíveis</div>
                 
-                <div style={{ maxWidth: '600px', margin: '0 auto', background: interpretation.bg, border: `2px solid ${interpretation.border}`, borderRadius: '18px', padding: '1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.03)' }}>
-                  <p style={{ margin: '0 0 8px 0', fontWeight: 900, fontSize: '1.3rem', color: '#1e293b' }}>{interpretation.emoji} {interpretation.label}</p>
-                  <p style={{ margin: 0, fontSize: '0.95rem', color: '#475569', lineHeight: 1.6, fontWeight: 500 }}>{interpretation.desc}</p>
+                <div style={{ maxWidth: '600px', margin: '0 auto', background: interpre              <div className="pillar-container" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2.5rem' }}>
+                {PILLARS.slice(0, 4).map((p, i) => (
+                  <div key={p.id} style={{ textAlign: 'center', background: `${p.color}08`, border: `1px solid ${p.color}15`, borderRadius: '12px', padding: '0.75rem 0.5rem' }}>
+                    <div style={{ fontSize: '1.8rem', fontWeight: 900, color: p.color }}>{pillarScores[i]}</div>
+                    <div style={{ fontSize: '0.65rem', color: '#94a3b8', marginBottom: '2px' }}>de 10</div>
+                    <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#334155', lineHeight: 1.2 }}>{p.name}</div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* O 5º Pillar centralizado abaixo */}
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2.5rem' }}>
+                <div style={{ textAlign: 'center', background: `${PILLARS[4].color}08`, border: `1px solid ${PILLARS[4].color}15`, borderRadius: '12px', padding: '0.75rem 1.5rem', minWidth: '180px' }}>
+                  <div style={{ fontSize: '1.8rem', fontWeight: 900, color: PILLARS[4].color }}>{pillarScores[4]}</div>
+                  <div style={{ fontSize: '0.65rem', color: '#94a3b8', marginBottom: '2px' }}>de 10</div>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#334155', lineHeight: 1.2 }}>{PILLARS[4].name}</div>
                 </div>
               </div>
-
-              <div className="pillar-container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem', marginBottom: '2.5rem' }}>
-                {PILLARS.map((p, i) => (
-                  <div key={p.id} style={{ textAlign: 'center', background: `${p.color}10`, border: `2px solid ${p.color}33`, borderRadius: '12px', padding: '0.75rem 0.5rem' }}>
-                    <div style={{ fontSize: '1.6rem', fontWeight: 900, color: p.color }}>{pillarScores[i]}</div>
-                    <div style={{ fontSize: '0.6rem', color: '#94a3b8', marginBottom: '2px' }}>de 10</div>
-                    <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#334155', lineHeight: 1.2 }}>{p.name}</div>
+                 <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#334155', lineHeight: 1.2 }}>{p.name}</div>
                     <div style={{ marginTop: '6px', background: '#e2e8f0', borderRadius: '100px', height: 4, overflow: 'hidden' }}>
                       <div style={{ height: '100%', width: `${(pillarScores[i] / 10) * 100}%`, background: p.color, borderRadius: '100px' }} />
                     </div>
