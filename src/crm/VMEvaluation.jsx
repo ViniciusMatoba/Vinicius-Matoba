@@ -254,6 +254,18 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
     }
   };
 
+  const handleWhatsAppShare = () => {
+    const message = `*Diagnóstico VM do Instagram - ${clientName}*\n\n` +
+      `📊 Pontuação Total: *${totalScore}/50*\n` +
+      `🏆 Classificação: ${interpretation.label}\n\n` +
+      `*Pontuação por Pilar:*\n` +
+      PILLARS.map((p, i) => `• ${p.name}: ${pillarScores[i]}/10`).join('\n') +
+      `\n\n_Para ver o diagnóstico completo e orientações detalhadas, consulte o seu consultor._`;
+    
+    const encoded = encodeURIComponent(message);
+    window.open(`https://api.whatsapp.com/send?text=${encoded}`, '_blank');
+  };
+
   if (loadingData) {
     return (
       <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -283,6 +295,7 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
                 </h2>
                 <p style={{ margin: 0, opacity: 0.7, fontSize: '0.9rem' }}>
                   Cliente: <strong style={{ color: '#1DB954' }}>{clientName}</strong>
+                  {savedAt && <span style={{ marginLeft: '1rem', fontSize: '0.75rem', opacity: 0.6 }}>Salvo em {new Date(savedAt).toLocaleDateString('pt-BR')}</span>}
                 </p>
               </div>
             </div>
@@ -437,8 +450,11 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
                 ))}
               </div>
 
-              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginBottom: '2rem' }}>
+              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginBottom: '2rem', flexWrap: 'wrap' }}>
                 <button onClick={() => setShowResult(false)} style={{ background: '#f1f5f9', border: 'none', borderRadius: '10px', padding: '0.75rem 1.5rem', fontWeight: 700, cursor: 'pointer', color: '#475569', fontSize: '0.9rem' }}>✏️ Editar Notas</button>
+                <button onClick={handleWhatsAppShare} style={{ background: '#25D366', border: 'none', borderRadius: '10px', padding: '0.75rem 1.5rem', fontWeight: 700, cursor: 'pointer', color: '#fff', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span>📲 WhatsApp</span>
+                </button>
                 <button onClick={() => window.print()} style={{ background: '#0F2D3A', border: 'none', borderRadius: '10px', padding: '0.75rem 1.5rem', fontWeight: 700, cursor: 'pointer', color: '#fff', fontSize: '0.9rem' }}>🖨️ Imprimir PDF</button>
                 {!readOnly && <button onClick={onClose} style={{ background: 'transparent', color: '#475569', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '0.75rem 1.5rem', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}>Finalizar</button>}
               </div>
