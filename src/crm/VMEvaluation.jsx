@@ -174,7 +174,9 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
         const snap = await getDoc(doc(db, 'users', clientId));
         if (snap.exists() && snap.data().vmEvaluation) {
           const saved = snap.data().vmEvaluation;
-          setScores(saved.scores);
+          // Reconstruir array 2D a partir do objeto Firestore
+          const reconstructed = PILLARS.map((_, pi) => saved.dbScores?.[`p${pi}`] || saved.scores?.[pi] || []);
+          setScores(reconstructed);
           setSavedAt(saved.savedAt);
           if (readOnly) setShowResult(true);
         }
@@ -237,8 +239,11 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
     setSaving(true);
     try {
       const now = new Date().toISOString();
+      const dbScores = {};
+      scores.forEach((p, pi) => { dbScores[`p${pi}`] = p; });
+      
       await setDoc(doc(db, 'users', clientId), {
-        vmEvaluation: { scores, pillarScores, totalScore, savedAt: now }
+        vmEvaluation: { dbScores, pillarScores, totalScore, savedAt: now }
       }, { merge: true });
       setSavedAt(now);
       setShowResult(true);
