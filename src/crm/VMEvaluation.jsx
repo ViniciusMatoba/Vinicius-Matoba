@@ -412,85 +412,74 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
                   body { background: white !important; }
                   .vm-eval-report-container { width: 100% !important; margin: 0 !important; padding: 0 !important; box-shadow: none !important; }
                   .no-print { display: none !important; }
-                  .print-only { display: block !important; }
                   button { display: none !important; }
                   div { break-inside: avoid; }
                   h2, h3 { color: #0F2D3A !important; }
-                  .pillar-container { grid-template-columns: repeat(5, 1fr) !important; }
-                  .results-summary { display: block !important; }
                 }
               `}</style>
 
               {/* Radar Chart Grande no Topo */}
-              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem', background: '#fcfcfc', borderRadius: '20px', padding: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem', background: '#fcfcfc', borderRadius: '24px', padding: '2rem' }}>
                 <RadarChart scores={pillarScores} />
               </div>
 
-              <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-                <p style={{ margin: '0 0 8px 0', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#94a3b8', fontWeight: 700 }}>Pontuação Geral do Perfil</p>
-                <div style={{ fontSize: '5.5rem', fontWeight: 950, lineHeight: 1, color: '#0F2D3A', margin: '0.5rem 0' }}>{totalScore}</div>
-                <div style={{ fontSize: '1.2rem', color: '#64748b', marginBottom: '1.5rem', fontWeight: 600 }}>de 50 pontos possíveis</div>
+              <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                <p style={{ margin: '0 0 8px 0', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#94a3b8', fontWeight: 800 }}>Pontuação do Perfil</p>
+                <div style={{ fontSize: '6rem', fontWeight: 950, lineHeight: 1, color: '#0F2D3A', margin: '0.5rem 0' }}>{totalScore}</div>
+                <div style={{ fontSize: '1.2rem', color: '#64748b', marginBottom: '2rem', fontWeight: 600 }}>de 50 pontos possíveis</div>
                 
-                <div style={{ maxWidth: '600px', margin: '0 auto', background: interpre              <div className="pillar-container" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2.5rem' }}>
+                <div style={{ maxWidth: '650px', margin: '0 auto', background: interpretation.bg, border: `2px solid ${interpretation.border}`, borderRadius: '20px', padding: '2rem', boxShadow: '0 15px 40px rgba(0,0,0,0.04)' }}>
+                  <p style={{ margin: '0 0 10px 0', fontWeight: 950, fontSize: '1.4rem', color: '#1e293b' }}>{interpretation.emoji} {interpretation.label}</p>
+                  <p style={{ margin: 0, fontSize: '1rem', color: '#475569', lineHeight: 1.7, fontWeight: 500 }}>{interpretation.desc}</p>
+                  
+                  {/* Barra de Progresso Brand-focused */}
+                  <div style={{ background: '#0F2D3A15', borderRadius: '100px', height: 12, marginTop: '1.5rem', overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: `${(totalScore / 50) * 100}%`, background: '#1DB954', borderRadius: '100px', transition: 'width 0.8s ease-out' }} />
+                  </div>
+                </div>
+              </div>
+
+              {/* Pilares em Grid 2x2 + 1 Centralizado */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem', marginBottom: '1.5rem' }}>
                 {PILLARS.slice(0, 4).map((p, i) => (
-                  <div key={p.id} style={{ textAlign: 'center', background: `${p.color}08`, border: `1px solid ${p.color}15`, borderRadius: '12px', padding: '0.75rem 0.5rem' }}>
-                    <div style={{ fontSize: '1.8rem', fontWeight: 900, color: p.color }}>{pillarScores[i]}</div>
-                    <div style={{ fontSize: '0.65rem', color: '#94a3b8', marginBottom: '2px' }}>de 10</div>
-                    <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#334155', lineHeight: 1.2 }}>{p.name}</div>
+                  <div key={p.id} style={{ textAlign: 'center', background: `${p.color}05`, border: `1px solid ${p.color}15`, borderRadius: '16px', padding: '1.2rem' }}>
+                    <div style={{ fontSize: '2.2rem', fontWeight: 950, color: p.color, lineHeight: 1 }}>{pillarScores[i]}</div>
+                    <div style={{ fontSize: '0.7rem', color: '#94a3b8', margin: '4px 0 8px' }}>de 10 pontos</div>
+                    <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#1e293b' }}>{p.name}</div>
                   </div>
                 ))}
               </div>
               
-              {/* O 5º Pillar centralizado abaixo */}
-              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2.5rem' }}>
-                <div style={{ textAlign: 'center', background: `${PILLARS[4].color}08`, border: `1px solid ${PILLARS[4].color}15`, borderRadius: '12px', padding: '0.75rem 1.5rem', minWidth: '180px' }}>
-                  <div style={{ fontSize: '1.8rem', fontWeight: 900, color: PILLARS[4].color }}>{pillarScores[4]}</div>
-                  <div style={{ fontSize: '0.65rem', color: '#94a3b8', marginBottom: '2px' }}>de 10</div>
-                  <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#334155', lineHeight: 1.2 }}>{PILLARS[4].name}</div>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '3rem' }}>
+                <div style={{ textAlign: 'center', background: `${PILLARS[4].color}05`, border: `1px solid ${PILLARS[4].color}15`, borderRadius: '16px', padding: '1.2rem', width: 'calc(50% - 0.75rem)' }}>
+                  <div style={{ fontSize: '2.2rem', fontWeight: 950, color: PILLARS[4].color, lineHeight: 1 }}>{pillarScores[4]}</div>
+                  <div style={{ fontSize: '0.7rem', color: '#94a3b8', margin: '4px 0 8px' }}>de 10 pontos</div>
+                  <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#1e293b' }}>{PILLARS[4].name}</div>
                 </div>
               </div>
-                 <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#334155', lineHeight: 1.2 }}>{p.name}</div>
-                    <div style={{ marginTop: '6px', background: '#e2e8f0', borderRadius: '100px', height: 4, overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: `${(pillarScores[i] / 10) * 100}%`, background: p.color, borderRadius: '100px' }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
 
-              <h3 style={{ fontWeight: 800, marginBottom: '1.2rem', color: '#1e293b', textAlign: readOnly ? 'left' : 'center' }}>Pontos de Atenção & Melhorias</h3>
-              <div style={{ display: 'grid', gap: '1rem', marginBottom: '2.5rem' }}>
+              <h3 style={{ fontWeight: 900, fontSize: '1.4rem', marginBottom: '1.5rem', color: '#0F2D3A', textAlign: 'center' }}>Pontos de Atenção & Orientações</h3>
+              
+              <div style={{ display: 'grid', gap: '1.2rem', marginBottom: '3.5rem' }}>
                 {problems.map((prob) => (
-                  <div key={prob.key} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', background: prob.bg, border: `1px solid ${prob.border}`, borderRadius: '14px', padding: '1rem 1.25rem' }}>
-                    <span style={{ fontSize: '1.4rem', flexShrink: 0 }}>{prob.icon}</span>
+                  <div key={prob.key} style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start', background: prob.bg, border: `1px solid ${prob.border}`, borderRadius: '18px', padding: '1.25rem 1.5rem' }}>
+                    <span style={{ fontSize: '1.6rem', flexShrink: 0 }}>{prob.icon}</span>
                     <div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '4px' }}>
-                        <span style={{ fontWeight: 800, color: prob.color, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{prob.label}</span>
-                        <span style={{ background: prob.color, color: '#fff', borderRadius: '6px', padding: '1px 8px', fontSize: '0.7rem', fontWeight: 700 }}>{prob.pillar?.name} — {prob.pillar?.score}/10</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '6px' }}>
+                        <span style={{ fontWeight: 900, color: prob.color, fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{prob.label}</span>
+                        <span style={{ background: prob.color, color: '#fff', borderRadius: '6px', padding: '2px 10px', fontSize: '0.75rem', fontWeight: 800 }}>{prob.pillar?.name} — {prob.pillar?.score}/10</span>
                       </div>
-                      <p style={{ margin: 0, color: '#475569', fontSize: '0.85rem', lineHeight: 1.5 }}>{prob.suggestion}</p>
+                      <p style={{ margin: 0, color: '#444', fontSize: '0.95rem', lineHeight: 1.6, fontWeight: 500 }}>{prob.suggestion}</p>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="no-print" style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '3rem', flexWrap: 'wrap', borderTop: '1px solid #f1f5f9', paddingTop: '2rem' }}>
-                <button onClick={() => setShowResult(false)} style={{ background: '#f1f5f9', border: 'none', borderRadius: '12px', padding: '1rem 2rem', fontWeight: 800, cursor: 'pointer', color: '#475569', fontSize: '0.95rem', transition: 'all 0.2s' }}>✏️ Editar Diagnóstico</button>
-                <button onClick={handleWhatsAppShare} style={{ background: '#25D366', border: 'none', borderRadius: '12px', padding: '1rem 2rem', fontWeight: 800, cursor: 'pointer', color: '#fff', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 4px 15px rgba(37, 211, 102, 0.2)' }}>
+              <div className="no-print" style={{ display: 'flex', gap: '1.2rem', justifyContent: 'center', marginBottom: '4rem', flexWrap: 'wrap', borderTop: '2px solid #f8fafc', paddingTop: '2.5rem' }}>
+                <button onClick={() => setShowResult(false)} style={{ background: '#f1f5f9', border: 'none', borderRadius: '14px', padding: '1.2rem 2.5rem', fontWeight: 800, cursor: 'pointer', color: '#475569', fontSize: '1rem' }}>✏️ Editar Notas</button>
+                <button onClick={handleWhatsAppShare} style={{ background: '#25D366', border: 'none', borderRadius: '14px', padding: '1.2rem 2.5rem', fontWeight: 800, cursor: 'pointer', color: '#fff', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <span>📲 WhatsApp</span>
                 </button>
-                <button onClick={() => window.print()} style={{ background: '#0F2D3A', border: 'none', borderRadius: '12px', padding: '1rem 2rem', fontWeight: 800, cursor: 'pointer', color: '#fff', fontSize: '0.95rem', boxShadow: '0 4px 15px rgba(15, 45, 58, 0.2)' }}>🖨️ Gerar Relatório PDF</button>
-              </div>
-
-              {/* Seção de Comentários Detalhados no Resultado */}
-              <div style={{ marginTop: '3rem', borderTop: '1px solid #e2e8f0', paddingTop: '2rem' }}>
-                <h3 style={{ fontWeight: 800, color: '#1a1a2e', marginBottom: '1.5rem' }}>📋 Observações Detalhadas</h3>
-                <div style={{ display: 'grid', gap: '1rem' }}>
-                  {PILLARS.map((p, pi) => {
-                    const pillarComments = scores[pi].filter(s => s.hasComment && s.comment.trim());
-                    if (pillarComments.length === 0) return null;
-                    return (
-                      <div key={p.id} style={{ border: `1px solid ${p.color}33`, borderRadius: '12px', padding: '1.25rem', background: `${p.color}03` }}>
-                        <h4 style={{ color: p.color, margin: '0 0 1rem 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
                           <span style={{ width: 8, height: 8, borderRadius: '50%', background: p.color }} />
                           {p.name}
                         </h4>
