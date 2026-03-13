@@ -91,16 +91,22 @@ export default function AdminDashboard() {
       const newUser = userCredential.user;
       console.log("[DEBUG] Usuário criado com sucesso no Auth. UID:", newUser.uid);
 
-      // 2. Deslogar o app secundário para não interferir
-      setLoadingStep('Desconectando sessão temporária...');
-      await secondaryAuth.signOut();
+      // Verificação crítica: O Admin ainda está logado?
+      console.log("[DEBUG] Validando sessão do Admin...");
+      if (!auth.currentUser) {
+        console.error("[DEBUG] Erro: Sessão do Admin perdida!");
+        throw new Error("Sessão do administrador perdida. Por favor, faça login novamente.");
+      }
+      console.log("[DEBUG] Admin autenticado: " + auth.currentUser.email);
 
       // 3. Salvar dados do cliente no Firestore
       setLoadingStep('Salvando dados no banco de dados...');
       console.log("[DEBUG] Salvando no Firestore (UserID: " + newUser.uid + ")...");
       
       const userRef = doc(db, 'users', newUser.uid);
-      await setDoc(userRef, {
+      
+      // Criar uma promessa para o setDoc com timeout de 15 segundos
+      const savePromise = setDoc(userRef, {
         name: newClient.name,
         email: newClient.email,
         displayName: newClient.name,
@@ -109,8 +115,19 @@ export default function AdminDashboard() {
         requirePasswordChange: true,
         requireNameEntry: true,
         createdAt: new Date().toISOString()
-      });
+      }, { merge: true });
+
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("O banco de dados demorou muito para responder (Timeout 15s). Verifique sua conexão.")), 15000)
+      );
+
+      await Promise.race([savePromise, timeoutPromise]);
       console.log("[DEBUG] Dados salvos com sucesso no Firestore.");
+
+      // 2. Deslogar o app secundário só DEPOIS de salvar com sucesso
+      setLoadingStep('Limpando sessão temporária...');
+      await secondaryAuth.signOut();
+      console.log("[DEBUG] Sessão temporária encerrada.");
 
       setLoadingStep('Finalizando...');
       setShowAddModal(false);
