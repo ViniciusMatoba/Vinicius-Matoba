@@ -174,7 +174,7 @@ export default function AdminDashboard() {
             email: newClient.email,
             displayName: newClient.name,
             role: 'client',
-            stage: newClient.initialStage,
+            stage: parseInt(newClient.initialStage),
             requirePasswordChange: true,
             requireNameEntry: true,
             createdAt: new Date().toISOString()
@@ -191,7 +191,7 @@ export default function AdminDashboard() {
         }
       }
 
-      setError("Falha Crítica (v1.0.9): " + (err.message || "Erro desconhecido"));
+      setError("Falha Crítica (v1.1.0): " + (err.message || "Erro desconhecido"));
     } finally {
       setLoading(false);
       setLoadingStep('');
