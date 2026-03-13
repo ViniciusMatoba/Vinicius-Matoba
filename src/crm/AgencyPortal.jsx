@@ -4,11 +4,15 @@ import AdminDashboard from './AdminDashboard';
 import ClientView from './ClientView';
 import logo from '../assets/logo.png';
 import './CRM.css';
+import { browserLocalPersistence, browserSessionPersistence, setPersistence } from 'firebase/auth';
+import { auth } from '../firebase/config';
 
 export default function AgencyPortal() {
   const { currentUser, userData, login, logout, updateUserProfile, updatePassword } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [newName, setNewName] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [error, setError] = useState('');
@@ -19,6 +23,8 @@ export default function AgencyPortal() {
     try {
       setError('');
       setLoading(true);
+      // Define persistência conforme escolha do usuário
+      await setPersistence(auth, rememberMe ? browserLocalPersistence : browserSessionPersistence);
       await login(email, password);
     } catch (err) {
       console.error("Erro de login:", err);
@@ -33,7 +39,7 @@ export default function AgencyPortal() {
       setError('');
       setLoading(true);
       await updateUserProfile({ name: newName, requireNameEntry: false });
-    } catch (err) {
+    } catch {
       setError('Erro ao salvar nome. Tente novamente.');
     }
     setLoading(false);
@@ -46,20 +52,20 @@ export default function AgencyPortal() {
       setLoading(true);
       await updatePassword(newPassword);
       await updateUserProfile({ requirePasswordChange: false });
-    } catch (err) {
+    } catch {
       setError('Erro ao alterar senha. Use uma senha mais forte (mínimo 6 caracteres).');
     }
     setLoading(false);
   }
 
-  // Tela de Login
+  // ─── Tela de Login ───────────────────────────────────────────────────────────
   if (!currentUser) {
     return (
       <div className="crm-portal-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div className="crm-login-wrapper">
           <img src={logo} alt="VM Logo" className="crm-login-logo" />
           <h2 style={{ marginBottom: '1.5rem', fontWeight: 800 }}>Portal Agência VM</h2>
-          {error && <div style={{ color: '#ef4444', marginBottom: '1rem', fontSize: '0.85rem' }}>{error}</div>}
+          {error && <div style={{ color: '#ef4444', marginBottom: '1rem', fontSize: '0.85rem', background: '#fef2f2', padding: '0.6rem 0.8rem', borderRadius: '8px' }}>{error}</div>}
           <form onSubmit={handleLogin}>
             <div className="crm-input-group">
               <label>E-mail</label>
@@ -74,15 +80,42 @@ export default function AgencyPortal() {
             </div>
             <div className="crm-input-group">
               <label>Senha</label>
-              <input
-                type="password"
-                className="crm-input"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <div style={{ position: 'relative' }}>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  className="crm-input"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  style={{ paddingRight: '3rem' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)',
+                    background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+                    color: '#94a3b8', fontSize: '1.1rem', lineHeight: 1
+                  }}
+                  title={showPassword ? 'Esconder senha' : 'Ver senha'}
+                >
+                  {showPassword ? '🙈' : '👁️'}
+                </button>
+              </div>
             </div>
+
+            {/* Manter conectado */}
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem', cursor: 'pointer', fontSize: '0.875rem', color: '#475569' }}>
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                style={{ width: 16, height: 16, accentColor: '#1a1a2e', cursor: 'pointer' }}
+              />
+              Manter conectado
+            </label>
+
             <button disabled={loading} type="submit" className="crm-btn-primary">
               {loading ? 'Entrando...' : 'Acessar Portal'}
             </button>
