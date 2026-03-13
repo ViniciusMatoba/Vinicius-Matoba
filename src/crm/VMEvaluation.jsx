@@ -479,10 +479,33 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
                 <button onClick={() => setShowResult(false)} style={{ background: '#f1f5f9', border: 'none', borderRadius: '14px', padding: '1.2rem 2.5rem', fontWeight: 800, cursor: 'pointer', color: '#475569', fontSize: '1rem' }}>✏️ Editar Notas</button>
                 <button onClick={handleWhatsAppShare} style={{ background: '#25D366', border: 'none', borderRadius: '14px', padding: '1.2rem 2.5rem', fontWeight: 800, cursor: 'pointer', color: '#fff', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <span>📲 WhatsApp</span>
-                </button>
-                  )}
-                </div>
+                <button onClick={() => window.print()} style={{ background: '#0F2D3A', border: 'none', borderRadius: '14px', padding: '1.2rem 2.5rem', fontWeight: 800, cursor: 'pointer', color: '#fff', fontSize: '1rem' }}>🖨️ PDF Profissional</button>
               </div>
+
+              {/* Seção de Comentários Detalhados no Resultado (Opcional) */}
+              {scores.some(p => p.some(c => c.hasComment && c.comment)) && (
+                <div style={{ marginTop: '3rem', borderTop: '2px dashed #e2e8f0', paddingTop: '3rem' }}>
+                  <h3 style={{ fontWeight: 900, color: '#0F2D3A', marginBottom: '2rem', textAlign: 'center' }}>Observações Detalhadas</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    {PILLARS.map((pilar, pi) => {
+                      const pillarComments = scores[pi].filter(c => c.hasComment && c.comment);
+                      if (pillarComments.length === 0) return null;
+                      return (
+                        <div key={pilar.id} style={{ background: '#fcfcfc', border: `1px solid #f1f5f9`, borderRadius: '18px', padding: '1.5rem' }}>
+                          <h4 style={{ margin: '0 0 1rem 0', color: pilar.color, fontSize: '1rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{pilar.name}</h4>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            {pillarComments.map((c, ci) => (
+                              <div key={ci} style={{ paddingLeft: '1rem', borderLeft: `3px solid ${pilar.color}33` }}>
+                                <p style={{ margin: 0, color: '#475569', fontSize: '0.95rem', fontStyle: 'italic', lineHeight: 1.6 }}>"{c.comment}"</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
