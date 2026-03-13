@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, query, getDocs, doc, setDoc, getDoc, getFirestore } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
 import { initializeApp, getApps } from 'firebase/app';
+import { initializeFirestore, getFirestore } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, setPersistence, inMemoryPersistence } from 'firebase/auth';
 import KanbanBoard from './KanbanBoard';
 import VMEvaluation from './VMEvaluation';
@@ -18,7 +19,10 @@ const firebaseConfig = {
 
 const secondaryApp = getApps().find(app => app.name === 'clientCreator') || initializeApp(firebaseConfig, 'clientCreator');
 const secondaryAuth = getAuth(secondaryApp);
-const secondaryDb = getFirestore(secondaryApp);
+// Forçar Long Polling também na conexão secundária para evitar travamentos de rede
+const secondaryDb = initializeFirestore(secondaryApp, {
+  experimentalForceLongPolling: true
+});
 
 const STAGES = [
   { id: 1, title: '1° contato' },
@@ -103,7 +107,7 @@ export default function AdminDashboard() {
     setLoadingStep('Iniciando...');
 
     try {
-      console.log("[DEBUG] 1. Iniciando processo (v1.1.0)...");
+      console.log("[DEBUG] 1. Iniciando processo (v1.1.1)...");
       
       setLoadingStep('Segurança...');
       try {
@@ -112,7 +116,7 @@ export default function AdminDashboard() {
         console.warn("[DEBUG] Erro de persistência:", pErr);
       }
 
-      // 1. Criar conta no Firebase Auth
+      // 1. Criar conta no Firebase Auth (Sessão temporária)
       setLoadingStep('Criando Auth...');
       const userCredential = await createUserWithEmailAndPassword(
         secondaryAuth,
@@ -122,13 +126,14 @@ export default function AdminDashboard() {
       const newUser = userCredential.user;
       console.log("[DEBUG] 4. Auth criado: " + newUser.uid);
 
-      // 3. Salvar no Firestore USANDO O DB SECUNDÁRIO
+      // 3. Salvar no Firestore USANDO A CONEXÃO DO ADMIN (db)
+      // Como você é o Master, sua conexão (db) deve ter permissão de escrita
       setLoadingStep('Salvando no Banco...');
-      console.log("[DEBUG] 6. Tentando escrita v1.1.0...");
+      console.log("[DEBUG] 6. Tentando escrita via Admin Session (v1.1.1)...");
       
-      const userRef = doc(secondaryDb, 'users', newUser.uid);
+      const userRef = doc(db, 'users', newUser.uid);
       
-      // Timeout de 7 segundos
+      // Timeout de 8 segundos
       const savePromise = setDoc(userRef, {
         name: newClient.name,
         email: newClient.email,
@@ -141,11 +146,11 @@ export default function AdminDashboard() {
       }, { merge: true });
 
       const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error("O Banco de Dados não respondeu (7s). Pode ser que as 'Security Rules' estejam bloqueando a escrita.")), 7000)
+        setTimeout(() => reject(new Error("O Banco de Dados não respondeu (8s). Se você é o Master, verifique se no Console do Firebase as 'Security Rules' permitem que ADMIN escreva na coleção 'users'.")), 8000)
       );
 
       await Promise.race([savePromise, timeoutPromise]);
-      console.log("[DEBUG] 7. Escrita Finalizada.");
+      console.log("[DEBUG] 7. Escrita Finalizada com Sucesso.");
 
       // Limpar sessão temporária
       secondaryAuth.signOut().catch(e => console.warn("Erro ao deslogar:", e));
@@ -220,7 +225,7 @@ export default function AdminDashboard() {
       {showAddModal && (
         <div className="method-modal-overlay" onClick={() => { setShowAddModal(false); setError(null); }}>
           <div className="method-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '480px' }}>
-            <h2 style={{ marginBottom: '0.5rem' }}>Cadastrar Novo Cliente <span style={{ fontSize: '0.6rem', opacity: 0.3 }}>v1.1.0</span></h2>
+            <h2 style={{ marginBottom: '0.5rem' }}>Cadastrar Novo Cliente <span style={{ fontSize: '0.6rem', opacity: 0.3 }}>v1.1.1</span></h2>
             <p style={{ opacity: 0.6, marginBottom: '1.5rem', fontSize: '0.9rem' }}>
               No primeiro login, o cliente precisará trocar a senha e confirmar seu nome.
             </p>
