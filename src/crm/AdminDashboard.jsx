@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, query, getDocs, doc, setDoc, getDoc, initializeFirestore } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
 import { initializeApp, getApps } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, setPersistence, inMemoryPersistence } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, setPersistence, inMemoryPersistence, sendPasswordResetEmail } from 'firebase/auth';
 import KanbanBoard from './KanbanBoard';
 import VMEvaluation from './VMEvaluation';
 
@@ -106,7 +106,7 @@ export default function AdminDashboard() {
     setLoadingStep('Iniciando...');
 
     try {
-      console.log("[DEBUG] 1. Iniciando processo (v1.1.1)...");
+      console.log("[DEBUG] 1. Iniciando processo (v1.1.2)...");
       
       setLoadingStep('Segurança...');
       try {
@@ -115,24 +115,26 @@ export default function AdminDashboard() {
         console.warn("[DEBUG] Erro de persistência:", pErr);
       }
 
-      // 1. Criar conta no Firebase Auth (Sessão temporária)
-      setLoadingStep('Criando Auth...');
+      // 1. Criar o acesso do cliente (Firebase Auth)
+      setLoadingStep('Criando Acesso...');
+      // Usamos uma senha provisória que será trocada pelo link de e-mail
+      const passwordToUse = newClient.password || Math.random().toString(36).slice(-10);
+      
       const userCredential = await createUserWithEmailAndPassword(
         secondaryAuth,
         newClient.email,
-        newClient.password
+        passwordToUse
       );
       const newUser = userCredential.user;
-      console.log("[DEBUG] 4. Auth criado: " + newUser.uid);
+      console.log("[DEBUG] 4. Acesso criado: " + newUser.uid);
 
-      // 3. Salvar no Firestore USANDO A CONEXÃO DO ADMIN (db)
-      // Como você é o Master, sua conexão (db) deve ter permissão de escrita
+      // 2. Salvar no Banco de Dados (Firestore)
       setLoadingStep('Salvando no Banco...');
-      console.log("[DEBUG] 6. Tentando escrita via Admin Session (v1.1.1)...");
+      console.log("[DEBUG] 6. Tentando escrita v1.1.2...");
       
       const userRef = doc(db, 'users', newUser.uid);
       
-      // Timeout de 8 segundos
+      // Timeout de 8 segundos para diagnóstico
       const savePromise = setDoc(userRef, {
         name: newClient.name,
         email: newClient.email,
@@ -141,17 +143,29 @@ export default function AdminDashboard() {
         stage: parseInt(newClient.initialStage),
         requirePasswordChange: true,
         requireNameEntry: true,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        perfilAvaliado: false
       }, { merge: true });
 
       const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error("O Banco de Dados não respondeu (8s). Se você é o Master, verifique se no Console do Firebase as 'Security Rules' permitem que ADMIN escreva na coleção 'users'.")), 8000)
+        setTimeout(() => reject(new Error("O Banco de Dados não respondeu (8s). Verifique as 'Security Rules' no Console do Firebase.")), 8000)
       );
 
       await Promise.race([savePromise, timeoutPromise]);
-      console.log("[DEBUG] 7. Escrita Finalizada com Sucesso.");
+      console.log("[DEBUG] 7. Dados salvos com sucesso.");
 
-      // Limpar sessão temporária
+      // 3. Enviar e-mail para o cliente criar a própria senha
+      setLoadingStep('Enviando Convite...');
+      try {
+        await sendPasswordResetEmail(auth, newClient.email);
+        console.log("[DEBUG] 8. Convite enviado.");
+      } catch (emailErr) {
+        console.warn("Aviso: Acesso criado, mas falha ao enviar e-mail:", emailErr.message);
+      }
+
+      // 4. Finalização
+      alert("Cadastro concluído com sucesso! O e-mail de acesso foi enviado ao cliente.");
+      
       secondaryAuth.signOut().catch(e => console.warn("Erro ao deslogar:", e));
 
       setLoadingStep('Atualizando...');
@@ -159,12 +173,12 @@ export default function AdminDashboard() {
       await fetchClients();
 
       setShowAddModal(false);
+      // Abre automaticamente a janela de avaliação
       setEvaluationClient({ id: newUser.uid, name: newClient.name });
 
     } catch (err) {
-      console.error("[DEBUG] ERRO NO CADASTRO:", err);
+      console.error("[DEBUG] ERRO NO PROCESSO:", err);
       
-      // RECUPERAÇÃO AUTOMÁTICA
       if (err.code === 'auth/email-already-in-use') {
         setLoadingStep('Recuperando...');
         try {
@@ -195,7 +209,7 @@ export default function AdminDashboard() {
         }
       }
 
-      setError("Falha Crítica (v1.1.1): " + (err.message || "Erro desconhecido"));
+      setError("Falha Crítica (v1.1.2): " + (err.message || "Erro desconhecido"));
     } finally {
       setLoading(false);
       setLoadingStep('');
@@ -224,7 +238,7 @@ export default function AdminDashboard() {
       {showAddModal && (
         <div className="method-modal-overlay" onClick={() => { setShowAddModal(false); setError(null); }}>
           <div className="method-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '480px' }}>
-            <h2 style={{ marginBottom: '0.5rem' }}>Cadastrar Novo Cliente <span style={{ fontSize: '0.6rem', opacity: 0.3 }}>v1.1.1</span></h2>
+            <h2 style={{ marginBottom: '0.5rem' }}>Cadastrar Novo Cliente <span style={{ fontSize: '0.6rem', opacity: 0.3 }}>v1.1.2</span></h2>
             <p style={{ opacity: 0.6, marginBottom: '1.5rem', fontSize: '0.9rem' }}>
               No primeiro login, o cliente precisará trocar a senha e confirmar seu nome.
             </p>
