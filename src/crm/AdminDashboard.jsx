@@ -196,10 +196,6 @@ export default function AdminDashboard() {
       setLoading(false);
       setLoadingStep('');
     }
-    } finally {
-      setLoading(false);
-      setLoadingStep('');
-    }
   }
 
   return (
