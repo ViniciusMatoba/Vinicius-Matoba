@@ -66,12 +66,17 @@ export default function AdminDashboard() {
       }
     } catch (err) {
       console.error("[DEBUG] Erro Crítico no Firestore:", err);
-      // Mostra o erro real para o usuário nos ajudar a diagnosticar
-      const errorMessage = err.code === 'permission-denied' 
-        ? "Erro de Permissão (Security Rules). O Banco de Dados está bloqueado para o seu usuário."
-        : "Erro de Conexão: " + (err.message || "Não foi possível contatar o Firestore.");
+      // Tentar extrair o código de erro específico do Firebase
+      const errorCode = err.code || (err.message && err.message.includes('permission-denied') ? 'permission-denied' : 'unknown');
       
-      setError(errorMessage);
+      let msg = "Erro de Conexão: " + err.message;
+      if (errorCode === 'permission-denied') {
+        msg = "ERRO DE PERMISSÃO: O seu acesso ao banco de dados está bloqueado pelas regras do Firebase.";
+      } else if (errorCode === 'unavailable') {
+        msg = "ERRO DE REDE: O banco de dados está offline ou inacessível no momento.";
+      }
+      
+      setError(`[Código: ${errorCode}] ${msg}`);
     }
   };
 
@@ -207,7 +212,7 @@ export default function AdminDashboard() {
       <div className="admin-header">
         <div>
           <h1 style={{ fontWeight: 800, fontSize: '2rem' }}>Gerenciamento de Clientes</h1>
-          <p style={{ opacity: 0.6 }}>Acompanhe as etapas da VM para cada projeto.</p>
+          <p style={{ opacity: 0.6 }}>Acompanhe as etapas da VM para cada projeto. <button onClick={() => window.location.reload(true)} style={{ background: 'none', border: 'none', color: '#6366f1', cursor: 'pointer', textDecoration: 'underline', padding: 0, fontSize: 'inherit' }}>Limpar Cache</button></p>
         </div>
         <button onClick={() => setShowAddModal(true)} className="crm-btn-primary" style={{ width: 'auto', padding: '0.8rem 1.5rem' }}>
           + Novo Cliente
@@ -224,7 +229,7 @@ export default function AdminDashboard() {
       {showAddModal && (
         <div className="method-modal-overlay" onClick={() => { setShowAddModal(false); setError(null); }}>
           <div className="method-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '480px' }}>
-            <h2 style={{ marginBottom: '0.5rem' }}>Cadastrar Novo Cliente <span style={{ fontSize: '0.6rem', opacity: 0.3 }}>v1.0.7</span></h2>
+            <h2 style={{ marginBottom: '0.5rem' }}>Cadastrar Novo Cliente <span style={{ fontSize: '0.6rem', opacity: 0.3 }}>v1.0.8</span></h2>
             <p style={{ opacity: 0.6, marginBottom: '1.5rem', fontSize: '0.9rem' }}>
               No primeiro login, o cliente precisará trocar a senha e confirmar seu nome.
             </p>
