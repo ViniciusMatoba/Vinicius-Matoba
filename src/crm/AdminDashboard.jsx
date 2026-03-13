@@ -38,7 +38,7 @@ const STAGES = [
 export default function AdminDashboard() {
   const [clients, setClients] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [newClient, setNewClient] = useState({ name: '', email: '', password: '', initialStage: 4 });
+  const [newClient, setNewClient] = useState({ name: '', email: '', password: '', initialStage: 1 });
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState('');
   const [error, setError] = useState(null);
@@ -150,7 +150,7 @@ export default function AdminDashboard() {
       }, { merge: true });
 
       const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error("Timeout (8s). Isso significa que as 'Rules' do seu Firebase estão bloqueando seu acesso de Admin. No console do Firebase, em Firestore > Rules, verifique se existe: allow write: if request.auth != null;")), 8000)
+        setTimeout(() => reject(new Error("ERRO DE REGRAS: Suas 'Firestone Rules' estão bloqueando o Admin. Copie este código e cole no console do Firebase > Firestore > Rules: \n\nmatch /users/{userId} { allow read, write: if request.auth != null; }")), 8000)
       );
 
       await Promise.race([savePromise, timeoutPromise]);
@@ -240,7 +240,7 @@ export default function AdminDashboard() {
       {showAddModal && (
         <div className="method-modal-overlay" onClick={() => { setShowAddModal(false); setError(null); }}>
           <div className="method-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '480px' }}>
-            <h2 style={{ marginBottom: '0.5rem' }}>Cadastrar Novo Cliente <span style={{ fontSize: '0.6rem', opacity: 0.3 }}>v1.1.3</span></h2>
+            <h2 style={{ marginBottom: '0.5rem' }}>Cadastrar Novo Cliente <span style={{ fontSize: '0.6rem', opacity: 0.3 }}>v1.1.4</span></h2>
             <p style={{ opacity: 0.6, marginBottom: '1.5rem', fontSize: '0.9rem' }}>
               No primeiro login, o cliente precisará trocar a senha e confirmar seu nome.
             </p>
