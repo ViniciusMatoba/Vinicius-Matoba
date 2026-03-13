@@ -479,6 +479,7 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
                 <button onClick={() => setShowResult(false)} style={{ background: '#f1f5f9', border: 'none', borderRadius: '14px', padding: '1.2rem 2.5rem', fontWeight: 800, cursor: 'pointer', color: '#475569', fontSize: '1rem' }}>✏️ Editar Notas</button>
                 <button onClick={handleWhatsAppShare} style={{ background: '#25D366', border: 'none', borderRadius: '14px', padding: '1.2rem 2.5rem', fontWeight: 800, cursor: 'pointer', color: '#fff', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <span>📲 WhatsApp</span>
+                </button>
                 <button onClick={() => window.print()} style={{ background: '#0F2D3A', border: 'none', borderRadius: '14px', padding: '1.2rem 2.5rem', fontWeight: 800, cursor: 'pointer', color: '#fff', fontSize: '1rem' }}>🖨️ PDF Profissional</button>
               </div>
 
