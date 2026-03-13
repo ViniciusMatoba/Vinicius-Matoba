@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, query, getDocs, doc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { initializeApp, getApps } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, setPersistence, inMemoryPersistence } from 'firebase/auth';
 import KanbanBoard from './KanbanBoard';
 import VMEvaluation from './VMEvaluation';
 
@@ -66,23 +66,30 @@ export default function AdminDashboard() {
     setError(null);
 
     try {
+      console.log("Iniciando processo de cadastro...");
+      
+      // Configurar persistência em memória para o app secundário
+      // Isso evita conflitos com o login do admin no localStorage
+      await setPersistence(secondaryAuth, inMemoryPersistence);
+      console.log("Persistência em memória configurada.");
+
       // 1. Criar conta real no Firebase Auth usando o app secundário
-      console.log("Criando usuário no Firebase Auth...");
+      console.log("Criando usuário no Firebase Auth (e-mail: " + newClient.email + ")...");
       const userCredential = await createUserWithEmailAndPassword(
         secondaryAuth,
         newClient.email,
         newClient.password
       );
       const newUser = userCredential.user;
-      console.log("Usuário criado no Auth com UID:", newUser.uid);
+      console.log("Usuário criado com sucesso no Auth. UID:", newUser.uid);
 
       // 2. Deslogar o app secundário
       await secondaryAuth.signOut();
 
       // 3. Salvar dados do cliente no Firestore
-      console.log("Salvando dados no Firestore...");
+      console.log("Salvando dados no Firestore (UserID: " + newUser.uid + ")...");
       await setDoc(doc(db, 'users', newUser.uid), {
-        name: '',
+        name: newClient.name, // Ajustado para salvar o nome corretamente
         email: newClient.email,
         displayName: newClient.name,
         role: 'client',
