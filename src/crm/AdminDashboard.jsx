@@ -16,9 +16,9 @@ const firebaseConfig = {
   appId: "1:169394728371:web:ec1ce35f170ceb0244afc6",
 };
 
-const secondaryApp = getApps().find(a => a.name === 'secondary')
-  || initializeApp(firebaseConfig, 'secondary');
+const secondaryApp = getApps().find(app => app.name === 'clientCreator') || initializeApp(firebaseConfig, 'clientCreator');
 const secondaryAuth = getAuth(secondaryApp);
+const secondaryDb = getFirestore(secondaryApp);
 
 const STAGES = [
   { id: 1, title: '1° contato' },
