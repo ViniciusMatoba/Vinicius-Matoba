@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import logoVM from '../assets/logo.png';
@@ -165,6 +165,7 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
   const [saving, setSaving] = useState(false);
   const [loadingData, setLoadingData] = useState(!!clientId);
   const [savedAt, setSavedAt] = useState(null);
+  const scrollContainerRef = useRef(null);
 
   // Carregar avaliação existente do Firestore
   useEffect(() => {
@@ -190,8 +191,8 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
 
   // Garantir que a tela comece no topo ao ver o resultado
   useEffect(() => {
-    if (showResult) {
-      window.scrollTo({ top: 0, behavior: 'instant' });
+    if (showResult && scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: 'auto' });
     }
   }, [showResult]);
 
@@ -285,7 +286,7 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
   }
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', overflowY: 'auto', padding: '2rem 1rem' }}>
+    <div ref={scrollContainerRef} style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', overflowY: 'auto', padding: '2rem 1rem' }}>
       <div style={{ background: '#ffffff', borderRadius: '20px', width: '100%', maxWidth: '860px', overflow: 'hidden', boxShadow: '0 25px 60px rgba(0,0,0,0.3)' }}>
 
         {/* Header - Premium Refined */}
@@ -310,6 +311,25 @@ export default function VMEvaluation({ clientName, clientId, readOnly = false, o
                 )}
               </div>
             </div>
+            {!showResult && savedAt && (
+              <button 
+                onClick={() => setShowResult(true)}
+                style={{ 
+                  marginTop: '1.2rem', 
+                  background: '#1DB954', 
+                  color: '#fff', 
+                  border: 'none', 
+                  borderRadius: '10px', 
+                  padding: '0.6rem 1.5rem', 
+                  fontWeight: 800, 
+                  fontSize: '0.85rem', 
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 12px rgba(29, 185, 84, 0.3)'
+                }}
+              >
+                📊 Ver Relatório Já Concluído
+              </button>
+            )}
           </div>
         </div>
 
