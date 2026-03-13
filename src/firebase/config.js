@@ -18,19 +18,6 @@ const firebaseConfig = {
 const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
-// Forçar Long Polling de forma segura (evitando erro de re-inicialização)
-let firestoreDb;
-try {
-  firestoreDb = initializeFirestore(app, {
-    experimentalForceLongPolling: true,
-    useFetchStreams: false,
-  });
-  console.log("Firestore inicializado com Long Polling.");
-} catch (e) {
-  // Se já foi inicializado (comum em HMR/Refresh), pega a instância existente
-  firestoreDb = getFirestore(app);
-  console.log("Firestore já estava inicializado, pegando instância existente.");
-}
-
-export const db = firestoreDb;
+// Initialize Firestore
+export const db = getFirestore(app);
 export const analytics = getAnalytics(app);
