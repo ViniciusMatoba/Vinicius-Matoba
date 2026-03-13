@@ -84,15 +84,20 @@
   gap: 1.5rem;
   overflow-x: auto;
   padding-bottom: 2rem;
-  margin-top: 2rem;
+  min-height: 70vh;
+  scroll-behavior: smooth;
 }
 
 .kanban-column {
-  flex: 0 0 320px;
-  background: #f1f5f9;
-  border-radius: 16px;
-  min-height: 600px;
-  padding: 1rem;
+  min-width: 280px;
+  background: rgba(255, 255, 255, 0.4);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .kanban-column-header {
@@ -111,12 +116,13 @@
 
 .kanban-card {
   background: white;
-  border-radius: 12px;
-  padding: 1.2rem;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   margin-bottom: 1rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid rgba(0, 0, 0, 0.03);
   cursor: pointer;
-  transition: transform 0.2s;
 }
 
 .kanban-card:hover {

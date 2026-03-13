@@ -3,16 +3,19 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
 const STAGES = [
-  { id: 1, title: 'Diagnosticar' },
-  { id: 2, title: 'Posicionar' },
-  { id: 3, title: 'Planejar' },
-  { id: 4, title: 'Executar' },
-  { id: 5, title: 'Analisar' },
-  { id: 6, title: 'Otimizar' }
+  { id: 1, title: '1° contato' },
+  { id: 2, title: 'Orçamento' },
+  { id: 3, title: 'Aprovação' },
+  { id: 4, title: 'Diagnosticar' },
+  { id: 5, title: 'Posicionar' },
+  { id: 6, title: 'Planejar' },
+  { id: 7, title: 'Executar' },
+  { id: 8, title: 'Analisar' },
+  { id: 9, title: 'Otimizar' }
 ];
 
-export default function KanbanBoard({ clients, onUpdateClient, isAdmin }) {
-  
+export default function KanbanBoard({ clients, onUpdateClient, isAdmin, onOpenEvaluation }) {
+
   async function moveClient(clientId, newStage) {
     if (!isAdmin) return;
     try {
@@ -35,31 +38,45 @@ export default function KanbanBoard({ clients, onUpdateClient, isAdmin }) {
               {clients.filter(c => c.stage === stage.id).length} clientes
             </span>
           </div>
-          
+
           <div className="kanban-cards-wrapper">
             {clients
               .filter(client => client.stage === stage.id)
               .map(client => (
                 <div key={client.id} className="kanban-card">
-                  <h4 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{client.name}</h4>
-                  <p style={{ fontSize: '0.8rem', opacity: 0.6, marginBottom: '1rem' }}>{client.email}</p>
-                  
+                  <h4 style={{ fontWeight: 700, marginBottom: '0.25rem' }}>
+                    {client.displayName || client.name || 'Cliente'}
+                  </h4>
+                  <p style={{ fontSize: '0.8rem', opacity: 0.6, marginBottom: '0.75rem' }}>{client.email}</p>
+
                   {isAdmin && (
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
-                      {stage.id > 1 && (
-                        <button 
-                          onClick={() => moveClient(client.id, stage.id - 1)}
-                          style={{ fontSize: '0.7rem', padding: '0.3rem 0.5rem', borderRadius: '4px', border: '1px solid #ddd' }}
+                    <div className="card-management" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                      <select
+                        className="stage-select-mini"
+                        value={client.stage}
+                        onChange={(e) => moveClient(client.id, parseInt(e.target.value))}
+                      >
+                        <option value="" disabled>Mudar para etapa:</option>
+                        {STAGES.map(s => (
+                          <option key={s.id} value={s.id}>{s.title}</option>
+                        ))}
+                      </select>
+                      {onOpenEvaluation && (
+                        <button
+                          onClick={() => onOpenEvaluation(client)}
+                          style={{
+                            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                            color: '#fff',
+                            border: 'none',
+                            borderRadius: '8px',
+                            padding: '0.4rem 0.75rem',
+                            fontSize: '0.72rem',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            textAlign: 'center'
+                          }}
                         >
-                          ←
-                        </button>
-                      )}
-                      {stage.id < 6 && (
-                        <button 
-                          onClick={() => moveClient(client.id, stage.id + 1)}
-                          style={{ fontSize: '0.7rem', padding: '0.3rem 0.5rem', borderRadius: '4px', border: '1px solid #ddd', marginLeft: 'auto' }}
-                        >
-                          →
+                          📊 Avaliação VM
                         </button>
                       )}
                     </div>

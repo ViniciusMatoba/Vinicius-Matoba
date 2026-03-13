@@ -1,18 +1,36 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { initializeFirestore, getFirestore } from "firebase/firestore";
+import { getAnalytics } from "firebase/analytics";
 
-// TODO: Replace with your actual Firebase config from the Firebase Console
+// ... real config ...
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
+  apiKey: "AIzaSyCvYZ6ZcI1rjkLF5KLKZMtzM-Q6ELwoB7A",
   authDomain: "vinicius-matoba.firebaseapp.com",
   projectId: "vinicius-matoba",
   storageBucket: "vinicius-matoba.firebasestorage.app",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  messagingSenderId: "169394728371",
+  appId: "1:169394728371:web:ec1ce35f170ceb0244afc6",
+  measurementId: "G-3972N11TME"
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const db = getFirestore(app);
+
+// Forçar Long Polling de forma segura (evitando erro de re-inicialização)
+let firestoreDb;
+try {
+  firestoreDb = initializeFirestore(app, {
+    experimentalForceLongPolling: true,
+    useFetchStreams: false,
+  });
+  console.log("Firestore inicializado com Long Polling.");
+} catch (e) {
+  // Se já foi inicializado (comum em HMR/Refresh), pega a instância existente
+  firestoreDb = getFirestore(app);
+  console.log("Firestore já estava inicializado, pegando instância existente.");
+}
+
+export const db = firestoreDb;
+export const analytics = getAnalytics(app);

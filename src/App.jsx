@@ -56,9 +56,9 @@ function Footer() {
       <img src={logo} alt="Logo VM" style={{ width: '180px', marginBottom: '1.5rem', filter: 'brightness(0) invert(1)' }} />
       <p style={{ opacity: 0.6, fontSize: '0.9rem' }}>© 2026 Vinícius Matoba. Estratégia Digital. Todos os direitos reservados.</p>
       
-      <div style={{ marginTop: '2rem' }}>
-        <Link to="/agenciaVM" style={{ color: 'white', opacity: 0.5, fontSize: '0.8rem', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}>
-          <Lock size={12} /> Acesso Adm/Cliente
+      <div className="vm-footer-access-container">
+        <Link to="/agenciaVM" className="btn-access-crm-discrete">
+          <Lock size={12} /> ÁREA CRM
         </Link>
       </div>
     </footer>
